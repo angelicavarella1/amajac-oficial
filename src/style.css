@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos personalizados para a AMAJAC */
+:root {
+  --amajac-primary: #3a9a3a;
+  --amajac-secondary: #f0f9f0;
+}
+
+/* Suporte para scroll suave */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Estilo para o botão de foco acessível */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #3a9a3a;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Animações personalizadas */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Estilos para impressão */
+@media print {
+  /* Esconder elementos não relevantes */
+  header,
+  footer,
+  nav,
+  .hero-section,
+  .galeria-section,
+  .colaboradores-section,
+  .info-tempo-relogio,
+  .contato-section form,
+  button,
+  a[href^="#"],
+  .mobile-menu,
+  .social-icons,
+  .back-to-top {
+    display: none !important;
+  }
+
+  /* Forçar conteúdo principal a ocupar toda a página */
+  body,
+  #app,
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Estilizar texto para impressão */
+  h1, h2, h3, h4, h5, h6,
+  p, li, blockquote {
+    color: black !important;
+    background: transparent !important;
+  }
+
+  /* Remover sombras, bordas decorativas e fundos */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    background: transparent !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Garantir que imagens apareçam em escala de cinza */
+  img {
+    filter: grayscale(1) contrast(1) !important;
+    max-width: 100% !important;
+  }
+}
