@@ -269,7 +269,7 @@
                     :alt="safeString(foto.titulo || `Imagem ${index + 1}`)" 
                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     :loading="index < 4 ? 'eager' : 'lazy'"
-                    @load="foto.imageState?.lazyLoad"
+                    @load="() => foto.imageState?.lazyLoad()"
                   />
                   <div v-else-if="foto.imageState?.loading" class="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse flex items-center justify-center">
                     <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -355,7 +355,7 @@
                       :src="evento.imageState?.imageUrl" 
                       :alt="safeString(evento.titulo)" 
                       class="w-full h-full object-cover"
-                      @load="evento.imageState?.lazyLoad"
+                      @load="() => evento.imageState?.lazyLoad()"
                     />
                     <div v-else-if="evento.imageState?.loading" class="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse flex items-center justify-center">
                       <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -439,7 +439,7 @@
                     :alt="safeString(noticia.titulo)" 
                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     :loading="index < 2 ? 'eager' : 'lazy'"
-                    @load="noticia.imageState?.lazyLoad"
+                    @load="() => noticia.imageState?.lazyLoad()"
                   />
                   <div v-else-if="noticia.imageState?.loading" class="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse flex items-center justify-center">
                     <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -673,7 +673,7 @@
                     :src="parceiro.imageState?.imageUrl"
                     :alt="parceiro.texto_alternativo || `Logo ${parceiro.nome}`"
                     class="max-w-full max-h-full object-contain"
-                    @load="parceiro.imageState?.lazyLoad"
+                    @load="() => parceiro.imageState?.lazyLoad()"
                   />
                   <div v-else-if="parceiro.imageState?.loading" class="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse flex items-center justify-center">
                     <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

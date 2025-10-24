@@ -1,12 +1,15 @@
-﻿<template>
+﻿<!-- src/components/ColaboradoresSection.vue -->
+<template>
   <section id="colaboradores" class="py-16 bg-gray-50 dark:bg-gray-900">
     <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-4">
-        Nossos Parceiros Colaboradores
-      </h2>
-      <p class="text-xl text-center text-gray-600 dark:text-gray-400 mb-12">
-        Apoie o comércio local que apoia a nossa associação.
-      </p>
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-4">
+          Nossos Parceiros Colaboradores
+        </h2>
+        <p class="text-xl text-center text-gray-600 dark:text-gray-400 mb-12">
+          Apoie o comércio local que apoia a nossa associação.
+        </p>
+      </div>
 
       <div v-if="parceiros.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         
@@ -15,30 +18,37 @@
           :key="colaborador.id" 
           class="bg-white dark:bg-gray-800 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 p-6 flex flex-col items-center text-center hover:scale-105"
         >
-          <!-- Logo com useSafeImage -->
+          <!-- Logo com useSafeImage (CORRIGIDO) -->
           <div class="mb-4 h-20 w-full flex justify-center">
             <div class="image-wrapper h-full max-w-full">
+              <!-- Imagem carregada com sucesso -->
               <img 
-                v-if="!colaborador.logoState.loading && !colaborador.logoState.error"
-                :src="colaborador.logoState.imageUrl" 
+                v-if="!colaborador._logoState.loading && !colaborador._logoState.error && colaborador._logoState.imageUrl"
+                :src="colaborador._logoState.imageUrl" 
                 :alt="colaborador.imagem_alt || `Logo de ${colaborador.nome}`" 
                 class="max-h-full max-w-full object-contain p-1 rounded-md transition-opacity duration-300"
-                :class="{ 'opacity-0': colaborador.logoState.loading, 'opacity-100': !colaborador.logoState.loading }"
-                @load="colaborador.logoState.lazyLoad"
+                :class="{ 'opacity-0': colaborador._logoState.loading, 'opacity-100': !colaborador._logoState.loading }"
+                @load="colaborador._logoState.lazyLoad"
                 loading="lazy"
               />
-              <div v-else-if="colaborador.logoState.loading" class="placeholder animate-pulse w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-md">
+              
+              <!-- Estado de carregamento -->
+              <div v-else-if="colaborador._logoState.loading" class="placeholder animate-pulse w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-md">
                 <div class="text-center">
                   <i class="fas fa-store text-gray-400 text-xl mb-1"></i>
                   <span class="text-xs text-gray-500 dark:text-gray-400 block">Carregando...</span>
                 </div>
               </div>
-              <div v-else-if="colaborador.logoState.error" class="error-state w-full h-full flex items-center justify-center bg-red-50 dark:bg-red-900/20 rounded-md border border-red-200 dark:border-red-700">
+              
+              <!-- Estado de erro -->
+              <div v-else-if="colaborador._logoState.error" class="error-state w-full h-full flex items-center justify-center bg-red-50 dark:bg-red-900/20 rounded-md border border-red-200 dark:border-red-700">
                 <div class="text-center">
                   <i class="fas fa-exclamation-triangle text-red-400 text-xl mb-1"></i>
                   <span class="text-xs text-red-500 dark:text-red-400 block">Erro</span>
                 </div>
               </div>
+              
+              <!-- Placeholder padrão -->
               <div v-else class="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-md">
                 <i class="fas fa-store text-gray-400 text-2xl"></i>
               </div>
@@ -161,7 +171,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted } from 'vue'
 import { usePublicColaboradores } from '@/composables/usePublicColaboradores'
 import { useSafeImage } from '@/composables/useSafeImage'
 import { useToast } from '@/composables/useToast'
@@ -169,12 +179,17 @@ import { useToast } from '@/composables/useToast'
 const { parceiros: parceirosData, isLoading, fetchColaboradores } = usePublicColaboradores()
 const { showToast } = useToast()
 
-// Adiciona useSafeImage para cada parceiro
+// Computed para parceiros com estado de imagem (CORRIGIDO)
 const parceiros = computed(() => {
-  return parceirosData.value.map(parceiro => ({
-    ...parceiro,
-    logoState: useSafeImage(parceiro.logo_url || '')
-  }))
+  return parceirosData.value.map(parceiro => {
+    const parceiroComImagem = { ...parceiro };
+    
+    // Adiciona o estado da imagem usando useSafeImage
+    // Armazena como _logoState para evitar conflitos com propriedades existentes
+    parceiroComImagem._logoState = useSafeImage(parceiro.logo_url || '');
+    
+    return parceiroComImagem;
+  });
 })
 
 onMounted(() => {
@@ -205,41 +220,6 @@ async function copiarEndereco(endereco) {
     showToast('Erro ao copiar endereço', 'error')
   }
 }
-
-// Mock para testes (se necessário)
-/*
-const parceirosData = ref([
-  { 
-    id: '1', 
-    nome: 'Padaria Sabor Local', 
-    tipo: 'Alimentação', 
-    logo_url: 'https://example.com/logo1.jpg', 
-    imagem_alt: 'Logo Padaria', 
-    descricao_curta: 'A melhor padaria da região! Pães frescos e bolos artesanais.', 
-    link_site: 'https://padariasaborlocal.com',
-    ativo: true,
-    telefone: '(11) 99999-9999',
-    endereco: 'Rua Principal, 123',
-    Instagram: 'https://instagram.com/padaria',
-    Facebook: 'https://facebook.com/padaria'
-  },
-  { 
-    id: '2', 
-    nome: 'Consultório Odonto+', 
-    tipo: 'Saúde', 
-    logo_url: 'https://example.com/logo2.jpg', 
-    imagem_alt: 'Logo Odonto', 
-    descricao_curta: 'Especialistas em clareamento e implantes. Agende sua avaliação!', 
-    link_site: null,
-    ativo: true,
-    telefone: '(11) 88888-8888',
-    endereco: 'Av. Central, 456',
-    Instagram: null,
-    Facebook: 'https://facebook.com/odonto'
-  },
-])
-const isLoading = ref(false)
-*/
 </script>
 
 <style scoped>
@@ -277,7 +257,7 @@ const isLoading = ref(false)
     opacity: 1;
   }
   50% {
-    opacity: 0.5;
+    opacity: .5;
   }
 }
 

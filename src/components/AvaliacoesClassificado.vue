@@ -1,3 +1,4 @@
+<!-- src/components/AvaliacoesClassificado.vue -->
 <template>
   <div class="space-y-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
     <!-- Cabeçalho -->
@@ -139,22 +140,34 @@
         class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm border border-gray-100 dark:border-gray-600 transition-all duration-300 hover:shadow-md"
         :style="`animation-delay: ${index * 0.1}s`"
       >
-        <!-- Avatar do usuário com useSafeImage -->
+        <!-- Avatar do usuário com useSafeImage (CORRIGIDO) -->
         <div class="flex items-start gap-4">
           <div class="flex-shrink-0">
             <div class="image-wrapper">
+              <!-- Imagem carregada com sucesso -->
               <img 
-                v-if="!avaliacao.userImage.loading && !avaliacao.userImage.error" 
-                :src="avaliacao.userImage.imageUrl" 
+                v-if="!avaliacao._userImage.loading && !avaliacao._userImage.error && avaliacao._userImage.imageUrl"
+                :src="avaliacao._userImage.imageUrl" 
                 :alt="`Foto de ${avaliacao.usuario?.name || 'Usuário'}`"
-                class="w-12 h-12 rounded-full object-cover border-2 border-green-200 dark:border-green-600"
-                @load="avaliacao.userImage.lazyLoad"
+                class="w-12 h-12 rounded-full object-cover border-2 border-green-200 dark:border-green-600 transition-opacity duration-300"
+                :class="{ 'opacity-0': avaliacao._userImage.loading, 'opacity-100': !avaliacao._userImage.loading }"
+                @load="avaliacao._userImage.lazyLoad"
+                loading="lazy"
               />
-              <div v-else-if="avaliacao.userImage.loading" class="placeholder animate-pulse w-12 h-12 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+              
+              <!-- Estado de carregamento -->
+              <div v-else-if="avaliacao._userImage.loading" class="placeholder animate-pulse w-12 h-12 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
                 <span class="text-xs text-gray-500">...</span>
               </div>
-              <div v-else-if="avaliacao.userImage.error" class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center border-2 border-red-300 dark:border-red-700">
+              
+              <!-- Estado de erro -->
+              <div v-else-if="avaliacao._userImage.error" class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center border-2 border-red-300 dark:border-red-700">
                 <span class="text-xs text-red-600 dark:text-red-400">❌</span>
+              </div>
+              
+              <!-- Placeholder padrão -->
+              <div v-else class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
+                <span class="text-lg">👤</span>
               </div>
             </div>
           </div>
@@ -222,11 +235,11 @@
 </template>
 
 <script setup>
-import { defineProps, ref, onMounted, computed, onUnmounted, watch } from 'vue';
+import { defineProps, ref, onMounted, computed, onUnmounted } from 'vue';
 import { useAvaliacoesStore } from '@/stores/avaliacoes';
 import { useAuthStore } from '@/stores/auth';
 import { useUIStore } from '@/stores/ui';
-import { useSafeImage } from '@/composables/useSafeImage';
+import { useSafeImage } from '@/composables/useSafeImage'; // Certifique-se de importar
 
 const props = defineProps({
   classificadoId: {
@@ -239,23 +252,29 @@ const avaliacoesStore = useAvaliacoesStore();
 const authStore = useAuthStore();
 const uiStore = useUIStore();
 
-// Refs
+// Refs para o formulário
 const newNota = ref(0);
 const newComentario = ref('');
 const hoverNota = ref(0);
 const realtimeConnected = ref(false);
 
-// Computed
+// Computed para avaliações com estado de imagem
 const avaliacoes = computed(() => {
   const avaliacoesData = avaliacoesStore.getAvaliacoes(props.classificadoId);
   
-  // Adiciona useSafeImage para cada avaliação com foto do usuário
-  return avaliacoesData.map(avaliacao => ({
-    ...avaliacao,
-    userImage: useSafeImage(avaliacao.usuario?.foto_url || '')
-  }));
+  // ✅ CORREÇÃO: Aplica useSafeImage reativamente para cada avaliação
+  return avaliacoesData.map(avaliacao => {
+    const avaliacaoComImagem = { ...avaliacao };
+    
+    // Adiciona o estado da imagem do usuário usando useSafeImage
+    // Armazena como _userImage para evitar conflitos
+    avaliacaoComImagem._userImage = useSafeImage(avaliacao.usuario?.foto_url || '');
+    
+    return avaliacaoComImagem;
+  });
 });
 
+// Outras computed properties
 const mediaEstrelas = computed(() => avaliacoesStore.getMediaEstrelas(props.classificadoId));
 const totalAvaliacoes = computed(() => avaliacoesStore.getTotalAvaliacoes(props.classificadoId));
 const hasEvaluated = computed(() => avaliacoesStore.hasUserEvaluated(props.classificadoId));
@@ -292,7 +311,8 @@ async function submitAvaliacao() {
     hoverNota.value = 0;
     
   } catch (error) {
-    uiStore.showToast(avaliacoesStore.error, 'error');
+    console.error('Erro ao enviar avaliação:', error);
+    uiStore.showToast(avaliacoesStore.error || 'Erro ao enviar avaliação.', 'error');
   }
 }
 
@@ -303,7 +323,8 @@ async function deleteAvaliacao(avaliacaoId) {
     await avaliacoesStore.deleteAvaliacao(avaliacaoId, props.classificadoId);
     uiStore.showToast('🗑️ Avaliação excluída com sucesso!', 'success');
   } catch (error) {
-    uiStore.showToast(avaliacoesStore.error, 'error');
+    console.error('Erro ao excluir avaliação:', error);
+    uiStore.showToast(avaliacoesStore.error || 'Erro ao excluir avaliação.', 'error');
   }
 }
 

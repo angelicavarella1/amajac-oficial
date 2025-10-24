@@ -1,4 +1,5 @@
-﻿<template>
+﻿<!-- src/views/NoticiasView.vue -->
+<template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
     <header class="fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-md z-40 transition-colors duration-200">
       <div class="container mx-auto px-4">
@@ -56,7 +57,7 @@
         <div v-else-if="error" class="max-w-2xl mx-auto bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center">
           <div class="text-red-600 dark:text-red-400 mb-4">
             <svg class="w-12 h-12 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
             </svg>
             <h3 class="text-lg font-semibold mb-2">Erro ao carregar notícias</h3>
             <p>{{ error }}</p>
@@ -75,10 +76,10 @@
             :key="noticia.id"
             class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700"
           >
-            <!-- ✅ ATUALIZADO: Imagem com useSafeImage() -->
+            <!-- Imagem com useSafeImage (CORRIGIDO) -->
             <div class="h-48 bg-gray-100 dark:bg-gray-700 relative overflow-hidden">
               <!-- Loading State -->
-              <div v-if="noticia.imageLoading" class="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse flex items-center justify-center">
+              <div v-if="noticia._imageState.loading" class="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse flex items-center justify-center">
                 <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
@@ -86,23 +87,28 @@
               
               <!-- Imagem Carregada -->
               <img
-                v-else-if="noticia.imagem_url"
-                :src="noticia.imageUrl"
-                :alt="noticia.imagem_alt || noticia.titulo"
-                class="w-full h-full object-cover hover:scale-105 transition duration-500"
-                :ref="el => noticia.imageRef = el"
+                v-else-if="!noticia._imageState.error && noticia._imageState.imageUrl"
+                :src="noticia._imageState.imageUrl"
+                :alt="safeString(noticia.titulo)"
+                class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                :class="{ 'opacity-0': noticia._imageState.loading, 'opacity-100': !noticia._imageState.loading }"
+                @load="noticia._imageState.lazyLoad"
+                loading="lazy"
               />
               
-              <!-- Fallback para Sem Imagem -->
-              <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
-                <svg class="w-16 h-16 text-green-300 dark:text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9m0 0v12m0 0h6m-6 0h6"/>
-                </svg>
+              <!-- Error State -->
+              <div v-else-if="noticia._imageState.error" class="absolute inset-0 bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
+                <div class="text-center p-2">
+                  <i class="fas fa-exclamation-triangle text-red-500 text-lg mb-1"></i>
+                  <p class="text-red-500 text-xs">Falha ao carregar imagem</p>
+                </div>
               </div>
               
-              <!-- Error State -->
-              <div v-if="noticia.imageError" class="absolute inset-0 bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
-                <span class="text-red-500 text-sm">Falha ao carregar imagem</span>
+              <!-- Placeholder Padrão -->
+              <div v-else class="absolute inset-0 bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
+                <svg class="w-8 h-8 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
               </div>
               
               <!-- Data da Notícia -->
@@ -112,11 +118,11 @@
             </div>
 
             <div class="p-6">
-              <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-3 leading-tight max-lines-2">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-3 leading-tight line-clamp-2">
                 {{ safeString(noticia.titulo) }}
               </h2>
               
-              <p class="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed max-lines-3">
+              <p class="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed line-clamp-3">
                 {{ safeString(noticia.resumo || noticia.conteudo) }}
               </p>
               
@@ -162,7 +168,7 @@
 </template>
 
 <script setup>
-import { onMounted, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useNoticiasStore } from '@/stores/noticias'
 import { useUIStore } from '@/stores/ui'
@@ -170,46 +176,42 @@ import { useSafeImage } from '@/composables/useSafeImage'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
 
 const noticiasStore = useNoticiasStore()
-const { noticias, loading, error } = storeToRefs(noticiasStore)
 const uiStore = useUIStore()
+const { noticias, loading, error } = storeToRefs(noticiasStore)
 
-// ✅ ATUALIZADO: Notícias com useSafeImage() para cada imagem
+// ✅ CORREÇÃO: Computeds para processar notícias com useSafeImage reativamente
 const noticiasComImagens = computed(() => {
   return noticias.value.map(noticia => {
-    // ✅ NOVO: Criar useSafeImage para cada notícia no loop
-    const { 
-      imageUrl, 
-      loading: imageLoading, 
-      error: imageError,
-      setUrl,
-      lazyLoad 
-    } = useSafeImage()
-
-    // ✅ NOVO: Inicializar a imagem da notícia
-    if (noticia.imagem_url) {
-      setUrl(noticia.imagem_url)
-    }
-
+    // Cria um estado de imagem para cada notícia
+    const imageState = useSafeImage(noticia.imagem_url || '')
+    
     return {
       ...noticia,
-      imageUrl,
-      imageLoading,
-      imageError,
-      imageRef: null,
-      setImageUrl: setUrl,
-      lazyLoadImage: lazyLoad
+      // Estados da imagem
+      _imageState: {
+        loading: imageState.loading.value,
+        error: imageState.error.value,
+        imageUrl: imageState.imageUrl.value,
+        
+        // Handlers
+        lazyLoad: imageState.lazyLoad,
+        reload: imageState.reload,
+        reset: imageState.reset
+      }
     }
   })
 })
 
-// ✅ CORREÇÃO: Adicionada função formatarData local
+// ✅ CORREÇÃO: Funções de segurança adicionadas
+const safeString = (str) => {
+  if (typeof str !== 'string') return ''
+  return str.replace(/[<>"']/g, '').trim()
+}
+
 const formatarData = (dataString) => {
   if (!dataString) return 'Data não informada'
   try {
-    const data = new Date(dataString)
-    if (isNaN(data.getTime())) return 'Data inválida'
-    
-    return data.toLocaleDateString('pt-BR', {
+    return new Date(dataString).toLocaleDateString('pt-BR', {
       timeZone: 'America/Sao_Paulo',
       day: '2-digit',
       month: '2-digit',
@@ -220,12 +222,6 @@ const formatarData = (dataString) => {
   }
 }
 
-// ✅ CORREÇÃO: Funções de segurança adicionadas
-const safeString = (str) => {
-  if (typeof str !== 'string') return ''
-  return str.replace(/[<>"']/g, '').trim()
-}
-
 onMounted(() => {
   uiStore.initializeDarkMode()
   noticiasStore.carregarNoticias()
@@ -233,14 +229,14 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.max-lines-2 {
+.line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.max-lines-3 {
+.line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -263,5 +259,12 @@ onMounted(() => {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* Transições suaves */
+* {
+  transition-property: color, background-color, border-color, box-shadow, transform, opacity;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
 }
 </style>

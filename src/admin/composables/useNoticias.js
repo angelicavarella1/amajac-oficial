@@ -1,58 +1,30 @@
+// src/admin/composables/useNoticias.js
 import { ref } from 'vue'
+import { adminApi } from '@/supabase/admin' // Importação correta: adminApi
 import { useUIStore } from '@/stores/ui'
 
 export function useNoticias() {
   const uiStore = useUIStore()
   const noticias = ref([])
+  const noticia = ref(null) // Para armazenar uma notícia individual (detalhe)
   const loading = ref(false)
   const error = ref(null)
 
-  // Simulação de dados - substitua pela sua API real
-  const noticiasMock = [
-    {
-      id: 1,
-      titulo: 'Primeira Notícia de Exemplo',
-      resumo: 'Esta é uma notícia de exemplo para demonstrar o funcionamento do sistema.',
-      conteudo: 'Conteúdo completo da primeira notícia de exemplo...',
-      imagem_url: '/placeholder-news.jpg',
-      autor: 'AMAJAC',
-      data_publicacao: new Date().toISOString(),
-      ativo: true,
-      destaque: true,
-      visualizacoes: 150,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    },
-    {
-      id: 2,
-      titulo: 'Segunda Notícia de Teste',
-      resumo: 'Outra notícia para testar a listagem e filtros.',
-      conteudo: 'Conteúdo completo da segunda notícia...',
-      imagem_url: '/placeholder-news.jpg',
-      autor: 'Administrador',
-      data_publicacao: new Date(Date.now() - 86400000).toISOString(), // 1 dia atrás
-      ativo: true,
-      destaque: false,
-      visualizacoes: 75,
-      created_at: new Date(Date.now() - 86400000).toISOString(),
-      updated_at: new Date(Date.now() - 86400000).toISOString()
-    }
-  ]
-
-  const fetchNoticias = async () => {
+  // 🔥 CARREGAR NOTÍCIAS (Renomeado para fetchNoticias para consistência com o store)
+  const fetchNoticias = async (forceRefresh = false) => {
     loading.value = true
     error.value = null
     try {
-      // TODO: Substituir pela chamada real da API
-      // const response = await fetch('/api/noticias')
-      // if (!response.ok) throw new Error('Erro ao carregar notícias')
-      // noticias.value = await response.json()
-      
-      // Usando dados mock por enquanto
-      await new Promise(resolve => setTimeout(resolve, 1000)) // Simula delay
-      noticias.value = noticiasMock
-      return noticias.value
+      console.log('📰 Carregando notícias do banco...')
+
+      // 🔧 CHAMADA REAL PARA O SUPABASE VIA adminApi
+      const dados = await adminApi.noticias.getAll()
+
+      noticias.value = dados
+      console.log(`✅ ${dados.length} notícias carregadas`)
+      return dados
     } catch (err) {
+      console.error('❌ Erro ao carregar notícias:', err)
       error.value = err.message
       uiStore.showToast('Erro ao carregar notícias', 'error')
       return []
@@ -61,20 +33,25 @@ export function useNoticias() {
     }
   }
 
-  const fetchNoticia = async (id) => {
+  // 🔥 CARREGAR NOTÍCIA POR ID (Renomeado de fetchNoticia para carregarNoticiaPorId)
+  const carregarNoticiaPorId = async (id) => {
     loading.value = true
     error.value = null
     try {
-      // TODO: Substituir pela chamada real da API
-      // const response = await fetch(`/api/noticias/${id}`)
-      // if (!response.ok) throw new Error('Erro ao carregar notícia')
-      // return await response.json()
-      
-      await new Promise(resolve => setTimeout(resolve, 500))
-      const noticia = noticiasMock.find(n => n.id === parseInt(id))
-      if (!noticia) throw new Error('Notícia não encontrada')
-      return noticia
+      console.log(`🔍 Buscando notícia com ID: ${id}`)
+
+      // 🔧 CHAMADA REAL PARA O SUPABASE VIA adminApi
+      const noticiaEncontrada = await adminApi.noticias.getById(id)
+
+      if (!noticiaEncontrada) {
+        throw new Error('Notícia não encontrada')
+      }
+
+      noticia.value = noticiaEncontrada
+      console.log('✅ Notícia carregada:', noticiaEncontrada)
+      return noticiaEncontrada
     } catch (err) {
+      console.error('❌ Erro ao carregar notícia:', err)
       error.value = err.message
       uiStore.showToast('Erro ao carregar notícia', 'error')
       return null
@@ -83,113 +60,132 @@ export function useNoticias() {
     }
   }
 
-  const createNoticia = async (noticiaData) => {
+  // 🔥 CRIAR NOTÍCIA
+  const criarNoticia = async (noticiaData) => {
     loading.value = true
     error.value = null
     try {
-      // TODO: Substituir pela chamada real da API
-      // const response = await fetch('/api/noticias', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(noticiaData)
-      // })
-      // if (!response.ok) throw new Error('Erro ao criar notícia')
-      // const novaNoticia = await response.json()
-      
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      const novaNoticia = {
-        ...noticiaData,
-        id: Math.max(...noticiasMock.map(n => n.id)) + 1,
-        visualizacoes: 0,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }
-      noticias.value.push(novaNoticia)
+      console.log('📝 Criando nova notícia...')
+
+      // 🔧 CHAMADA REAL PARA O SUPABASE VIA adminApi
+      const novaNoticia = await adminApi.noticias.create(noticiaData)
+
+      // Atualizar cache local
+      noticias.value.unshift(novaNoticia)
       uiStore.showToast('Notícia criada com sucesso!', 'success')
       return novaNoticia
     } catch (err) {
+      console.error('❌ Erro ao criar notícia:', err)
       error.value = err.message
       uiStore.showToast('Erro ao criar notícia', 'error')
-      return null
+      throw err // Re-lança para o componente tratar
     } finally {
       loading.value = false
     }
   }
 
-  const updateNoticia = async (id, noticiaData) => {
+  // 🔥 ATUALIZAR NOTÍCIA
+  const atualizarNoticia = async (id, noticiaData) => {
     loading.value = true
     error.value = null
     try {
-      // TODO: Substituir pela chamada real da API
-      // const response = await fetch(`/api/noticias/${id}`, {
-      //   method: 'PUT',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(noticiaData)
-      // })
-      // if (!response.ok) throw new Error('Erro ao atualizar notícia')
-      // const noticiaAtualizada = await response.json()
-      
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      const index = noticias.value.findIndex(n => n.id === parseInt(id))
+      console.log(`✏️ Atualizando notícia com ID: ${id}`)
+
+      // 🔧 CHAMADA REAL PARA O SUPABASE VIA adminApi
+      const noticiaAtualizada = await adminApi.noticias.update(id, noticiaData)
+
+      // Atualizar cache local
+      const index = noticias.value.findIndex(n => n.id === id)
       if (index !== -1) {
-        noticias.value[index] = {
-          ...noticias.value[index],
-          ...noticiaData,
-          updated_at: new Date().toISOString()
-        }
-        uiStore.showToast('Notícia atualizada com sucesso!', 'success')
-        return noticias.value[index]
+        noticias.value[index] = noticiaAtualizada
       }
-      throw new Error('Notícia não encontrada')
+
+      // Atualizar notícia individual se for a mesma sendo editada
+      if (noticia.value && noticia.value.id === id) {
+        noticia.value = noticiaAtualizada
+      }
+
+      uiStore.showToast('Notícia atualizada com sucesso!', 'success')
+      return noticiaAtualizada
     } catch (err) {
+      console.error('❌ Erro ao atualizar notícia:', err)
       error.value = err.message
       uiStore.showToast('Erro ao atualizar notícia', 'error')
-      return null
+      throw err // Re-lança para o componente tratar
     } finally {
       loading.value = false
     }
   }
 
-  const deleteNoticia = async (id) => {
+  // 🔥 DELETAR NOTÍCIA
+  const deletarNoticia = async (id) => {
     loading.value = true
     error.value = null
     try {
-      // TODO: Substituir pela chamada real da API
-      // const response = await fetch(`/api/noticias/${id}`, {
-      //   method: 'DELETE'
-      // })
-      // if (!response.ok) throw new Error('Erro ao excluir notícia')
-      
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      noticias.value = noticias.value.filter(n => n.id !== parseInt(id))
+      console.log(`🗑️ Deletando notícia com ID: ${id}`)
+
+      // 🔧 CHAMADA REAL PARA O SUPABASE VIA adminApi
+      await adminApi.noticias.delete(id)
+
+      // Atualizar cache local
+      noticias.value = noticias.value.filter(n => n.id !== id)
+
+      // Limpar notícia individual se for a mesma sendo deletada
+      if (noticia.value && noticia.value.id === id) {
+        noticia.value = null
+      }
+
       uiStore.showToast('Notícia excluída com sucesso!', 'success')
       return true
     } catch (err) {
+      console.error('❌ Erro ao excluir notícia:', err)
       error.value = err.message
       uiStore.showToast('Erro ao excluir notícia', 'error')
-      return false
+      throw err // Re-lança para o componente tratar
     } finally {
       loading.value = false
     }
   }
 
+  // 🔥 ALTERAR STATUS (Ativo/Inativo)
   const alterarStatusNoticia = async (id, ativo) => {
-    return await updateNoticia(id, { ativo })
+    try {
+      console.log(`🔄 Alterando status da notícia ${id} para ${ativo ? 'ativo' : 'inativo'}`)
+      // Supondo que adminApi.noticias.update também atualize o campo 'ativo'
+      const noticiaAtualizada = await atualizarNoticia(id, { ativo })
+      return noticiaAtualizada
+    } catch (err) {
+      console.error(`❌ Erro ao alterar status da notícia ${id}:`, err)
+      throw err
+    }
+  }
+
+  // 🔥 ALTERAR DESTAQUE
+  const alterarDestaqueNoticia = async (id, destaque) => {
+    try {
+      console.log(`⭐ Alterando destaque da notícia ${id} para ${destaque ? 'destaque' : 'não destaque'}`)
+      // Supondo que adminApi.noticias.update também atualize o campo 'destaque'
+      const noticiaAtualizada = await atualizarNoticia(id, { destaque })
+      return noticiaAtualizada
+    } catch (err) {
+      console.error(`❌ Erro ao alterar destaque da notícia ${id}:`, err)
+      throw err
+    }
   }
 
   return {
+    // Estado
     noticias,
+    noticia, // Adicionado
     loading,
     error,
-    fetchNoticias,
-    fetchNoticia,
-    createNoticia,
-    updateNoticia,
-    deleteNoticia,
-    alterarStatusNoticia
+    // Ações
+    fetchNoticias, // Renomeado
+    carregarNoticiaPorId, // Renomeado
+    criarNoticia, // Renomeado
+    atualizarNoticia, // Renomeado
+    deletarNoticia, // Renomeado
+    alterarStatusNoticia,
+    alterarDestaqueNoticia // Adicionado
   }
 }

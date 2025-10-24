@@ -1,4 +1,5 @@
-﻿<template>
+﻿<!-- src/views/GaleriaView.vue -->
+<template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 transition-colors duration-200">
     <div class="container mx-auto px-4">
       <div class="text-center mb-8">
@@ -205,21 +206,21 @@
 </template>
 
 <script>
-import { ref, onMounted, computed, watch } from 'vue'
-import { supabase } from '@/supabase'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useGaleriaStore } from '@/stores/galeria'
+import { useUIStore } from '@/stores/ui'
+import { useSafeImage } from '@/composables/useSafeImage'
 
 export default {
   name: 'GaleriaView',
   setup() {
+    const galeriaStore = useGaleriaStore()
+    const uiStore = useUIStore()
+
     // Estados principais
-    const imagensRaw = ref([])
-    const loading = ref(true)
+    const loading = ref(false)
     const debugStatus = ref('Iniciando...')
     
-    // ✅ VARIÁVEIS DE PAGINAÇÃO
-    const paginaAtual = ref(1)
-    const imagensPorPagina = ref(20) // Ajuste conforme necessidade
-
     // Estados do modal
     const modalAberto = ref(false)
     const imagemSelecionada = ref(null)
@@ -228,83 +229,61 @@ export default {
     const imagemModalError = ref(false)
     const imagemModalUrl = ref('')
 
+    // Estados de paginação
+    const paginaAtual = ref(1)
+    const itensPorPagina = ref(12)
+
     // Computed
     const isDevelopment = computed(() => import.meta.env.DEV)
 
-    // ✅ COMPUTED PROPERTIES PARA PAGINAÇÃO
-    const totalPaginas = computed(() => {
-      return Math.ceil(imagensRaw.value.length / imagensPorPagina.value)
-    })
-
-    const imagensPaginadas = computed(() => {
-      const startIndex = (paginaAtual.value - 1) * imagensPorPagina.value
-      const endIndex = startIndex + imagensPorPagina.value
-      return imagens.value.slice(startIndex, endIndex)
-    })
-
-    const inicioPagina = computed(() => {
-      return (paginaAtual.value - 1) * imagensPorPagina.value + 1
-    })
-
-    const fimPagina = computed(() => {
-      const end = paginaAtual.value * imagensPorPagina.value
-      return end > imagensRaw.value.length ? imagensRaw.value.length : end
-    })
-
-    // ✅ MÉTODOS DE PAGINAÇÃO
-    const proximaPagina = () => {
-      if (paginaAtual.value < totalPaginas.value) {
-        paginaAtual.value++
-        // Rolagem suave para o topo
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-      }
-    }
-
-    const paginaAnterior = () => {
-      if (paginaAtual.value > 1) {
-        paginaAtual.value--
-        // Rolagem suave para o topo
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-      }
-    }
-
-    // ✅ CORREÇÃO: Processar imagens SEM useSafeImage no computed
+    // ✅ COMPUTED CORRIGIDA: Processa as imagens com useSafeImage reativamente
     const imagens = computed(() => {
-      return imagensRaw.value.map(imagem => {
-        // Se já foi processada, retorna
-        if (imagem._processed) return imagem
+      return galeriaStore.imagens.map(imagem => {
+        // Cria um estado de imagem para cada item
+        const imageState = useSafeImage(imagem.imagem_url || '')
         
-        // ✅ CORREÇÃO: Criar estados de imagem simples
-        const imageState = ref({
-          loading: true,
-          error: false,
-          url: imagem.imagem_url || ''
-        })
-
         return {
           ...imagem,
           // Estados da imagem
-          imageLoading: imageState.value.loading,
-          imageError: imageState.value.error,
-          imageUrl: imageState.value.url,
+          imageLoading: imageState.loading.value,
+          imageError: imageState.error.value,
+          imageUrl: imageState.imageUrl.value,
           
           // Handlers
-          handleLoad: () => {
-            imageState.value.loading = false
-            imageState.value.error = false
-          },
-          handleError: () => {
-            imageState.value.loading = false
-            imageState.value.error = true
-          },
-          
-          _processed: true
+          handleLoad: imageState.lazyLoad,
+          handleError: imageState.lazyLoad // Mesmo handler para erro
         }
       })
     })
 
-    const temImagemAnterior = computed(() => indiceSelecionado.value > 0)
-    const temProximaImagem = computed(() => indiceSelecionado.value < imagens.value.length - 1)
+    // Paginação
+    const totalPaginas = computed(() => {
+      return Math.ceil(imagens.value.length / itensPorPagina.value)
+    })
+
+    const imagensPaginadas = computed(() => {
+      const startIndex = (paginaAtual.value - 1) * itensPorPagina.value
+      const endIndex = startIndex + itensPorPagina.value
+      return imagens.value.slice(startIndex, endIndex)
+    })
+
+    const inicioPagina = computed(() => {
+      return (paginaAtual.value - 1) * itensPorPagina.value + 1
+    })
+
+    const fimPagina = computed(() => {
+      const end = paginaAtual.value * itensPorPagina.value
+      return end > imagens.value.length ? imagens.value.length : end
+    })
+
+    // Modal
+    const temImagemAnterior = computed(() => {
+      return indiceSelecionado.value > 0
+    })
+
+    const temProximaImagem = computed(() => {
+      return indiceSelecionado.value < imagens.value.length - 1
+    })
 
     // Funções auxiliares
     const safeString = (str) => {
@@ -313,7 +292,7 @@ export default {
     }
 
     const formatDate = (dateString) => {
-      if (!dateString) return ''
+      if (!dateString) return 'Data não informada'
       try {
         return new Date(dateString).toLocaleDateString('pt-BR')
       } catch {
@@ -321,69 +300,30 @@ export default {
       }
     }
 
-    // ✅ CORREÇÃO: Funções do Modal melhoradas
+    // Métodos de paginação
+    const proximaPagina = () => {
+      if (paginaAtual.value < totalPaginas.value) {
+        paginaAtual.value++
+      }
+    }
+
+    const paginaAnterior = () => {
+      if (paginaAtual.value > 1) {
+        paginaAtual.value--
+      }
+    }
+
+    // Métodos do modal
     const abrirModalImagem = (imagem) => {
-      const index = imagens.value.findIndex(img => img.id === imagem.id)
+      const index = imagens.value.findIndex(i => i.id === imagem.id)
       if (index !== -1) {
         indiceSelecionado.value = index
-        imagemSelecionada.value = imagem
+        imagemSelecionada.value = imagens.value[index]
+        imagemModalUrl.value = imagens.value[index].imageUrl
+        imagemModalLoading.value = true
+        imagemModalError.value = false
         modalAberto.value = true
-        
-        // ✅ CORREÇÃO: Usar URL direta com fallback
-        imagemModalUrl.value = imagem.imagem_url || imagem.imageUrl || ''
-        imagemModalLoading.value = true
-        imagemModalError.value = false
-        
         document.body.style.overflow = 'hidden'
-        
-        console.log('🖼️ Modal aberto:', {
-          imagem: imagem.titulo,
-          url: imagem.imagem_url,
-          imageUrl: imagem.imageUrl,
-          modalUrl: imagemModalUrl.value,
-          indiceGlobal: index,
-          total: imagens.value.length
-        })
-      }
-    }
-
-    const imagemModalLoaded = () => {
-      imagemModalLoading.value = false
-      console.log('✅ Imagem do modal carregada')
-    }
-
-    const imagemModalErro = () => {
-      imagemModalLoading.value = false
-      imagemModalError.value = true
-      console.error('❌ Erro ao carregar imagem no modal:', {
-        url: imagemModalUrl.value,
-        imagem: imagemSelecionada.value
-      })
-    }
-
-    const imagemAnterior = () => {
-      if (temImagemAnterior.value) {
-        indiceSelecionado.value--
-        const novaImagem = imagens.value[indiceSelecionado.value]
-        imagemSelecionada.value = novaImagem
-        imagemModalUrl.value = novaImagem.imagem_url || novaImagem.imageUrl || ''
-        imagemModalLoading.value = true
-        imagemModalError.value = false
-        
-        console.log('⬅️ Imagem anterior:', novaImagem.titulo, 'Índice:', indiceSelecionado.value)
-      }
-    }
-
-    const proximaImagem = () => {
-      if (temProximaImagem.value) {
-        indiceSelecionado.value++
-        const novaImagem = imagens.value[indiceSelecionado.value]
-        imagemSelecionada.value = novaImagem
-        imagemModalUrl.value = novaImagem.imagem_url || novaImagem.imageUrl || ''
-        imagemModalLoading.value = true
-        imagemModalError.value = false
-        
-        console.log('➡️ Próxima imagem:', novaImagem.titulo, 'Índice:', indiceSelecionado.value)
       }
     }
 
@@ -392,159 +332,99 @@ export default {
       imagemSelecionada.value = null
       imagemModalUrl.value = ''
       indiceSelecionado.value = 0
-      imagemModalLoading.value = false
-      imagemModalError.value = false
       document.body.style.overflow = 'auto'
     }
 
-    // Navegação por teclado
-    const handleKeydown = (event) => {
-      if (!modalAberto.value) return
-      
-      switch (event.key) {
-        case 'Escape':
-          fecharModal()
-          break
-        case 'ArrowLeft':
-          if (temImagemAnterior.value) {
-            event.preventDefault()
-            imagemAnterior()
-          }
-          break
-        case 'ArrowRight':
-          if (temProximaImagem.value) {
-            event.preventDefault()
-            proximaImagem()
-          }
-          break
+    const imagemAnterior = () => {
+      if (temImagemAnterior.value) {
+        indiceSelecionado.value--
+        const novaImagem = imagens.value[indiceSelecionado.value]
+        imagemSelecionada.value = novaImagem
+        imagemModalUrl.value = novaImagem.imageUrl
+        imagemModalLoading.value = true
+        imagemModalError.value = false
       }
     }
 
-    // ✅ CORREÇÃO: Carregar galeria otimizado
-    const loadGallery = async () => {
+    const proximaImagem = () => {
+      if (temProximaImagem.value) {
+        indiceSelecionado.value++
+        const novaImagem = imagens.value[indiceSelecionado.value]
+        imagemSelecionada.value = novaImagem
+        imagemModalUrl.value = novaImagem.imageUrl
+        imagemModalLoading.value = true
+        imagemModalError.value = false
+      }
+    }
+
+    const imagemModalLoaded = () => {
+      imagemModalLoading.value = false
+    }
+
+    const imagemModalErro = () => {
+      imagemModalLoading.value = false
+      imagemModalError.value = true
+    }
+
+    // Lifecycle
+    const carregarGaleria = async () => {
       loading.value = true
-      debugStatus.value = 'Conectando ao banco de dados...'
+      debugStatus.value = 'Carregando...'
       
       try {
-        console.log('🚀 CARREGANDO GALERIA...')
-        
-        const { data, error } = await supabase
-          .from('galeria')
-          .select('*')
-          .order('created_at', { ascending: false })
-
-        if (error) {
-          console.error('❌ ERRO SUPABASE:', error)
-          throw error
-        }
-
-        console.log('📦 DADOS RECEBIDOS:', data?.length || 0, 'imagens')
-        debugStatus.value = `Encontradas ${data?.length || 0} imagens`
-        
-        // ✅ CORREÇÃO: Atribuir diretamente sem processamento inicial
-        imagensRaw.value = data || []
-
-        // Debug das imagens
-        if (isDevelopment.value && data && data.length > 0) {
-          console.log('🔍 DEBUG IMAGENS:')
-          data.forEach((imagem, index) => {
-            console.log(`   ${index + 1}. "${imagem.titulo}" - ${imagem.imagem_url}`)
-          })
-        }
-
-      } catch (error) {
-        console.error('💥 ERRO:', error)
-        debugStatus.value = `Erro: ${error.message}`
+        await galeriaStore.fetchImagens()
+        debugStatus.value = `Carregadas ${galeriaStore.imagens.length} imagens`
+      } catch (err) {
+        console.error('❌ Erro ao carregar galeria:', err)
+        debugStatus.value = `Erro: ${err.message}`
+        uiStore.showToast('Erro ao carregar galeria', 'error')
       } finally {
         loading.value = false
       }
     }
 
-    // ✅ CORREÇÃO: Watch para verificar URLs das imagens
-    watch(imagensRaw, (novasImagens) => {
-      if (novasImagens.length > 0) {
-        console.log('👀 Imagens carregadas - verificando URLs:')
-        novasImagens.forEach((imagem, index) => {
-          if (!imagem.imagem_url) {
-            console.warn(`   ⚠️ Imagem ${index + 1} sem URL:`, imagem.titulo)
-          }
-        })
-      }
-    }, { immediate: true })
-
-    // ✅ CORREÇÃO: Watch para debug do modal
-    watch(modalAberto, (aberto) => {
-      if (aberto && imagemSelecionada.value) {
-        console.log('🔍 DEBUG MODAL ABERTO:', {
-          titulo: imagemSelecionada.value.titulo,
-          imagem_url: imagemSelecionada.value.imagem_url,
-          imageUrl: imagemSelecionada.value.imageUrl,
-          modalUrl: imagemModalUrl.value,
-          indice: indiceSelecionado.value,
-          total: imagens.value.length
-        })
-        
-        // Testar se a URL é acessível
-        if (imagemModalUrl.value) {
-          console.log('🌐 Testando acesso à URL...')
-          fetch(imagemModalUrl.value, { method: 'HEAD' })
-            .then(response => {
-              console.log('✅ URL acessível - Status:', response.status)
-            })
-            .catch(error => {
-              console.error('❌ URL não acessível:', error)
-            })
-        }
-      }
-    })
-
-    // ✅ CORREÇÃO: Resetar para página 1 quando modal fechar
-    watch(modalAberto, (aberto) => {
-      if (!aberto) {
-        // Opcional: voltar para página 1 quando fechar modal
-        // paginaAtual.value = 1
-      }
-    })
-
     onMounted(() => {
-      console.log('🎯 GALERIA MONTADA')
-      loadGallery()
-      document.addEventListener('keydown', handleKeydown)
+      carregarGaleria()
+    })
 
-      // ✅ CORREÇÃO: Cleanup
-      return () => {
-        document.removeEventListener('keydown', handleKeydown)
+    // Watch para atualizar URL da imagem no modal quando a imagem selecionada mudar
+    watch(imagemSelecionada, (novaImagem) => {
+      if (novaImagem) {
+        imagemModalUrl.value = novaImagem.imageUrl
       }
     })
 
     return {
-      // Estados principais
-      imagens,
+      // Estados
       loading,
       debugStatus,
-      
-      // Paginação
+      modalAberto,
+      imagemSelecionada,
+      indiceSelecionado,
+      imagemModalLoading,
+      imagemModalError,
+      imagemModalUrl,
       paginaAtual,
+      itensPorPagina,
+      isDevelopment,
+      
+      // Computed
+      imagens,
       totalPaginas,
       imagensPaginadas,
       inicioPagina,
       fimPagina,
-      proximaPagina,
-      paginaAnterior,
-      
-      // Modal
-      modalAberto,
-      imagemSelecionada,
-      imagemModalLoading,
-      imagemModalError,
-      imagemModalUrl,
-      isDevelopment,
       temImagemAnterior,
       temProximaImagem,
       
-      // Funções
+      // Funções auxiliares
       safeString,
       formatDate,
+      
+      // Métodos
+      carregarGaleria,
+      proximaPagina,
+      paginaAnterior,
       abrirModalImagem,
       fecharModal,
       imagemAnterior,
@@ -557,29 +437,14 @@ export default {
 </script>
 
 <style scoped>
-/* Melhorias visuais */
-.fixed {
-  backdrop-filter: blur(8px);
-}
-
 /* Transições suaves */
 * {
-  transition-property: color, background-color, border-color, box-shadow, transform;
+  transition-property: color, background-color, border-color, box-shadow, transform, opacity;
   transition-duration: 200ms;
   transition-timing-function: ease-in-out;
 }
 
-/* Efeito de hover nos botões */
-button:hover {
-  transform: scale(1.05);
-}
-
-/* Melhorar a aparência das imagens no modal */
-img {
-  border-radius: 8px;
-}
-
-/* Loading animation personalizada */
+/* Loading animation */
 .animate-spin {
   animation: spin 1s linear infinite;
 }
@@ -593,47 +458,26 @@ img {
   }
 }
 
-/* Efeito de overlay suave */
+/* Pulse animation for loading states */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+
+/* Modal overlay */
 .bg-opacity-90 {
   background-color: rgba(0, 0, 0, 0.9);
 }
 
-/* Melhorar responsividade do modal */
-@media (max-width: 768px) {
-  .p-4 {
-    padding: 1rem;
-  }
-  
-  .min-h-\[400px\] {
-    min-height: 300px;
-  }
-  
-  .max-h-\[70vh\] {
-    max-height: 60vh;
-  }
-}
-
-/* Estilos para paginação */
-.pagination-info {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-}
-
-.dark .pagination-info {
-  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-}
-
-/* Botões de paginação com efeito melhorado */
-.pagination-btn {
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.pagination-btn:hover:not(:disabled) {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transform: translateY(-2px);
-}
-
-/* Grid responsivo melhorado */
+/* Responsive grid */
 .grid {
   display: grid;
   gap: 1.5rem;
