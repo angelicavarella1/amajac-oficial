@@ -90,7 +90,7 @@ const routes = [
 
   // ===== ROTAS DO PAINEL ADMIN =====
   
-  // 🔥 CORREÇÃO: /admin deve ir para LOGIN (não redirecionar)
+  // 🔐 ROTAS PÚBLICAS DE AUTENTICAÇÃO
   {
     path: "/admin",
     name: "AdminRoot", 
@@ -101,7 +101,6 @@ const routes = [
     }
   },
   
-  // 🔥 CORREÇÃO: Login em path separado
   {
     path: "/admin/login",
     name: "AdminLogin",
@@ -112,7 +111,27 @@ const routes = [
     }
   },
   
-  // ROTA PÚBLICA: Recuperação de Senha
+  // ✅ CORREÇÃO: Rotas de recuperação de senha adicionadas
+  {
+    path: "/admin/forgot-password",
+    name: "AdminForgotPassword",
+    component: () => import("@/admin/components/AdminEsqueciSenha.vue"),
+    meta: { 
+      title: "Recuperar Senha - Painel Admin",
+      public: true 
+    }
+  },
+  
+  {
+    path: "/admin/reset-password", 
+    name: "AdminResetPassword",
+    component: () => import("@/admin/components/AdminResetSenha.vue"),
+    meta: { 
+      title: "Nova Senha - Painel Admin",
+      public: true 
+    }
+  },
+  
   {
     path: "/admin/esqueci-senha",
     name: "AdminEsqueciSenha",
@@ -365,7 +384,7 @@ const router = createRouter({
   }
 })
 
-// Guarda de navegação - CORRIGIDO
+// Guarda de navegação - CORRIGIDO E MELHORADO
 router.beforeEach(async (to, from, next) => {
   const uiStore = useUIStore()
   const authStore = useAuthStore()
@@ -378,28 +397,33 @@ router.beforeEach(async (to, from, next) => {
     document.title = to.meta.title
   }
   
-  // Verificar autenticação (apenas para rotas admin protegidas)
-  let isAdminAuthenticated = false
-  if (to.path.startsWith('/admin') && to.meta.requiresAuth) {
-    isAdminAuthenticated = await authStore.checkAuth()
-  }
-
-  // 🔥 FLUXO CORRETO DE AUTENTICAÇÃO
+  // ✅ CORREÇÃO: Verificar autenticação apenas para rotas que requerem
+  let isAuthenticated = false
   
-  // 1. Se tentar acessar rotas protegidas sem autenticação
-  if (to.meta.requiresAuth && !isAdminAuthenticated) {
-    uiStore.showToast('Acesso negado. Por favor, faça login.', 'error')
-    next('/admin/login')
-    return
+  // Se a rota requer autenticação, verifica
+  if (to.meta.requiresAuth) {
+    isAuthenticated = await authStore.checkAuth()
+    
+    // Se não autenticado e tentando acessar área protegida
+    if (!isAuthenticated) {
+      uiStore.showToast('Acesso negado. Por favor, faça login.', 'error')
+      next('/admin/login')
+      return
+    }
+  }
+  
+  // ✅ CORREÇÃO: Se já está autenticado e tenta acessar login/recuperação
+  if (to.meta.public) {
+    const currentAuth = await authStore.checkAuth()
+    
+    // Se autenticado e tentando acessar páginas públicas de auth, redireciona para dashboard
+    if (currentAuth && (to.path === '/admin/login' || to.path === '/admin' || to.path.includes('/admin/forgot-password') || to.path.includes('/admin/reset-password'))) {
+      next('/admin/dashboard')
+      return
+    }
   }
 
-  // 2. Se estiver autenticado e tentar acessar login, redirecionar para dashboard
-  if (to.meta.public && isAdminAuthenticated && to.path === '/admin/login') {
-    next('/admin/dashboard')
-    return
-  }
-
-  // 3. Permite acesso a todas as outras rotas
+  // Permite acesso a todas as outras rotas
   next()
 })
 
