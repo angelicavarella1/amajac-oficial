@@ -1,4 +1,4 @@
-import { ref, onUnmounted, computed } from 'vue'
+import { ref, onUnmounted, computed, unref } from 'vue'
 
 // Constantes para fallback e configuração
 export const DEFAULT_FALLBACK_IMAGE = '/images/placeholder-image.jpg'
@@ -95,41 +95,48 @@ export function useSafeImage(initialUrl = null) {
     error.value = true
   }
 
-  const lazyLoad = (elementOrContainer, url = null) => {
-    if (!elementOrContainer) return
+  // ------------------ LazyLoad que aceita string, ref ou HTMLImageElement ------------------
+  const lazyLoad = (target, url = null) => {
+    const el = unref(target) // desreferencia se for ref
+    if (!el) return
 
-    // Detecta todas as <img> dentro do container ou usa a img passada
-    const images = elementOrContainer.tagName === 'IMG'
-      ? [elementOrContainer]
-      : Array.from(elementOrContainer.querySelectorAll('img'))
-
-    if (!('IntersectionObserver' in window)) {
-      images.forEach(img => {
-        const imgUrl = url || img.dataset.src || img.src
-        loadImage(imgUrl)
-      })
+    // Se for string (URL), carrega diretamente
+    if (typeof el === 'string') {
+      loadImage(el)
       return
     }
 
-    const obs = new IntersectionObserver(
-      (entries, observerInstance) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const img = entry.target
-            const imgUrl = url || img.dataset.src || img.src
-            loadImage(imgUrl)
-            observerInstance.unobserve(img)
-          }
-        })
-      },
-      {
-        rootMargin: LAZY_LOAD_ROOT_MARGIN,
-        threshold: LAZY_LOAD_THRESHOLD
+    // Se for elemento DOM
+    if (el instanceof HTMLImageElement) {
+      if (!('IntersectionObserver' in window)) {
+        const imgUrl = url || el.dataset.src || el.src
+        loadImage(imgUrl)
+        return
       }
-    )
 
-    images.forEach(img => obs.observe(img))
-    observer.value = obs
+      const obs = new IntersectionObserver(
+        (entries, observerInstance) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target
+              const imgUrl = url || img.dataset.src || img.src
+              loadImage(imgUrl)
+              observerInstance.unobserve(img)
+            }
+          })
+        },
+        {
+          rootMargin: LAZY_LOAD_ROOT_MARGIN,
+          threshold: LAZY_LOAD_THRESHOLD
+        }
+      )
+
+      obs.observe(el)
+      observer.value = obs
+      return
+    }
+
+    console.warn('❌ lazyLoad: parâmetro inválido, deve ser ref, HTMLImageElement ou URL string', el)
   }
 
   const reload = () => {
@@ -184,6 +191,8 @@ export function useSafeImage(initialUrl = null) {
     getSafeUrl
   }
 }
+
+// ------------------ useGalleryImages e usePlaceholderImage ------------------
 
 export function useGalleryImages(initialImages = []) {
   const images = ref([])
