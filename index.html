@@ -9,7 +9,7 @@
     <meta name="keywords" content="AMAJAC, associação de moradores, Jardim Atlântico Central, comunidade, bairro" />
     <meta name="author" content="AMAJAC" />
 
-    <!-- Open Graph para redes sociais -->
+    <!-- Open Graph -->
     <meta property="og:title" content="AMAJAC - Associação de Moradores do Jardim Atlântico Central" />
     <meta property="og:description" content="Trabalhando por uma comunidade melhor e mais unida." />
     <meta property="og:type" content="website" />
@@ -22,31 +22,30 @@
     <meta name="twitter:description" content="Trabalhando por uma comunidade melhor e mais unida." />
     <meta name="twitter:image" content="/images/og-image.jpg" />
 
-    <!-- Favicon e PWA -->
+    <!-- Favicons e PWA -->
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <meta name="theme-color" content="#ffffff">
 
-    <!-- Preload de fontes críticas -->
+    <!-- Preload de fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!-- CDN para Font Awesome -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
           integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
           crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- CDN para bibliotecas de exportação -->
+    <!-- Bibliotecas de exportação -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <title>AMAJAC - Associação de Moradores do Jardim Atlântico Central</title>
 
-    <!-- Estilos críticos inline para melhor performance -->
+    <!-- Estilos inline para loading -->
     <style>
-      /* Loading inicial */
       #app-loading {
         position: fixed;
         top: 0;
@@ -83,7 +82,7 @@
         100% { transform: rotate(360deg); }
       }
       
-      /* Esconder loading quando Vue carregar */
+      /* Esconde loading quando Vue carregar */
       #app.loaded ~ #app-loading {
         opacity: 0;
         pointer-events: none;
@@ -91,29 +90,23 @@
     </style>
   </head>
   <body>
-    <!-- Loading inicial -->
     <div id="app-loading">
       <div class="loading-spinner"></div>
       <div class="loading-text">Carregando AMAJAC...</div>
     </div>
-    
-    <!-- Container principal da aplicação Vue -->
+
     <div id="app"></div>
     
     <script type="module" src="/src/main.js"></script>
-    
-    <!-- Script para remover loading quando Vue carregar -->
+
     <script>
       window.addEventListener('load', function() {
         setTimeout(function() {
           const app = document.getElementById('app');
           const loading = document.getElementById('app-loading');
-          
           if (app && loading) {
             app.classList.add('loaded');
-            setTimeout(() => {
-              loading.remove();
-            }, 300);
+            setTimeout(() => loading.remove(), 300);
           }
         }, 1000);
       });
