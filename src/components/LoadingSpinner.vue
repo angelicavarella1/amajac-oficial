@@ -1,45 +1,46 @@
-<template>
-  <div class="flex justify-center items-center" :class="containerClass">
-    <div class="animate-spin rounded-full border-4 border-gray-300 border-t-amajac-500" 
-         :class="spinnerClass"
-         role="status"
-         aria-label="Carregando">
-    </div>
-    <span v-if="showText" class="ml-3 text-gray-600">{{ text }}</span>
+﻿<template>
+  <div class="flex items-center justify-center" :class="containerClass">
+    <div
+      class="animate-spin rounded-full border-b-2 border-primary-600"
+      :class="spinnerClasses"
+      :style="spinnerStyle"
+    ></div>
+    <span v-if="showText" class="ml-2 text-gray-600 dark:text-gray-400">{{ text }}</span>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'LoadingSpinner',
-  props: {
-    size: {
-      type: String,
-      default: 'medium',
-      validator: (value) => ['small', 'medium', 'large'].includes(value)
-    },
-    showText: {
-      type: Boolean,
-      default: false
-    },
-    text: {
-      type: String,
-      default: 'Carregando...'
-    },
-    containerClass: {
-      type: String,
-      default: 'py-8'
-    }
+<script setup>
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'medium', // 'small', 'medium', 'large'
+    validator: (value) => ['small', 'medium', 'large'].includes(value)
   },
-  computed: {
-    spinnerClass() {
-      const sizes = {
-        small: 'w-6 h-6',
-        medium: 'w-8 h-8',
-        large: 'w-12 h-12'
-      }
-      return sizes[this.size]
-    }
+  color: {
+    type: String,
+    default: 'primary'
+  },
+  text: {
+    type: String,
+    default: 'Carregando...'
+  },
+  showText: {
+    type: Boolean,
+    default: false
+  },
+  containerClass: {
+    type: String,
+    default: ''
   }
+})
+
+const spinnerClasses = {
+  small: 'h-4 w-4',
+  medium: 'h-8 w-8',
+  large: 'h-12 w-12'
+}[props.size]
+
+const spinnerStyle = {
+  borderColor: `var(--color-${props.color}-600)`
 }
 </script>

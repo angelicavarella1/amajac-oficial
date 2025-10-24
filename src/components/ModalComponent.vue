@@ -1,126 +1,108 @@
-<template>
-  <div v-if="isOpen" class="fixed inset-0 z-50 overflow-y-auto">
-    <!-- Overlay -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" 
-         @click="closeModal"
-         aria-hidden="true"></div>
+﻿<template>
+  <Transition name="modal">
+    <div
+      v-if="show"
+      class="fixed inset-0 z-50 overflow-y-auto"
+      aria-labelledby="modal-title"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div
+          class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          aria-hidden="true"
+          @click="$emit('close')"
+        ></div>
 
-    <!-- Modal -->
-    <div class="flex min-h-full items-center justify-center p-4">
-      <div class="relative bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-hidden"
-           role="dialog"
-           :aria-labelledby="titleId"
-           :aria-describedby="descriptionId"
-           aria-modal="true">
-        
-        <!-- Header -->
-        <div class="flex items-center justify-between p-6 border-b border-gray-200">
-          <div>
-            <h3 :id="titleId" class="text-lg font-semibold text-gray-900">
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
               {{ title }}
             </h3>
-            <p v-if="description" :id="descriptionId" class="text-sm text-gray-600 mt-1">
-              {{ description }}
-            </p>
+            <button
+              @click="$emit('close')"
+              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
-          <button 
-            @click="closeModal"
-            class="text-gray-400 hover:text-gray-600 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amajac-500 focus-visible:ring-offset-2 rounded"
-            aria-label="Fechar modal"
-          >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
 
-        <!-- Content -->
-        <div class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
-          <slot name="content"></slot>
-        </div>
+          <!-- Content -->
+          <div class="mb-4">
+            <slot></slot>
+          </div>
 
-        <!-- Footer -->
-        <div v-if="$slots.footer" class="flex justify-end space-x-3 p-6 border-t border-gray-200 bg-gray-50">
-          <slot name="footer"></slot>
+          <!-- Footer -->
+          <div v-if="showActions" class="flex justify-end space-x-3">
+            <button
+              v-if="showCancel"
+              @click="$emit('close')"
+              class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
+            >
+              {{ cancelText }}
+            </button>
+            <button
+              @click="$emit('confirm')"
+              :disabled="confirmDisabled"
+              class="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            >
+              {{ confirmText }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </Transition>
 </template>
 
-<script>
-import { onMounted, onUnmounted } from 'vue'
-
-export default {
-  name: 'ModalComponent',
-  props: {
-    isOpen: {
-      type: Boolean,
-      default: false
-    },
-    title: {
-      type: String,
-      default: ''
-    },
-    description: {
-      type: String,
-      default: ''
-    },
-    closeOnOverlay: {
-      type: Boolean,
-      default: true
-    },
-    closeOnEscape: {
-      type: Boolean,
-      default: true
-    }
+<script setup>
+defineProps({
+  show: {
+    type: Boolean,
+    default: false
   },
-  emits: ['close', 'update:isOpen'],
-  setup(props, { emit }) {
-    const titleId = `modal-title-${Math.random().toString(36).substr(2, 9)}`
-    const descriptionId = `modal-description-${Math.random().toString(36).substr(2, 9)}`
-
-    const closeModal = () => {
-      emit('close')
-      emit('update:isOpen', false)
-    }
-
-    const handleEscape = (event) => {
-      if (props.closeOnEscape && event.key === 'Escape') {
-        closeModal()
-      }
-    }
-
-    onMounted(() => {
-      if (props.closeOnEscape) {
-        document.addEventListener('keydown', handleEscape)
-      }
-      
-      // Prevenir scroll do body quando modal estiver aberto
-      if (props.isOpen) {
-        document.body.style.overflow = 'hidden'
-      }
-    })
-
-    onUnmounted(() => {
-      document.removeEventListener('keydown', handleEscape)
-      document.body.style.overflow = 'auto'
-    })
-
-    return {
-      titleId,
-      descriptionId,
-      closeModal
-    }
+  title: {
+    type: String,
+    default: 'Modal'
   },
-  watch: {
-    isOpen(newVal) {
-      if (newVal) {
-        document.body.style.overflow = 'hidden'
-      } else {
-        document.body.style.overflow = 'auto'
-      }
-    }
+  showActions: {
+    type: Boolean,
+    default: true
+  },
+  showCancel: {
+    type: Boolean,
+    default: true
+  },
+  cancelText: {
+    type: String,
+    default: 'Cancelar'
+  },
+  confirmText: {
+    type: String,
+    default: 'Confirmar'
+  },
+  confirmDisabled: {
+    type: Boolean,
+    default: false
   }
-}
+})
+
+defineEmits(['close', 'confirm'])
 </script>
+
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+</style>

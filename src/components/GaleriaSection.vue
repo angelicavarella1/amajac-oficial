@@ -1,142 +1,205 @@
-<template>
-  <section id="galeria" class="py-20 bg-gray-50" aria-labelledby="galeria-title">
-    <div class="container mx-auto px-4">
-      <!-- Cabeçalho -->
-      <div class="text-center mb-16">
-        <h2 id="galeria-title" class="text-4xl md:text-5xl font-bold text-amajac-800 mb-4">
-          Galeria de Fotos
+﻿<template>
+  <section v-if="configuracoesStore.sistema?.info_galeria_ativado === 'true'" 
+           class="py-16 bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+          Nossa Galeria
         </h2>
-        <div class="w-24 h-1 bg-amajac-500 mx-auto mb-6" aria-hidden="true"></div>
-        <p class="text-xl text-gray-700 max-w-3xl mx-auto">
-          Confira os melhores momentos dos nossos eventos e atividades comunitárias
+        <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          Confira os melhores momentos dos nossos eventos e atividades
         </p>
       </div>
 
-      <!-- Skeleton Loading -->
-      <div v-if="loading" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" aria-live="polite" aria-label="Carregando galeria">
-        <div v-for="i in 8" :key="i" class="animate-pulse">
-          <div class="bg-gray-200 rounded-lg h-48"></div>
-        </div>
-      </div>
-
-      <!-- Error State -->
-      <div v-else-if="error" class="text-center py-12" role="alert" aria-live="assertive">
-        <div class="text-red-600 mb-4" aria-hidden="true">
-          <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-        </div>
-        <h3 class="text-xl font-semibold text-gray-800 mb-2">Erro ao carregar galeria</h3>
-        <p class="text-gray-700 mb-4">{{ error }}</p>
-        <button 
-          @click="carregarFotos"
-          class="bg-amajac-500 text-white px-6 py-3 rounded-lg hover:bg-amajac-600 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amajac-500 focus-visible:ring-offset-2"
-          aria-label="Tentar carregar galeria novamente"
+      <!-- Filters -->
+      <div class="flex flex-wrap justify-center gap-4 mb-8">
+        <button
+          v-for="category in categories"
+          :key="category.id"
+          @click="setActiveCategory(category.id)"
+          :class="[
+            'px-6 py-2 rounded-full text-sm font-medium transition-all duration-300',
+            activeCategory === category.id
+              ? 'bg-green-600 text-white shadow-lg'
+              : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+          ]"
         >
-          Tentar Novamente
+          {{ category.name }}
         </button>
       </div>
 
-      <!-- Grid de Fotos -->
-      <div v-else class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" aria-live="polite">
-        <div 
-          v-for="(foto, index) in fotos" 
-          :key="foto.id"
-          class="relative group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus-within:ring-2 focus-within:ring-amajac-500 focus-within:ring-offset-2"
-          tabindex="0"
-          @click="abrirLightbox(index)"
-          @keydown.enter="abrirLightbox(index)"
-          @keydown.space="abrirLightbox(index)"
-        >
-          <img 
-            :src="foto.url" 
-            :alt="foto.descricao || 'Foto da galeria AMAJAC'"
-            @error="substituirPorPlaceholder"
-            loading="lazy"
-            class="w-full h-48 object-cover group-hover:brightness-75 transition duration-300"
-          >
-          <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition duration-300 flex items-center justify-center">
-            <svg class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3-3H7"/>
-            </svg>
+      <!-- Loading State -->
+      <div v-if="galeriaStore.loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div v-for="n in 8" :key="n" class="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+          <div class="aspect-w-16 aspect-h-9 overflow-hidden">
+            <div class="w-full h-64 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
+          </div>
+          <div class="p-4">
+            <div class="h-4 bg-gray-200 dark:bg-gray-600 rounded mb-2 w-3/4"></div>
+            <div class="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/2"></div>
           </div>
         </div>
+      </div>
+
+      <!-- Gallery Grid -->
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div
+          v-for="image in imagensPaginadas"
+          :key="image.id"
+          class="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-500 cursor-pointer border border-gray-200 dark:border-gray-700"
+          @click="openLightbox(image)"
+        >
+          <!-- Image -->
+          <div class="aspect-w-16 aspect-h-9 overflow-hidden">
+            <!-- Loading State -->
+            <div v-if="image.imageLoading" class="w-full h-64 bg-gray-300 dark:bg-gray-700 animate-pulse flex items-center justify-center">
+              <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            
+            <!-- Image Loaded -->
+            <img
+              v-else-if="!image.imageError && image.imageUrl"
+              :src="image.imageUrl"
+              :alt="image.titulo || 'Imagem da galeria'"
+              class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+              :loading="imagensPaginadas.indexOf(image) < 4 ? 'eager' : 'lazy'"
+              @load="image.handleLoad"
+              @error="image.handleError"
+            />
+            
+            <!-- Error State -->
+            <div v-else class="w-full h-64 bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
+              <div class="text-center">
+                <i class="fas fa-exclamation-triangle text-red-500 text-lg mb-1"></i>
+                <p class="text-red-500 text-xs">Falha ao carregar</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Overlay -->
+          <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-end">
+            <div class="p-4 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+              <h3 class="text-white font-semibold text-lg mb-1">{{ safeString(image.titulo || 'Sem título') }}</h3>
+              <p class="text-gray-200 text-sm">{{ formatarCategoria(image.categoria) }}</p>
+            </div>
+          </div>
+
+          <!-- View Icon -->
+          <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div class="bg-white bg-opacity-90 rounded-full p-2">
+              <i class="fas fa-expand text-gray-800 text-sm"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Load More -->
+      <div v-if="hasMore && !galeriaStore.loading" class="text-center mt-12">
+        <button
+          @click="loadMore"
+          :disabled="loadingMore"
+          class="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-medium py-3 px-8 rounded-lg transition-colors flex items-center mx-auto"
+        >
+          <span v-if="loadingMore">
+            <i class="fas fa-spinner fa-spin mr-2"></i>
+            Carregando...
+          </span>
+          <span v-else>
+            <i class="fas fa-plus mr-2"></i>
+            Carregar Mais
+          </span>
+        </button>
       </div>
 
       <!-- Empty State -->
-      <div v-if="!loading && !error && fotos.length === 0" class="text-center py-12" aria-live="polite">
-        <div class="text-gray-500 mb-4" aria-hidden="true">
-          <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-          </svg>
-        </div>
-        <h3 class="text-xl font-semibold text-gray-800 mb-2">Nenhuma foto publicada</h3>
-        <p class="text-gray-700">Em breve teremos imagens para compartilhar!</p>
+      <div v-if="filteredImages.length === 0 && !galeriaStore.loading" class="text-center py-12">
+        <i class="fas fa-images text-6xl text-gray-400 mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+          Nenhuma imagem encontrada
+        </h3>
+        <p class="text-gray-600 dark:text-gray-400">
+          {{ activeCategory === 'all' ? 'A galeria está vazia no momento.' : 'Tente selecionar outra categoria' }}
+        </p>
       </div>
+    </div>
 
-      <!-- Lightbox -->
-      <div v-if="lightboxAtivo" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true" :aria-label="'Visualizando foto ' + (indiceLightbox + 1) + ' de ' + fotos.length">
-        <div class="relative max-w-4xl w-full max-h-full">
-          <!-- Botão Fechar -->
-          <button 
-            @click="fecharLightbox"
-            @keydown.enter="fecharLightbox"
-            @keydown.space="fecharLightbox"
-            class="absolute top-4 right-4 text-white hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
-            aria-label="Fechar visualização de foto"
-          >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
+    <!-- Lightbox Modal -->
+    <div v-if="lightboxOpen" class="fixed inset-0 z-50 overflow-y-auto">
+      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Overlay -->
+        <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity" @click="closeLightbox"></div>
 
-          <!-- Botão Anterior -->
-          <button 
-            v-if="fotos.length > 1"
-            @click="fotoAnterior"
-            @keydown.enter="fotoAnterior"
-            @keydown.space="fotoAnterior"
-            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
-            aria-label="Foto anterior"
-          >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-            </svg>
-          </button>
-
-          <!-- Botão Próximo -->
-          <button 
-            v-if="fotos.length > 1"
-            @click="proximaFoto"
-            @keydown.enter="proximaFoto"
-            @keydown.space="proximaFoto"
-            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
-            aria-label="Próxima foto"
-          >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-          </button>
-
-          <!-- Imagem Lightbox -->
-          <div class="flex items-center justify-center h-full">
-            <img 
-              :src="fotos[indiceLightbox].url" 
-              :alt="fotos[indiceLightbox].descricao || 'Foto da galeria AMAJAC'"
-              @error="substituirPorPlaceholderLightbox"
-              loading="eager"
-              class="max-w-full max-h-full object-contain"
+        <!-- Content -->
+        <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+          <!-- Close Button -->
+          <div class="absolute top-4 right-4 z-10">
+            <button
+              @click="closeLightbox"
+              class="bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-2 transition-colors"
             >
+              <i class="fas fa-times text-lg"></i>
+            </button>
           </div>
 
-          <!-- Contador -->
-          <div v-if="fotos.length > 1" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white bg-black bg-opacity-50 rounded-full px-3 py-1" aria-hidden="true">
-            {{ indiceLightbox + 1 }} / {{ fotos.length }}
+          <!-- Navigation -->
+          <button
+            v-if="hasPrevious"
+            @click="previousImage"
+            class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-3 transition-colors z-10"
+          >
+            <i class="fas fa-chevron-left text-xl"></i>
+          </button>
+
+          <button
+            v-if="hasNext"
+            @click="nextImage"
+            class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-3 transition-colors z-10"
+          >
+            <i class="fas fa-chevron-right text-xl"></i>
+          </button>
+
+          <!-- Image Loading -->
+          <div v-if="imagemModalLoading" class="flex items-center justify-center min-h-96">
+            <div class="text-center">
+              <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+              <p class="text-gray-600 dark:text-gray-400">Carregando imagem...</p>
+            </div>
           </div>
 
-          <!-- Descrição -->
-          <div v-if="fotos[indiceLightbox].descricao" class="absolute bottom-4 left-4 text-white bg-black bg-opacity-50 rounded-lg p-2 max-w-md">
-            {{ fotos[indiceLightbox].descricao }}
+          <!-- Image -->
+          <div v-else class="bg-white dark:bg-gray-800 p-4">
+            <img
+              :src="imagemModalUrl"
+              :alt="currentImage?.titulo || 'Imagem da galeria'"
+              class="w-full h-96 object-contain rounded-lg"
+              @load="imagemModalLoaded"
+              @error="imagemModalErro"
+            />
+          </div>
+
+          <!-- Info -->
+          <div v-if="currentImage && !imagemModalError" class="bg-gray-50 dark:bg-gray-700 px-6 py-4">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+              {{ safeString(currentImage.titulo || 'Sem título') }}
+            </h3>
+            <p v-if="currentImage.descricao" class="text-gray-600 dark:text-gray-300 mb-4">
+              {{ safeString(currentImage.descricao) }}
+            </p>
+            <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+              <span>{{ formatarData(currentImage.created_at) }}</span>
+              <span>{{ formatarCategoria(currentImage.categoria) }}</span>
+              <span>{{ currentImageIndex + 1 }} de {{ filteredImages.length }}</span>
+            </div>
+          </div>
+
+          <!-- Error State -->
+          <div v-else-if="imagemModalError" class="bg-red-50 dark:bg-red-900/20 px-6 py-8 text-center">
+            <i class="fas fa-exclamation-triangle text-red-500 text-3xl mb-2"></i>
+            <h3 class="text-lg font-semibold text-red-800 dark:text-red-300 mb-2">Erro ao carregar imagem</h3>
+            <p class="text-red-600 dark:text-red-400 text-sm">Não foi possível carregar a imagem selecionada.</p>
           </div>
         </div>
       </div>
@@ -144,62 +207,283 @@
   </section>
 </template>
 
-<script>
-import { SupabaseService } from '../services/supabaseService'
+<script setup>
+import { ref, computed, onMounted, watch } from 'vue'
+import { useGaleriaStore } from '@/stores/galeria'
+import { useConfiguracoesStore } from '@/stores/configuracoes'
+import { useSafeImage } from '@/composables/useSafeImage'
 
-export default {
-  name: 'GaleriaSection',
-  data() {
-    return {
-      fotos: [],
+const galeriaStore = useGaleriaStore()
+const configuracoesStore = useConfiguracoesStore()
+
+// Estados do componente
+const loading = ref(false)
+const loadingMore = ref(false)
+const lightboxOpen = ref(false)
+const activeCategory = ref('all')
+const currentPage = ref(1)
+const itemsPerPage = ref(12)
+const currentImageIndex = ref(0)
+const imagemModalLoading = ref(false)
+const imagemModalError = ref(false)
+const imagemModalUrl = ref('')
+
+// Categorias baseadas nos dados reais
+const categories = ref([
+  { id: 'all', name: 'Todas' },
+  { id: 'eventos', name: 'Eventos' },
+  { id: 'reunioes', name: 'Reuniões' },
+  { id: 'workshops', name: 'Workshops' },
+  { id: 'comunidade', name: 'Comunidade' }
+])
+
+// Computed properties
+const imagensComEstado = computed(() => {
+  return galeriaStore.imagens.map(imagem => {
+    // Se já foi processada, retorna
+    if (imagem._processed) return imagem
+    
+    const imageState = ref({
       loading: true,
-      error: null,
-      lightboxAtivo: false,
-      indiceLightbox: 0
-    }
-  },
-  async mounted() {
-    await this.carregarFotos()
-  },
-  methods: {
-    async carregarFotos() {
-      this.loading = true
-      this.error = null
+      error: false,
+      url: imagem.imagem_url || ''
+    })
+
+    return {
+      ...imagem,
+      imageLoading: imageState.value.loading,
+      imageError: imageState.value.error,
+      imageUrl: imageState.value.url,
       
-      try {
-        const { data, error } = await SupabaseService.getFotos()
-        if (error) throw error
-        this.fotos = data || []
-      } catch (error) {
-        console.error('Erro ao carregar fotos:', error)
-        this.error = error.message
-      } finally {
-        this.loading = false
-      }
-    },
-    abrirLightbox(index) {
-      this.indiceLightbox = index
-      this.lightboxAtivo = true
-      document.body.style.overflow = 'hidden'
-    },
-    fecharLightbox() {
-      this.lightboxAtivo = false
-      document.body.style.overflow = 'auto'
-    },
-    proximaFoto() {
-      this.indiceLightbox = (this.indiceLightbox + 1) % this.fotos.length
-    },
-    fotoAnterior() {
-      this.indiceLightbox = (this.indiceLightbox - 1 + this.fotos.length) % this.fotos.length
-    },
-    substituirPorPlaceholder(event) {
-      event.target.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="400" height="300" fill="%23f0f9f0"/><text x="50%" y="50%" font-family="Arial" font-size="18" fill="%233a9a3a" text-anchor="middle" dy=".3em">AMAJAC Gallery</text></svg>`
-      event.target.onerror = null
-    },
-    substituirPorPlaceholderLightbox(event) {
-      event.target.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"><rect width="800" height="600" fill="%23f0f9f0"/><text x="50%" y="50%" font-family="Arial" font-size="24" fill="%233a9a3a" text-anchor="middle" dy=".3em">AMAJAC Gallery</text></svg>`
-      event.target.onerror = null
+      handleLoad: () => {
+        imageState.value.loading = false
+        imageState.value.error = false
+      },
+      handleError: () => {
+        imageState.value.loading = false
+        imageState.value.error = true
+      },
+      
+      _processed: true
     }
+  })
+})
+
+const filteredImages = computed(() => {
+  let filtered = imagensComEstado.value
+
+  if (activeCategory.value !== 'all') {
+    filtered = filtered.filter(image => 
+      image.categoria?.toLowerCase() === activeCategory.value.toLowerCase()
+    )
+  }
+
+  return filtered
+})
+
+const imagensPaginadas = computed(() => {
+  return filteredImages.value.slice(0, currentPage.value * itemsPerPage.value)
+})
+
+const currentImage = computed(() => {
+  return filteredImages.value[currentImageIndex.value]
+})
+
+const hasMore = computed(() => {
+  return imagensPaginadas.value.length < filteredImages.value.length
+})
+
+const hasPrevious = computed(() => currentImageIndex.value > 0)
+const hasNext = computed(() => currentImageIndex.value < filteredImages.value.length - 1)
+
+// Métodos
+const safeString = (str) => {
+  if (typeof str !== 'string') return ''
+  return str.replace(/[<>"']/g, '').trim()
+}
+
+const formatarCategoria = (categoria) => {
+  if (!categoria) return 'Sem categoria'
+  return categoria.charAt(0).toUpperCase() + categoria.slice(1).toLowerCase()
+}
+
+const formatarData = (dataString) => {
+  if (!dataString) return ''
+  try {
+    const data = new Date(dataString)
+    return data.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    })
+  } catch {
+    return dataString
   }
 }
+
+const setActiveCategory = (category) => {
+  activeCategory.value = category
+  currentPage.value = 1
+  currentImageIndex.value = 0
+}
+
+const openLightbox = (image) => {
+  const index = filteredImages.value.findIndex(img => img.id === image.id)
+  if (index !== -1) {
+    currentImageIndex.value = index
+    lightboxOpen.value = true
+    imagemModalUrl.value = image.imagem_url || image.imageUrl || ''
+    imagemModalLoading.value = true
+    imagemModalError.value = false
+    
+    document.body.style.overflow = 'hidden'
+  }
+}
+
+const closeLightbox = () => {
+  lightboxOpen.value = false
+  imagemModalUrl.value = ''
+  imagemModalLoading.value = false
+  imagemModalError.value = false
+  document.body.style.overflow = 'auto'
+}
+
+const imagemModalLoaded = () => {
+  imagemModalLoading.value = false
+}
+
+const imagemModalErro = () => {
+  imagemModalLoading.value = false
+  imagemModalError.value = true
+}
+
+const nextImage = () => {
+  if (hasNext.value) {
+    currentImageIndex.value++
+    const novaImagem = filteredImages.value[currentImageIndex.value]
+    imagemModalUrl.value = novaImagem.imagem_url || novaImagem.imageUrl || ''
+    imagemModalLoading.value = true
+    imagemModalError.value = false
+  }
+}
+
+const previousImage = () => {
+  if (hasPrevious.value) {
+    currentImageIndex.value--
+    const novaImagem = filteredImages.value[currentImageIndex.value]
+    imagemModalUrl.value = novaImagem.imagem_url || novaImagem.imageUrl || ''
+    imagemModalLoading.value = true
+    imagemModalError.value = false
+  }
+}
+
+const loadMore = async () => {
+  loadingMore.value = true
+  // Simular carregamento para melhor UX
+  await new Promise(resolve => setTimeout(resolve, 500))
+  currentPage.value++
+  loadingMore.value = false
+}
+
+// Navegação por teclado no lightbox
+const handleKeydown = (event) => {
+  if (!lightboxOpen.value) return
+  
+  switch (event.key) {
+    case 'Escape':
+      closeLightbox()
+      break
+    case 'ArrowLeft':
+      if (hasPrevious.value) {
+        event.preventDefault()
+        previousImage()
+      }
+      break
+    case 'ArrowRight':
+      if (hasNext.value) {
+        event.preventDefault()
+        nextImage()
+      }
+      break
+  }
+}
+
+// Carregar dados
+const loadGalleryData = async () => {
+  if (galeriaStore.imagens.length === 0) {
+    await galeriaStore.fetchImagens()
+  }
+}
+
+onMounted(() => {
+  loadGalleryData()
+  document.addEventListener('keydown', handleKeydown)
+})
+
+// Cleanup
+import { onUnmounted } from 'vue'
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeydown)
+})
 </script>
+
+<style scoped>
+.aspect-w-16 {
+  position: relative;
+}
+
+.aspect-w-16::before {
+  content: "";
+  display: block;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+.aspect-w-16 > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Transições suaves */
+* {
+  transition-property: color, background-color, border-color, box-shadow, transform, opacity;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+}
+
+/* Melhorar a aparência no dark mode */
+.dark .shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+.dark .shadow-xl {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsividade */
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1025px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+</style>

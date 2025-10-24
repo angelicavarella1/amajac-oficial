@@ -1,120 +1,62 @@
+﻿// src/composables/useI18n.js
 import { ref, computed } from 'vue'
 
+// Traduções em português (único idioma por enquanto)
 const translations = {
   pt: {
-    // Navegação
-    inicio: 'Início',
-    quemSomos: 'Quem Somos',
-    noticias: 'Notícias',
-    eventos: 'Eventos',
-    galeria: 'Galeria',
-    colaboradores: 'Colaboradores',
-    contato: 'Contato',
+    // Notícias
+    'noticias.titulo': 'Notícias',
+    'noticias.ultimas': 'Últimas Notícias',
+    'noticias.ler_mais': 'Ler mais',
+    'noticias.sem_noticias': 'Nenhuma notícia publicada',
     
-    // Hero Section
-    heroTitulo: 'AMAJAC',
-    heroSubtitulo: 'Associação de Moradores e Amigos do Bairro',
-    heroLocal: 'Jardim Atlântico Central',
-    heroDescricao: 'Unindo a comunidade por um bairro melhor. Trabalhamos juntos para transformar nosso bairro através de ações coletivas.',
-    botaoConhecer: 'Conheça Nossa Associação',
-    botaoParticipar: 'Participe da Comunidade',
-    
-    // Quem Somos
-    quemSomosTitulo: 'Quem Somos',
-    nossaHistoria: 'Nossa História',
-    nossaMissao: 'Nossa Missão',
-    nossosValores: 'Nossos Valores',
+    // Eventos
+    'eventos.titulo': 'Eventos',
+    'eventos.proximos': 'Próximos Eventos',
+    'eventos.local': 'Local',
+    'eventos.data': 'Data',
+    'eventos.horario': 'Horário',
     
     // Contato
-    endereco: 'Endereço',
-    telefone: 'Telefone',
-    email: 'E-mail',
-    enviarMensagem: 'Enviar Mensagem',
-    nomeCompleto: 'Nome Completo',
-    assunto: 'Assunto',
-    mensagem: 'Mensagem',
-    placeholderTelefone: '(21) 99999-9999',
-    placeholderMensagem: 'Escreva sua mensagem aqui...',
+    'contato.titulo': 'Entre em Contato',
+    'contato.enviar': 'Enviar Mensagem',
+    'contato.sucesso': 'Mensagem enviada com sucesso!',
+    'contato.erro': 'Erro ao enviar mensagem',
     
-    // Footer
-    direitosReservados: 'Todos os direitos reservados.',
+    // Admin
+    'admin.login': 'Acesso Administrativo',
+    'admin.email': 'Email',
+    'admin.senha': 'Senha',
+    'admin.entrar': 'Entrar',
     
-    // Estados
-    carregando: 'Carregando...',
-    nenhumResultado: 'Nenhum resultado encontrado',
-    erroCarregar: 'Erro ao carregar',
-    tentarNovamente: 'Tentar Novamente'
-  },
-  en: {
-    // Navigation
-    inicio: 'Home',
-    quemSomos: 'About Us',
-    noticias: 'News',
-    eventos: 'Events',
-    galeria: 'Gallery',
-    colaboradores: 'Partners',
-    contato: 'Contact',
-    
-    // Hero Section
-    heroTitulo: 'AMAJAC',
-    heroSubtitulo: 'Residents and Friends Association of',
-    heroLocal: 'Jardim Atlântico Central',
-    heroDescricao: 'Uniting the community for a better neighborhood. We work together to transform our neighborhood through collective actions.',
-    botaoConhecer: 'Learn About Our Association',
-    botaoParticipar: 'Join the Community',
-    
-    // About Us
-    quemSomosTitulo: 'About Us',
-    nossaHistoria: 'Our History',
-    nossaMissao: 'Our Mission',
-    nossosValores: 'Our Values',
-    
-    // Contact
-    endereco: 'Address',
-    telefone: 'Phone',
-    email: 'Email',
-    enviarMensagem: 'Send Message',
-    nomeCompleto: 'Full Name',
-    assunto: 'Subject',
-    mensagem: 'Message',
-    placeholderTelefone: '(21) 99999-9999',
-    placeholderMensagem: 'Write your message here...',
-    
-    // Footer
-    direitosReservados: 'All rights reserved.',
-    
-    // States
-    carregando: 'Loading...',
-    nenhumResultado: 'No results found',
-    erroCarregar: 'Error loading',
-    tentarNovamente: 'Try Again'
+    // Geral
+    'geral.salvar': 'Salvar',
+    'geral.cancelar': 'Cancelar',
+    'geral.editar': 'Editar',
+    'geral.excluir': 'Excluir',
+    'geral.sim': 'Sim',
+    'geral.nao': 'Não'
   }
 }
 
+const currentLocale = ref('pt')
+
 export function useI18n() {
-  const currentLang = ref('pt')
+  const t = (key) => {
+    return translations[currentLocale.value][key] || key
+  }
 
-  const t = computed(() => {
-    return (key) => translations[currentLang.value][key] || key
-  })
+  const locale = computed(() => currentLocale.value)
 
-  const setLanguage = (lang) => {
-    if (['pt', 'en'].includes(lang)) {
-      currentLang.value = lang
-      localStorage.setItem('amajac-lang', lang)
+  const setLocale = (locale) => {
+    if (translations[locale]) {
+      currentLocale.value = locale
     }
   }
 
-  // Carregar preferência salva
-  const savedLang = localStorage.getItem('amajac-lang')
-  if (savedLang) {
-    currentLang.value = savedLang
-  }
-
-  return { 
-    t, 
-    currentLang, 
-    setLanguage,
-    availableLangs: ['pt', 'en']
+  return {
+    t,
+    locale,
+    setLocale
   }
 }

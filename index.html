@@ -1,129 +1,122 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- Título otimizado para SEO -->
-    <title>AMAJAC - Associação de Moradores do Jardim Atlântico Central | Maricá-RJ</title>
+    <!-- Meta tags para SEO -->
+    <meta name="description" content="Associação de Moradores do Jardim Atlântico Central - Trabalhando por uma comunidade melhor e mais unida." />
+    <meta name="keywords" content="AMAJAC, associação de moradores, Jardim Atlântico Central, comunidade, bairro" />
+    <meta name="author" content="AMAJAC" />
     
-    <!-- Meta Description otimizada -->
-    <meta name="description" content="AMAJAC: Associação de Moradores do Jardim Atlântico Central em Maricá-RJ. Eventos comunitários, notícias do bairro, melhorias urbanas e representação comunitária. Junte-se à nossa comunidade!">
+    <!-- Open Graph para redes sociais -->
+    <meta property="og:title" content="AMAJAC - Associação de Moradores do Jardim Atlântico Central" />
+    <meta property="og:description" content="Trabalhando por uma comunidade melhor e mais unida." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://amajac.org" />
+    <meta property="og:image" content="/images/og-image.jpg" />
     
-    <!-- Palavras-chave otimizadas para buscas locais -->
-    <meta name="keywords" content="AMAJAC, associação de moradores, Itaipuaçu, Maricá RJ, Jardim Atlântico Central, JAC, eventos comunitários, melhorias urbanas, denúncias bairro, associação bairro Maricá, moradores JAC">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="AMAJAC - Associação de Moradores" />
+    <meta name="twitter:description" content="Trabalhando por uma comunidade melhor e mais unida." />
+    <meta name="twitter:image" content="/images/og-image.jpg" />
     
-    <!-- Autor e desenvolvedora -->
-    <meta name="author" content="Angelica Varella - angelica.varella1@gmail.com">
-    <meta name="developer" content="Angelica Varella">
-    <meta name="organization" content="AMAJAC - Associação de Moradores e Amigos do Jardim Atlântico Central">
-    
-    <!-- Open Graph otimizado -->
-    <meta property="og:title" content="AMAJAC - Associação de Moradores do Jardim Atlântico Central">
-    <meta property="og:description" content="Unindo a comunidade por um bairro melhor no Jardim Atlântico Central, Maricá-RJ. Eventos, notícias e melhorias para o bairro.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://amajac.org.br">
-    <meta property="og:image" content="https://amajac.org.br/images/og-image.jpg">
-    <meta property="og:locale" content="pt_BR">
-    <meta property="og:site_name" content="AMAJAC">
-    
-    <!-- Twitter Card otimizado -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="AMAJAC - Associação de Moradores do Jardim Atlântico Central">
-    <meta name="twitter:description" content="Unindo a comunidade por um bairro melhor no Jardim Atlântico Central, Maricá-RJ">
-    <meta name="twitter:image" content="https://amajac.org.br/images/twitter-image.jpg">
-    <meta name="twitter:site" content="@amajac_oficial">
-    <meta name="twitter:creator" content="@amajac_oficial">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://amajac.org.br">
-    
-    <!-- Favicon e ícones -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <!-- Favicon e Apple Touch Icon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
     
-    <!-- Meta tags para PWA - CORRIGIDAS -->
-    <meta name="theme-color" content="#3a9a3a">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="AMAJAC">
-    <meta name="msapplication-TileColor" content="#3a9a3a">
-    
-    <!-- Pré-carregamento de recursos -->
+    <!-- Preload de fontes críticas -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'">
     
-    <!-- Estrutura de dados para SEO (Schema.org) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "AMAJAC - Associação de Moradores e Amigos do Jardim Atlântico Central",
-      "alternateName": "AMAJAC",
-      "url": "https://amajac.org.br",
-      "logo": "https://amajac.org.br/images/logo.png",
-      "description": "Associação de Moradores e Amigos do Bairro Jardim Atlântico Central em Maricá-RJ",
-      "foundingDate": "2024",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Rua Izabel Cristina Ouvina, 112",
-        "addressLocality": "Maricá",
-        "addressRegion": "RJ",
-        "addressCountry": "BR",
-        "postalCode": "24934-405"
-      },
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+55-21-97897-9840",
-        "contactType": "customer service",
-        "email": "amajac2024@gmail.com",
-        "availableLanguage": "Portuguese"
-      },
-      "sameAs": [
-        "https://www.instagram.com/amajac_oficial",
-        "https://www.facebook.com/amajacoficial"
-      ],
-      "areaServed": {
-        "@type": "City",
-        "name": "Maricá",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Maricá",
-          "addressRegion": "RJ",
-          "addressCountry": "BR"
-        }
+    <!-- CDN para Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- CDN para bibliotecas de exportação -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <title>AMAJAC - Associação de Moradores do Jardim Atlântico Central</title>
+    
+    <!-- Estilos críticos inline para melhor performance -->
+    <style>
+      /* Loading inicial */
+      #app-loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.3s ease;
       }
-    }
-    </script>
-
-    <!-- Fallback para navegadores sem JavaScript -->
-    <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-      <style>
-        .no-js-warning {
-          background: #f8d7da;
-          color: #721c24;
-          padding: 1rem;
-          text-align: center;
-          border: 1px solid #f5c6cb;
-        }
-      </style>
-    </noscript>
+      
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #059669;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      .loading-text {
+        margin-top: 16px;
+        color: #374151;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* Esconder loading quando Vue carregar */
+      #app.loaded ~ #app-loading {
+        opacity: 0;
+        pointer-events: none;
+      }
+    </style>
   </head>
   <body>
-    <!-- Aviso para usuários sem JavaScript -->
-    <noscript>
-      <div class="no-js-warning">
-        <strong>JavaScript Necessário:</strong> Este site requer JavaScript para funcionar corretamente. Por favor, habilite o JavaScript no seu navegador.
-      </div>
-    </noscript>
-
+    <!-- Loading inicial -->
+    <div id="app-loading">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Carregando AMAJAC...</div>
+    </div>
+    
+    <!-- Container principal da aplicação Vue -->
     <div id="app"></div>
+    
     <script type="module" src="/src/main.js"></script>
+    
+    <!-- Script para remover loading quando Vue carregar -->
+    <script>
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          const app = document.getElementById('app');
+          const loading = document.getElementById('app-loading');
+          
+          if (app && loading) {
+            app.classList.add('loaded');
+            setTimeout(() => {
+              loading.remove();
+            }, 300);
+          }
+        }, 1000);
+      });
+    </script>
   </body>
 </html>

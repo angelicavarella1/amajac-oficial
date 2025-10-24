@@ -1,154 +1,309 @@
-<template>
-  <section id="colaboradores" class="py-20 bg-white">
+﻿<template>
+  <section id="colaboradores" class="py-16 bg-gray-50 dark:bg-gray-900">
     <div class="container mx-auto px-4">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold text-amajac-800 mb-4">Colaboradores</h2>
-        <p class="text-xl text-gray-600">Conheça nossos parceiros e colaboradores</p>
-      </div>
+      <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-4">
+        Nossos Parceiros Colaboradores
+      </h2>
+      <p class="text-xl text-center text-gray-600 dark:text-gray-400 mb-12">
+        Apoie o comércio local que apoia a nossa associação.
+      </p>
 
-      <!-- Skeleton Loading -->
-      <div v-if="loading" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8" aria-live="polite" aria-label="Carregando colaboradores">
-        <div v-for="i in 8" :key="i" class="text-center animate-pulse">
-          <div class="bg-gray-200 rounded-full w-24 h-24 mx-auto mb-4"></div>
-          <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-2"></div>
-          <div class="h-3 bg-gray-200 rounded w-1/2 mx-auto"></div>
-        </div>
-      </div>
-
-      <!-- Error State -->
-      <div v-else-if="error" class="text-center py-12" role="alert" aria-live="assertive">
-        <div class="text-red-600 mb-4" aria-hidden="true">
-          <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-        </div>
-        <h3 class="text-xl font-semibold text-gray-800 mb-2">Erro ao carregar colaboradores</h3>
-        <p class="text-gray-700 mb-4">{{ error }}</p>
-        <button 
-          @click="carregarColaboradores"
-          class="bg-amajac-500 text-white px-6 py-3 rounded-lg hover:bg-amajac-600 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amajac-500 focus-visible:ring-offset-2"
-          aria-label="Tentar carregar colaboradores novamente"
-        >
-          Tentar Novamente
-        </button>
-      </div>
-
-      <!-- Grid de Colaboradores -->
-      <div v-else class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8" aria-live="polite">
+      <div v-if="parceiros.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        
         <div 
-          v-for="colaborador in colaboradores" 
-          :key="colaborador.id"
-          class="text-center group"
+          v-for="colaborador in parceiros" 
+          :key="colaborador.id" 
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 p-6 flex flex-col items-center text-center hover:scale-105"
         >
-          <div class="bg-amajac-100 rounded-full w-24 h-24 mx-auto mb-4 flex items-center justify-center group-hover:bg-amajac-200 transition-colors">
-            <img 
-              v-if="colaborador.logo_url"
-              :src="colaborador.logo_url" 
-              :alt="`Logo ${colaborador.nome}`"
-              @error="substituirPorPlaceholder"
-              loading="lazy"
-              class="w-16 h-16 object-contain rounded-full"
-            >
-            <div v-else class="text-amajac-500 font-bold text-lg">
-              {{ colaborador.nome.charAt(0) }}
+          <!-- Logo com useSafeImage -->
+          <div class="mb-4 h-20 w-full flex justify-center">
+            <div class="image-wrapper h-full max-w-full">
+              <img 
+                v-if="!colaborador.logoState.loading && !colaborador.logoState.error"
+                :src="colaborador.logoState.imageUrl" 
+                :alt="colaborador.imagem_alt || `Logo de ${colaborador.nome}`" 
+                class="max-h-full max-w-full object-contain p-1 rounded-md transition-opacity duration-300"
+                :class="{ 'opacity-0': colaborador.logoState.loading, 'opacity-100': !colaborador.logoState.loading }"
+                @load="colaborador.logoState.lazyLoad"
+                loading="lazy"
+              />
+              <div v-else-if="colaborador.logoState.loading" class="placeholder animate-pulse w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-md">
+                <div class="text-center">
+                  <i class="fas fa-store text-gray-400 text-xl mb-1"></i>
+                  <span class="text-xs text-gray-500 dark:text-gray-400 block">Carregando...</span>
+                </div>
+              </div>
+              <div v-else-if="colaborador.logoState.error" class="error-state w-full h-full flex items-center justify-center bg-red-50 dark:bg-red-900/20 rounded-md border border-red-200 dark:border-red-700">
+                <div class="text-center">
+                  <i class="fas fa-exclamation-triangle text-red-400 text-xl mb-1"></i>
+                  <span class="text-xs text-red-500 dark:text-red-400 block">Erro</span>
+                </div>
+              </div>
+              <div v-else class="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-md">
+                <i class="fas fa-store text-gray-400 text-2xl"></i>
+              </div>
             </div>
           </div>
-          <h3 class="font-semibold text-gray-800 mb-1">{{ colaborador.nome }}</h3>
-          <p class="text-sm text-gray-600">{{ colaborador.tipo }}</p>
+          
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-2 line-clamp-2">
+            {{ colaborador.nome }}
+          </h3>
+          <span class="text-sm font-medium text-primary-600 dark:text-primary-400 mt-1 mb-3">
+            {{ colaborador.tipo }}
+          </span>
+
+          <p class="text-gray-700 dark:text-gray-300 text-sm mb-4 flex-grow line-clamp-3">
+            {{ colaborador.descricao_curta || 'Nenhuma descrição disponível.' }}
+          </p>
+
+          <!-- Status do Parceiro -->
+          <div class="w-full mb-3">
+            <span 
+              :class="[
+                'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
+                colaborador.ativo 
+                  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
+                  : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+              ]"
+            >
+              <i 
+                :class="[
+                  'w-2 h-2 rounded-full mr-1',
+                  colaborador.ativo ? 'bg-green-500' : 'bg-gray-500'
+                ]"
+              ></i>
+              {{ colaborador.ativo ? 'Ativo' : 'Inativo' }}
+            </span>
+          </div>
+
+          <div class="mt-4 w-full">
+            <a 
+              v-if="colaborador.link_site"
+              :href="colaborador.link_site" 
+              target="_blank" 
+              class="inline-flex items-center justify-center w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 transition-colors duration-200"
+              rel="noopener noreferrer"
+            >
+              <i class="fas fa-external-link-alt mr-2"></i>
+              Visitar Site
+            </a>
+            <div v-else class="text-center">
+              <span class="text-xs text-gray-500 dark:text-gray-400 block mb-2">
+                Contato disponível por telefone/endereço.
+              </span>
+              <div class="flex justify-center space-x-2">
+                <button 
+                  v-if="colaborador.telefone"
+                  @click="copiarTelefone(colaborador.telefone)"
+                  class="inline-flex items-center p-2 text-xs text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                  title="Copiar telefone"
+                >
+                  <i class="fas fa-phone"></i>
+                </button>
+                <button 
+                  v-if="colaborador.endereco"
+                  @click="copiarEndereco(colaborador.endereco)"
+                  class="inline-flex items-center p-2 text-xs text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                  title="Copiar endereço"
+                >
+                  <i class="fas fa-map-marker-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Redes Sociais -->
+          <div v-if="hasRedesSociais(colaborador)" class="flex justify-center space-x-2 mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 w-full">
+            <a 
+              v-if="colaborador.Instagram"
+              :href="colaborador.Instagram" 
+              target="_blank"
+              class="inline-flex items-center p-2 text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 transition-colors"
+              title="Instagram"
+            >
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a 
+              v-if="colaborador.Facebook"
+              :href="colaborador.Facebook" 
+              target="_blank"
+              class="inline-flex items-center p-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+              title="Facebook"
+            >
+              <i class="fab fa-facebook-f"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div v-if="isLoading" class="text-center py-12">
+        <div class="inline-flex items-center gap-3 text-primary-600 dark:text-primary-400">
+          <i class="fas fa-spinner fa-spin text-xl"></i>
+          <span class="text-lg">Carregando parceiros...</span>
         </div>
       </div>
 
       <!-- Empty State -->
-      <div v-if="!loading && !error && colaboradores.length === 0" class="text-center py-12" aria-live="polite">
-        <div class="text-gray-500 mb-4" aria-hidden="true">
-          <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-          </svg>
-        </div>
-        <h3 class="text-xl font-semibold text-gray-800 mb-2">Em busca de colaboradores</h3>
-        <p class="text-gray-700 mb-4">Estamos formando parcerias para fortalecer nossa comunidade</p>
-        <button 
-          @click="scrollToSection('#contato')"
-          class="bg-amajac-500 text-white px-6 py-3 rounded-lg hover:bg-amajac-600 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amajac-500 focus-visible:ring-offset-2"
-        >
-          Seja um Colaborador
-        </button>
-      </div>
-
-      <!-- Seção de Apoio -->
-      <div class="mt-16 bg-amajac-50 rounded-2xl p-8 text-center">
-        <h3 class="text-2xl font-semibold text-amajac-800 mb-4">Quer Apoiar a AMAJAC?</h3>
-        <p class="text-gray-700 mb-6 max-w-2xl mx-auto">
-          Sua empresa ou organização pode fazer parte dessa rede de transformação comunitária. 
-          Juntos, podemos realizar ainda mais pelo Jardim Atlântico Central.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <button 
-            @click="scrollToSection('#contato')"
-            class="bg-amajac-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amajac-600 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amajac-500 focus-visible:ring-offset-2"
-          >
-            Seja um Parceiro
-          </button>
-          <a
-            href="https://wa.me/5521978979840?text=Olá! Gostaria de saber mais sobre como apoiar a AMAJAC."
-            target="_blank"
-            rel="noopener noreferrer"
-            class="border-2 border-amajac-500 text-amajac-500 px-6 py-3 rounded-lg font-semibold hover:bg-amajac-500 hover:text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amajac-500 focus-visible:ring-offset-2"
-          >
-            Falar no WhatsApp
-          </a>
+      <div v-if="!isLoading && parceiros.length === 0" class="text-center py-12">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-md mx-auto border border-gray-200 dark:border-gray-700">
+          <i class="fas fa-store-slash text-4xl text-gray-400 dark:text-gray-500 mb-4"></i>
+          <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">
+            Ainda não temos parceiros colaboradores ativos
+          </h3>
+          <p class="text-gray-500 dark:text-gray-400 text-sm">
+            Em breve teremos estabelecimentos parceiros para apresentar.
+          </p>
         </div>
       </div>
     </div>
   </section>
 </template>
 
-<script>
-import { SupabaseService } from '../services/supabaseService'
+<script setup>
+import { computed, onMounted, ref } from 'vue'
+import { usePublicColaboradores } from '@/composables/usePublicColaboradores'
+import { useSafeImage } from '@/composables/useSafeImage'
+import { useToast } from '@/composables/useToast'
 
-export default {
-  name: 'ColaboradoresSection',
-  data() {
-    return {
-      colaboradores: [],
-      loading: true,
-      error: null
-    }
-  },
-  async mounted() {
-    await this.carregarColaboradores()
-  },
-  methods: {
-    async carregarColaboradores() {
-      this.loading = true
-      this.error = null
-      
-      try {
-        const { data, error } = await SupabaseService.getColaboradores()
-        if (error) throw error
-        this.colaboradores = data || []
-      } catch (error) {
-        console.error('Erro ao carregar colaboradores:', error)
-        this.error = error.message
-      } finally {
-        this.loading = false
-      }
-    },
-    substituirPorPlaceholder(event) {
-      event.target.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" fill="%23f0f9f0"/><text x="50%" y="50%" font-family="Arial" font-size="14" fill="%233a9a3a" text-anchor="middle" dy=".3em">Parceiro</text></svg>`
-      event.target.onerror = null
-    },
-    scrollToSection(sectionId) {
-      const element = document.querySelector(sectionId)
-      if (element) {
-        const headerOffset = 80
-        const elementPosition = element.offsetTop - headerOffset
-        window.scrollTo({
-          top: elementPosition,
-          behavior: 'smooth'
-        })
-      }
-    }
+const { parceiros: parceirosData, isLoading, fetchColaboradores } = usePublicColaboradores()
+const { showToast } = useToast()
+
+// Adiciona useSafeImage para cada parceiro
+const parceiros = computed(() => {
+  return parceirosData.value.map(parceiro => ({
+    ...parceiro,
+    logoState: useSafeImage(parceiro.logo_url || '')
+  }))
+})
+
+onMounted(() => {
+  fetchColaboradores()
+})
+
+// Métodos utilitários
+function hasRedesSociais(colaborador) {
+  return !!(colaborador.Instagram || colaborador.Facebook)
+}
+
+async function copiarTelefone(telefone) {
+  try {
+    await navigator.clipboard.writeText(telefone)
+    showToast('Telefone copiado!', 'success')
+  } catch (error) {
+    console.error('Erro ao copiar telefone:', error)
+    showToast('Erro ao copiar telefone', 'error')
   }
 }
+
+async function copiarEndereco(endereco) {
+  try {
+    await navigator.clipboard.writeText(endereco)
+    showToast('Endereço copiado!', 'success')
+  } catch (error) {
+    console.error('Erro ao copiar endereço:', error)
+    showToast('Erro ao copiar endereço', 'error')
+  }
+}
+
+// Mock para testes (se necessário)
+/*
+const parceirosData = ref([
+  { 
+    id: '1', 
+    nome: 'Padaria Sabor Local', 
+    tipo: 'Alimentação', 
+    logo_url: 'https://example.com/logo1.jpg', 
+    imagem_alt: 'Logo Padaria', 
+    descricao_curta: 'A melhor padaria da região! Pães frescos e bolos artesanais.', 
+    link_site: 'https://padariasaborlocal.com',
+    ativo: true,
+    telefone: '(11) 99999-9999',
+    endereco: 'Rua Principal, 123',
+    Instagram: 'https://instagram.com/padaria',
+    Facebook: 'https://facebook.com/padaria'
+  },
+  { 
+    id: '2', 
+    nome: 'Consultório Odonto+', 
+    tipo: 'Saúde', 
+    logo_url: 'https://example.com/logo2.jpg', 
+    imagem_alt: 'Logo Odonto', 
+    descricao_curta: 'Especialistas em clareamento e implantes. Agende sua avaliação!', 
+    link_site: null,
+    ativo: true,
+    telefone: '(11) 88888-8888',
+    endereco: 'Av. Central, 456',
+    Instagram: null,
+    Facebook: 'https://facebook.com/odonto'
+  },
+])
+const isLoading = ref(false)
+*/
 </script>
+
+<style scoped>
+.image-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder {
+  background-color: #f8f9fa;
+}
+
+.dark .placeholder {
+  background-color: #374151;
+}
+
+.error-state {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.dark .error-state {
+  background-color: #7f1d1d;
+  border: 1px solid #dc2626;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.transition-opacity {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.hover-scale {
+  transition: transform 0.3s ease-in-out;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+</style>
