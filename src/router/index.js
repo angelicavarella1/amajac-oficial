@@ -89,6 +89,19 @@ const routes = [
   },
 
   // ===== ROTAS DO PAINEL ADMIN =====
+  
+  // 🔥 CORREÇÃO: /admin deve ir para LOGIN (não redirecionar)
+  {
+    path: "/admin",
+    name: "AdminRoot", 
+    component: () => import("@/admin/views/AdminLogin.vue"),
+    meta: { 
+      title: "Login - Painel Admin",
+      public: true
+    }
+  },
+  
+  // 🔥 CORREÇÃO: Login em path separado
   {
     path: "/admin/login",
     name: "AdminLogin",
@@ -98,6 +111,8 @@ const routes = [
       public: true
     }
   },
+  
+  // ROTA PÚBLICA: Recuperação de Senha
   {
     path: "/admin/esqueci-senha",
     name: "AdminEsqueciSenha",
@@ -107,20 +122,24 @@ const routes = [
       public: true 
     }
   },
+  
+  // ROTA PROTEGIDA: Layout Principal do Admin
   {
-    path: "/admin",
+    path: "/admin/dashboard",
     component: () => import("@/admin/components/AdminLayout.vue"),
     meta: { 
       requiresAuth: true,
       title: "Dashboard - Painel Admin"
     },
     children: [
+      // Dashboard Principal
       {
         path: "",
         name: "AdminDashboard",
         component: () => import("@/admin/views/AdminDashboard.vue"),
         meta: { title: "Dashboard" }
       },
+      
       // Notícias
       {
         path: "noticias",
@@ -141,6 +160,7 @@ const routes = [
         meta: { title: "Editar Notícia" },
         props: true
       },
+      
       // Eventos
       {
         path: "eventos",
@@ -161,6 +181,7 @@ const routes = [
         meta: { title: "Editar Evento" },
         props: true
       },
+      
       // Galeria
       {
         path: "galeria",
@@ -181,6 +202,7 @@ const routes = [
         meta: { title: "Editar Imagem" },
         props: true
       },
+      
       // Parceiros
       {
         path: "parceiros",
@@ -201,6 +223,7 @@ const routes = [
         meta: { title: "Editar Parceiro Comercial" },
         props: true
       },
+      
       // Classificados
       {
         path: "classificados",
@@ -221,6 +244,7 @@ const routes = [
         meta: { title: "Editar Classificado" },
         props: true
       },
+      
       // Mensagens
       {
         path: "mensagens",
@@ -228,6 +252,7 @@ const routes = [
         component: () => import("@/admin/views/AdminMensagens.vue"),
         meta: { title: "Mensagens de Contato" }
       },
+      
       // Solicitações de Sócio
       {
         path: "solicitacoes-socio",
@@ -235,6 +260,7 @@ const routes = [
         component: () => import("@/admin/views/AdminSolicitacoesSocio.vue"),
         meta: { title: "Solicitações de Sócio" }
       },
+      
       // Configurações
       {
         path: "configuracoes",
@@ -248,6 +274,7 @@ const routes = [
         component: () => import("@/admin/views/AdminConfiguracoesCompleto.vue"),
         meta: { title: "Configurações Avançadas" }
       },
+      
       // Relatórios
       {
         path: "relatorios",
@@ -255,6 +282,7 @@ const routes = [
         component: () => import("@/admin/views/AdminRelatorios.vue"),
         meta: { title: "Relatórios e Estatísticas" }
       },
+      
       // Auditoria
       {
         path: "relatorios/auditoria",
@@ -264,6 +292,7 @@ const routes = [
       },
 
       // ===== NOVAS ROTAS ADICIONADAS =====
+      
       // Monitor Supabase
       {
         path: "monitor",
@@ -271,6 +300,7 @@ const routes = [
         component: () => import("@/admin/views/MonitorView.vue"),
         meta: { title: "Monitor Supabase" }
       },
+      
       // Backup & Limpeza
       {
         path: "backup", 
@@ -278,6 +308,7 @@ const routes = [
         component: () => import("@/admin/views/BackupView.vue"),
         meta: { title: "Backup & Limpeza" }
       },
+      
       // Auditoria Completa
       {
         path: "auditoria",
@@ -334,7 +365,7 @@ const router = createRouter({
   }
 })
 
-// Guarda de navegação
+// Guarda de navegação - CORRIGIDO
 router.beforeEach(async (to, from, next) => {
   const uiStore = useUIStore()
   const authStore = useAuthStore()
@@ -347,26 +378,29 @@ router.beforeEach(async (to, from, next) => {
     document.title = to.meta.title
   }
   
-  // Verificar autenticação
-  const isAdminAuthenticated = await authStore.checkAuth()
-
-  // Proteger rotas que requerem autenticação
-  if (to.meta.requiresAuth) {
-    if (!isAdminAuthenticated) {
-      uiStore.showToast('Acesso negado. Por favor, faça login.', 'error')
-      next('/admin/login')
-    } else {
-      next()
-    }
-  } 
-  // Redirecionar usuários autenticados de rotas públicas
-  else if (to.meta.public && isAdminAuthenticated) {
-    next('/admin')
-  } 
-  // Permitir acesso a outras rotas
-  else {
-    next()
+  // Verificar autenticação (apenas para rotas admin protegidas)
+  let isAdminAuthenticated = false
+  if (to.path.startsWith('/admin') && to.meta.requiresAuth) {
+    isAdminAuthenticated = await authStore.checkAuth()
   }
+
+  // 🔥 FLUXO CORRETO DE AUTENTICAÇÃO
+  
+  // 1. Se tentar acessar rotas protegidas sem autenticação
+  if (to.meta.requiresAuth && !isAdminAuthenticated) {
+    uiStore.showToast('Acesso negado. Por favor, faça login.', 'error')
+    next('/admin/login')
+    return
+  }
+
+  // 2. Se estiver autenticado e tentar acessar login, redirecionar para dashboard
+  if (to.meta.public && isAdminAuthenticated && to.path === '/admin/login') {
+    next('/admin/dashboard')
+    return
+  }
+
+  // 3. Permite acesso a todas as outras rotas
+  next()
 })
 
 // Hook após navegação

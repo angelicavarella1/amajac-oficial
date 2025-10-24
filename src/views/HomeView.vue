@@ -1149,7 +1149,7 @@ const galeriaStore = useGaleriaStore()
 
 // ✅ VARIÁVEIS DE PAGINAÇÃO PARA GALERIA
 const paginaAtual = ref(1)
-const imagensPorPagina = ref(20) // Ajuste conforme necessidade
+const imagensPorPagina = ref(20)
 
 // ✅ COMPUTED PROPERTIES PARA PAGINAÇÃO
 const totalPaginas = computed(() => {
@@ -1166,7 +1166,6 @@ const imagensPaginadas = computed(() => {
 const proximaPagina = () => {
   if (paginaAtual.value < totalPaginas.value) {
     paginaAtual.value++
-    // Rolagem suave para o topo da galeria
     const galeriaSection = document.getElementById('galeria')
     if (galeriaSection) {
       galeriaSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -1177,7 +1176,6 @@ const proximaPagina = () => {
 const paginaAnterior = () => {
   if (paginaAtual.value > 1) {
     paginaAtual.value--
-    // Rolagem suave para o topo da galeria
     const galeriaSection = document.getElementById('galeria')
     if (galeriaSection) {
       galeriaSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -1215,9 +1213,7 @@ function abrirPreview(imagem) {
   
   console.log('🖼️ Preview aberto:', imagem.titulo, 'Índice:', index, 'Total:', galeriaComImagens.value.length)
   
-  // Forçar o carregamento da imagem
-  if (imagem.imageState?.imageUrl || imagem.imagem_url) {
-    const imgUrl = imagem.imageState?.imageUrl || imagem.imagem_url
+  if (imagem.imagem_url) {
     const img = new Image()
     img.onload = () => {
       previewLoading.value = false
@@ -1226,7 +1222,7 @@ function abrirPreview(imagem) {
       previewLoading.value = false
       previewError.value = true
     }
-    img.src = imgUrl
+    img.src = imagem.imagem_url
   } else {
     previewLoading.value = false
     previewError.value = true
@@ -1300,7 +1296,7 @@ function verParceiro(parceiro) {
   uiStore.showToast(`Visualizando ${parceiro.nome}`, 'info')
 }
 
-// ✅ useSafeImage para imagens principais
+// ✅ useSafeImage para imagens principais (APENAS PARA IMAGENS FIXAS)
 const { 
   imageUrl: heroImageUrl, 
   loading: heroLoading, 
@@ -1429,7 +1425,7 @@ const formContato = reactive({
   mensagem: ''
 })
 
-// ✅ Estados reativos para imagens dinâmicas
+// ✅ CORREÇÃO CRÍTICA: Estados reativos SEM useSafeImage nos watchers
 const noticiasComImagens = ref([])
 const galeriaComImagens = ref([])
 const eventosComImagens = ref([])
@@ -1455,55 +1451,43 @@ const safeArray = (arr) => {
   return arr
 }
 
-// ✅ WATCHERS para inicializar useSafeImage quando os dados chegarem
+// ✅ CORREÇÃO CRÍTICA: Watchers SEM useSafeImage - processamento simples
 watch(() => noticiasStore.noticiasHome, (noticias) => {
   if (noticias && noticias.length > 0) {
-    noticiasComImagens.value = noticias.slice(0, 6).map(noticia => {
-      const imageState = useSafeImage(noticia.imagem_url || '')
-      return {
-        ...noticia,
-        tituloSeguro: safeString(noticia.titulo || 'Sem título'),
-        dataFormatada: formatarData(noticia.data_publicacao),
-        imageState
-      }
-    })
+    noticiasComImagens.value = noticias.slice(0, 6).map(noticia => ({
+      ...noticia,
+      tituloSeguro: safeString(noticia.titulo || 'Sem título'),
+      dataFormatada: formatarData(noticia.data_publicacao),
+      // ✅ REMOVIDO: imageState - usaremos URL diretamente no template
+    }))
   }
 })
 
-// ✅ CORREÇÃO CRÍTICA: Usar TODAS as imagens sem limitar
+// ✅ CORREÇÃO: Usar TODAS as imagens sem limitar
 watch(() => galeriaStore.imagens, (imagens) => {
   if (imagens && imagens.length > 0) {
-    galeriaComImagens.value = imagens.map(imagem => {
-      const imageState = useSafeImage(imagem.imagem_url || '')
-      return {
-        ...imagem,
-        imageState
-      }
-    })
+    galeriaComImagens.value = imagens.map(imagem => ({
+      ...imagem,
+      // ✅ REMOVIDO: imageState - usaremos URL diretamente no template
+    }))
   }
 })
 
 watch(() => eventosStore.eventosFuturos, (eventos) => {
   if (eventos && eventos.length > 0) {
-    eventosComImagens.value = eventos.slice(0, 3).map(evento => {
-      const imageState = useSafeImage(evento.imagem_url || '')
-      return {
-        ...evento,
-        imageState
-      }
-    })
+    eventosComImagens.value = eventos.slice(0, 3).map(evento => ({
+      ...evento,
+      // ✅ REMOVIDO: imageState - usaremos URL diretamente no template
+    }))
   }
 })
 
 watch(() => colaboradoresStore.parceirosAtivos, (parceiros) => {
   if (parceiros && parceiros.length > 0) {
-    parceirosComImagens.value = parceiros.map(parceiro => {
-      const imageState = useSafeImage(parceiro.logo_url || '')
-      return {
-        ...parceiro,
-        imageState
-      }
-    })
+    parceirosComImagens.value = parceiros.map(parceiro => ({
+      ...parceiro,
+      // ✅ REMOVIDO: imageState - usaremos URL diretamente no template
+    }))
   }
 })
 
@@ -1701,7 +1685,7 @@ const atualizarRelogio = () => {
   })
 }
 
-// ✅ WATCHERS PARA ATUALIZAR IMAGENS DINAMICAMENTE
+// ✅ WATCHERS PARA ATUALIZAR IMAGENS DINAMICAMENTE (APENAS PARA IMAGENS FIXAS)
 watch(() => configuracoesStore.hero?.hero_imagem_url, (newUrl) => {
   if (newUrl) {
     setHeroUrl(newUrl)
@@ -1724,8 +1708,6 @@ watch(() => configuracoesStore.about?.quem_somos_imagem_url, (newUrl) => {
 watch(previewImageData, (newVal) => {
   if (!newVal) {
     // Quando fechar o modal, volta para a página atual
-    // Ou reseta para página 1 se preferir
-    // paginaAtual.value = 1
   }
 })
 
