@@ -254,6 +254,14 @@ const messageBox = reactive({
     classes: '' // Tailwind classes para cor/estilo
 });
 
+// Função segura para logging
+const safeLogError = (operation, err) => {
+  console.error(`Erro na operação ${operation}:`, {
+    code: err?.code || 'unknown',
+    message: err?.message ? err.message.substring(0, 100) : 'Erro desconhecido'
+  });
+};
+
 // --- Funções de Formatação ---
 const formatarCPF = () => {
     let valor = formData.cpf.replace(/\D/g, '');
@@ -422,14 +430,20 @@ const handleFormSubmit = async () => {
     loading.value = true;
 
     try {
-        // Verificar se CPF já existe
-        const { data: existingSocio, error: checkError } = await supabase
+        // ✅ CORREÇÃO: Verificar se CPF já existe SEM .single() para evitar erro 400
+        const { data: existingSocios, error: checkError } = await supabase
             .from('socios')
             .select('id')
             .eq('cpf', cpfLimpo)
-            .single();
+            .limit(1); // ✅ Usar .limit(1) em vez de .single()
 
-        if (existingSocio) {
+        if (checkError) {
+            safeLogError('verificacao_cpf', checkError);
+            throw new Error('Erro ao verificar CPF. Tente novamente.');
+        }
+
+        // ✅ CORREÇÃO: Verificar se encontrou algum registro
+        if (existingSocios && existingSocios.length > 0) {
             messageBox.classes = 'text-center p-3 text-sm rounded-lg bg-yellow-100 text-yellow-800 border border-yellow-300 dark:bg-yellow-800 dark:text-yellow-100 dark:border-yellow-600';
             messageBox.text = 'CPF já cadastrado. Entre em contato conosco se precisar de ajuda.';
             messageBox.isVisible = true;
@@ -459,7 +473,10 @@ const handleFormSubmit = async () => {
             }])
             .select();
 
-        if (error) throw error;
+        if (error) {
+            safeLogError('insercao_socio', error);
+            throw error;
+        }
 
         // Sucesso
         messageBox.classes = 'text-center p-3 text-sm rounded-lg bg-green-100 text-green-800 border border-green-300 dark:bg-green-800 dark:text-green-100 dark:border-green-600';

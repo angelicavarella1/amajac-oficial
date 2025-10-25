@@ -7,7 +7,7 @@
         <p class="text-gray-600 dark:text-gray-400 mt-1">Gerencie os comércios locais parceiros da associação</p>
       </div>
       <router-link
-        to="/admin/parceiros/novo"
+        to="/admin/dashboard/parceiros/novo"
         class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center"
       >
         <i class="fas fa-plus mr-2"></i>
@@ -171,8 +171,8 @@
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-10 w-10">
                     <img
-                      class="h-10 w-10 rounded-lg object-cover"
-                      :src="parceiro?.logo_url || '/placeholder-partner.jpg'"
+                      class="h-10 w-10 rounded-lg object-cover bg-gray-200 dark:bg-gray-700"
+                      :src="parceiro?.logo_url || '/images/logo-amajac.png'"
                       :alt="parceiro?.nome || 'Parceiro'"
                       @error="handleImageError"
                     >
@@ -222,7 +222,7 @@
 
                   <!-- Editar -->
                   <router-link
-                    :to="`/admin/parceiros/editar/${parceiro?.id}`"
+                    :to="`/admin/dashboard/parceiros/editar/${parceiro?.id}`"
                     class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors p-2 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20"
                     title="Editar"
                   >
@@ -260,7 +260,7 @@
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhum parceiro encontrado</h3>
         <p class="text-gray-500 dark:text-gray-400 mb-6">Comece criando seu primeiro parceiro comercial.</p>
         <router-link
-          to="/admin/parceiros/novo"
+          to="/admin/dashboard/parceiros/novo"
           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors inline-flex items-center"
         >
           <i class="fas fa-plus mr-2"></i>
@@ -453,7 +453,10 @@ const carregarParceiros = async () => {
 }
 
 const handleImageError = (event) => {
-  event.target.src = '/placeholder-partner.jpg'
+  // ✅ CORREÇÃO: Usa a logo AMAJAC como fallback em vez de placeholder que não existe
+  event.target.src = '/images/logo-amajac.png'
+  // ✅ CORREÇÃO: Previne loop infinito
+  event.target.onerror = null
 }
 
 const toggleStatus = async (parceiro) => {

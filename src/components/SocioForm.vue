@@ -63,6 +63,7 @@
               required
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
               placeholder="000.000.000-00"
+              @blur="formatCPF"
             >
           </div>
         </div>
@@ -183,18 +184,99 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
 import { supabase } from '@/supabase';
 
-export default {
-  name: 'SocioForm',
-  setup() {
-    const loading = ref(false);
-    const success = ref(false);
-    const error = ref(null);
+// Estados
+const loading = ref(false);
+const success = ref(false);
+const error = ref(null);
 
-    const form = ref({
+// Formulário
+const form = ref({
+  nome: '',
+  email: '',
+  telefone: '',
+  cpf: '',
+  endereco: '',
+  profissao: '',
+  motivacao: '',
+  aceitouTermos: false
+});
+
+// Função segura para logging
+const safeLogError = (operation, err) => {
+  console.error(`Erro na operação ${operation}:`, {
+    code: err?.code || 'unknown',
+    message: err?.message ? err.message.substring(0, 100) : 'Erro desconhecido'
+  });
+};
+
+// Formatar CPF
+const formatCPF = () => {
+  let cpf = form.value.cpf.replace(/\D/g, '');
+  if (cpf.length === 11) {
+    form.value.cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  }
+};
+
+// Validar formulário
+const validateForm = () => {
+  if (!form.value.nome.trim()) {
+    error.value = 'Nome é obrigatório';
+    return false;
+  }
+  if (!form.value.email.trim()) {
+    error.value = 'E-mail é obrigatório';
+    return false;
+  }
+  if (!form.value.telefone.trim()) {
+    error.value = 'Telefone é obrigatório';
+    return false;
+  }
+  if (!form.value.cpf.trim()) {
+    error.value = 'CPF é obrigatório';
+    return false;
+  }
+  if (!form.value.motivacao.trim()) {
+    error.value = 'Motivação é obrigatória';
+    return false;
+  }
+  if (!form.value.aceitouTermos) {
+    error.value = 'Você deve aceitar os termos e condições';
+    return false;
+  }
+  return true;
+};
+
+// Enviar formulário
+const handleSubmit = async () => {
+  if (!validateForm()) return;
+
+  loading.value = true;
+  error.value = null;
+  success.value = false;
+  
+  try {
+    const { error: submitError } = await supabase
+      .from('solicitacoes_socio')
+      .insert([{
+        ...form.value,
+        status: 'pendente',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }]);
+
+    if (submitError) {
+      safeLogError('cadastro_socio', submitError);
+      throw new Error('Erro ao enviar solicitação. Tente novamente.');
+    }
+    
+    success.value = true;
+    
+    // Reset form
+    form.value = {
       nome: '',
       email: '',
       telefone: '',
@@ -203,60 +285,19 @@ export default {
       profissao: '',
       motivacao: '',
       aceitouTermos: false
-    });
-
-    const handleSubmit = async () => {
-      loading.value = true;
-      error.value = null;
-      success.value = false;
-      
-      try {
-        const { error: submitError } = await supabase
-          .from('solicitacoes_socio')
-          .insert([{
-            ...form.value,
-            status: 'pendente',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          }]);
-
-        if (submitError) throw submitError;
-        
-        success.value = true;
-        
-        // Reset form
-        form.value = {
-          nome: '',
-          email: '',
-          telefone: '',
-          cpf: '',
-          endereco: '',
-          profissao: '',
-          motivacao: '',
-          aceitouTermos: false
-        };
-      } catch (err) {
-        console.error('Erro ao enviar solicitação:', err);
-        error.value = 'Erro ao enviar solicitação. Por favor, tente novamente.';
-      } finally {
-        loading.value = false;
-      }
     };
-
-    return {
-      form,
-      loading,
-      success,
-      error,
-      handleSubmit
-    };
+  } catch (err) {
+    error.value = err.message;
+  } finally {
+    loading.value = false;
   }
 };
 </script>
 
 <style scoped>
+/* ✅ CSS CORRIGIDO - sem propriedade 'ring' inválida */
 input:focus, textarea:focus {
   outline: none;
-  ring: 2px;
+  box-shadow: 0 0 0 2px rgb(34 197 94); /* Verde do Tailwind */
 }
 </style>

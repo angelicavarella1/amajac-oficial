@@ -7,9 +7,9 @@
           <!-- Logo e Nome -->
           <div class="flex items-center space-x-3">
             <div class="flex items-center justify-center w-12 h-12 bg-green-600 rounded-lg overflow-hidden">
-              <img 
-                :src="logoImageUrl" 
-                alt="Logo AMAJAC" 
+              <img
+                :src="logoImageUrl"
+                alt="Logo AMAJAC"
                 class="w-full h-full object-cover"
                 v-if="!logoLoading && !logoError"
               />
@@ -49,7 +49,7 @@
         <div class="hidden md:flex justify-between items-center py-2">
           <div class="flex items-center gap-6">
             <!-- RELÓGIO AUMENTADO E CORRIGIDO -->
-            <div v-if="configuracoesStore.sistema?.info_relogio_ativado === 'true'" 
+            <div v-if="configuracoesStore.sistema?.info_relogio_ativado === 'true'"
                  class="flex items-center gap-3 text-lg font-bold text-gray-700 dark:text-gray-300">
               <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -58,7 +58,7 @@
                 {{ horaAtual }}
               </span>
             </div>
-            
+
             <!-- Previsão do Tempo -->
             <WeatherInfo v-if="configuracoesStore.sistema?.info_clima_ativado === 'true'" />
           </div>
@@ -87,9 +87,9 @@
             <a href="#classificados" @click.prevent="scrollToSection('#classificados', true)" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400">Classificados</a>
             <a href="#colaboradores" @click.prevent="scrollToSection('#colaboradores', true)" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400">Parceiros</a>
             <a href="#contato" @click.prevent="scrollToFooter" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400">Contato</a>
-            
+
             <!-- Relógio Mobile Aumentado -->
-            <div v-if="configuracoesStore.sistema?.info_relogio_ativado === 'true'" 
+            <div v-if="configuracoesStore.sistema?.info_relogio_ativado === 'true'"
                  class="flex items-center gap-2 text-base font-semibold text-gray-700 dark:text-gray-300 pt-4 border-t border-gray-200 dark:border-gray-700">
               <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -124,9 +124,9 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
           </div>
-          <img 
+          <img
             v-else
-            :src="heroImageUrl" 
+            :src="heroImageUrl"
             :alt="safeString(configuracoesStore.hero?.hero_titulo || 'Bandeira AMAJAC')"
             class="w-full h-full object-cover"
             loading="eager"
@@ -143,15 +143,15 @@
           <h1 class="text-5xl md:text-6xl font-black mb-8 text-green-700 dark:text-green-500 tracking-tight">
             {{ safeString(configuracoesStore.hero?.hero_titulo || 'PORTAL DO MORADOR') }}
           </h1>
-          
+
           <p class="text-2xl md:text-3xl font-bold mb-3 text-green-700 dark:text-green-500">
             {{ safeString(configuracoesStore.hero?.hero_subtitulo || 'Associação de Moradores e Amigos do Jardim Atlântico Central') }}
           </p>
-          
+
           <p class="text-xl mb-6 text-green-700 dark:text-green-500 font-bold">
             {{ safeString(configuracoesStore.hero?.hero_local || 'Jardim Atlântico Central') }}
           </p>
-          
+
           <div class="max-w-3xl mx-auto space-y-6 mb-10">
             <p class="text-xl text-gray-800 dark:text-white font-medium leading-relaxed">
               {{ safeString(configuracoesStore.hero?.hero_descricao || 'Trabalhamos juntos para transformar nosso bairro através de ações coletivas.') }}
@@ -160,7 +160,7 @@
               Unindo a comunidade por um bairro melhor.
             </p>
           </div>
-          
+
           <div class="border-t-2 border-green-300 dark:border-green-600 max-w-3xl mx-auto pt-8"></div>
         </div>
       </section>
@@ -190,8 +190,8 @@
                 <div v-if="configuracoesStore.about?.quem_somos_valores" class="mt-6">
                   <h4 class="text-xl font-bold text-green-700 dark:text-green-400 mb-3">{{ safeString(configuracoesStore.about?.quem_somos_valores_titulo || 'Nossos Valores') }}</h4>
                   <ul class="space-y-2">
-                    <li v-for="(valor, index) in safeArray(configuracoesStore.about.quem_somos_valores.split('\n').filter(v => v.trim()))" 
-                        :key="index" 
+                    <li v-for="(valor, index) in safeArray(configuracoesStore.about.quem_somos_valores.split('\n').filter(v => v.trim()))"
+                        :key="index"
                         class="flex items-start text-gray-700 dark:text-gray-300">
                       <svg class="w-5 h-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
@@ -210,10 +210,10 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                       </svg>
                     </div>
-                    <img 
+                    <img
                       v-else
-                      :src="aboutImageUrl" 
-                      :alt="safeString('Comunidade AMAJAC')" 
+                      :src="aboutImageUrl"
+                      :alt="safeString('Comunidade AMAJAC')"
                       class="w-full h-64 md:h-80 object-cover hover:scale-105 transition-transform duration-300"
                       loading="lazy"
                     />
@@ -222,7 +222,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <div v-if="configuracoesStore.about?.quem_somos_estatisticas_familias" class="mt-6 grid grid-cols-2 gap-4 text-center">
                   <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
                     <div class="text-2xl font-bold text-green-700 dark:text-green-400">{{ safeString(configuracoesStore.about.quem_somos_estatisticas_familias) }}</div>
@@ -246,38 +246,35 @@
             <h2 class="text-3xl font-bold text-green-700 dark:text-green-400 mb-4">Galeria</h2>
             <p class="text-gray-700 dark:text-gray-300">Veja fotos dos nossos eventos e conquistas</p>
           </div>
-          
+
           <!-- Loading State -->
           <div v-if="galeriaStore.loading" class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
             <div v-for="n in 8" :key="n" class="aspect-video bg-gray-300 dark:bg-gray-700 rounded-lg animate-pulse"></div>
           </div>
-          
+
           <!-- Galeria com Paginação -->
           <div v-else-if="galeriaComImagens.length > 0">
             <!-- Grid de Imagens -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-8">
-              <div 
-                v-for="(foto, index) in imagensPaginadas" 
-                :key="foto.id || index" 
+              <div
+                v-for="(foto, index) in imagensPaginadas"
+                :key="foto.id || index"
                 class="aspect-video bg-gray-300 dark:bg-gray-700 rounded-lg overflow-hidden cursor-pointer relative"
                 @click="abrirPreview(foto)"
               >
                 <div class="image-wrapper w-full h-full">
-                  <img 
-                    v-if="!foto.imageState?.loading && !foto.imageState?.error"
-                    :src="foto.imageState?.imageUrl" 
-                    :alt="safeString(foto.titulo || `Imagem ${index + 1}`)" 
+                  <img
+                    v-if="foto.imagem_url"
+                    :src="foto.imagem_url"
+                    :alt="safeString(foto.titulo || `Imagem ${index + 1}`)"
                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     :loading="index < 4 ? 'eager' : 'lazy'"
-                    @load="() => foto.imageState?.lazyLoad()"
+                    @error="handleImageError"
                   />
-                  <div v-else-if="foto.imageState?.loading" class="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse flex items-center justify-center">
+                  <div v-else class="absolute inset-0 bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
                     <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
-                  </div>
-                  <div v-else-if="foto.imageState?.error" class="absolute inset-0 bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
-                    <span class="text-red-500 text-xs">Falha ao carregar</span>
                   </div>
                 </div>
                 <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
@@ -285,10 +282,10 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Paginação -->
             <div v-if="totalPaginas > 1" class="flex justify-center items-center gap-4 mt-8">
-              <button 
+              <button
                 @click="paginaAnterior"
                 :disabled="paginaAtual === 1"
                 class="px-4 py-2 bg-green-600 text-white rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-green-700 transition-colors flex items-center gap-2"
@@ -296,12 +293,12 @@
                 <i class="fas fa-chevron-left"></i>
                 Anterior
               </button>
-              
+
               <span class="text-gray-700 dark:text-gray-300 font-medium">
                 Página {{ paginaAtual }} de {{ totalPaginas }}
               </span>
-              
-              <button 
+
+              <button
                 @click="proximaPagina"
                 :disabled="paginaAtual === totalPaginas"
                 class="px-4 py-2 bg-green-600 text-white rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-green-700 transition-colors flex items-center gap-2"
@@ -311,7 +308,7 @@
               </button>
             </div>
           </div>
-          
+
           <div v-else class="text-center py-8">
             <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-auto">
               <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -331,7 +328,7 @@
             <h2 class="text-3xl font-bold text-green-700 dark:text-green-400 mb-4">Eventos</h2>
             <p class="text-gray-600 dark:text-gray-300">Participe dos eventos da nossa comunidade</p>
           </div>
-          
+
           <div v-if="eventosStore.loading" class="max-w-2xl mx-auto space-y-4">
             <div v-for="n in 3" :key="n" class="bg-green-50 dark:bg-green-900/20 rounded-lg p-6 border-l-4 border-green-500 animate-pulse">
               <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded mb-2 w-3/4"></div>
@@ -341,34 +338,23 @@
           </div>
 
           <div v-else-if="eventosComImagens.length > 0" class="max-w-2xl mx-auto space-y-4">
-            <div 
-              v-for="evento in safeArray(eventosComImagens)" 
-              :key="evento.id" 
+            <div
+              v-for="evento in safeArray(eventosComImagens)"
+              :key="evento.id"
               class="bg-green-50 dark:bg-green-900/20 rounded-lg p-6 border-l-4 border-green-500 hover:shadow-md transition-shadow cursor-pointer"
               @click="verEvento(evento)"
             >
               <div v-if="evento.imagem_url" class="mb-4 rounded-lg overflow-hidden">
                 <div class="relative h-40">
-                  <div class="image-wrapper w-full h-full">
-                    <img 
-                      v-if="!evento.imageState?.loading && !evento.imageState?.error"
-                      :src="evento.imageState?.imageUrl" 
-                      :alt="safeString(evento.titulo)" 
-                      class="w-full h-full object-cover"
-                      @load="() => evento.imageState?.lazyLoad()"
-                    />
-                    <div v-else-if="evento.imageState?.loading" class="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse flex items-center justify-center">
-                      <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                      </svg>
-                    </div>
-                    <div v-else-if="evento.imageState?.error" class="absolute inset-0 bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
-                      <span class="text-red-500 text-sm">Falha ao carregar imagem</span>
-                    </div>
-                  </div>
+                  <img
+                    :src="evento.imagem_url"
+                    :alt="safeString(evento.titulo)"
+                    class="w-full h-full object-cover"
+                    @error="handleImageError"
+                  />
                 </div>
               </div>
-              
+
               <h4 class="text-lg font-bold text-gray-800 dark:text-white mb-2">{{ safeString(evento.titulo) }}</h4>
               <p class="text-gray-600 dark:text-gray-300 mb-3">{{ safeString(evento.descricao) }}</p>
               <div class="text-sm text-green-700 dark:text-green-400 font-semibold">
@@ -378,9 +364,9 @@
                 <i class="fas fa-map-marker-alt mr-2"></i>
                 {{ safeString(evento.local) }}
               </div>
-              
+
               <div class="mt-4">
-                <router-link 
+                <router-link
                   :to="`/eventos/${evento.id}`"
                   class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
                 >
@@ -412,7 +398,7 @@
             <h2 class="text-3xl font-bold text-green-700 dark:text-green-400 mb-4">Notícias</h2>
             <p class="text-gray-600 dark:text-gray-300">Fique por dentro das novidades</p>
           </div>
-          
+
           <div v-if="noticiasStore.loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div v-for="n in 3" :key="n" class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden animate-pulse">
               <div class="h-48 bg-gray-200 dark:bg-gray-700"></div>
@@ -425,48 +411,43 @@
           </div>
 
           <div v-else-if="noticiasComImagens.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <article 
-              v-for="(noticia, index) in safeArray(noticiasComImagens)" 
-              :key="noticia.id" 
+            <article
+              v-for="(noticia, index) in safeArray(noticiasComImagens)"
+              :key="noticia.id"
               class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
               @click="verNoticia(noticia)"
             >
               <div class="h-48 overflow-hidden bg-gray-200 dark:bg-gray-700 relative">
-                <div class="image-wrapper w-full h-full">
-                  <img 
-                    v-if="!noticia.imageState?.loading && !noticia.imageState?.error"
-                    :src="noticia.imageState?.imageUrl" 
-                    :alt="safeString(noticia.titulo)" 
-                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    :loading="index < 2 ? 'eager' : 'lazy'"
-                    @load="() => noticia.imageState?.lazyLoad()"
-                  />
-                  <div v-else-if="noticia.imageState?.loading" class="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse flex items-center justify-center">
-                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                  </div>
-                  <div v-else-if="noticia.imageState?.error" class="absolute inset-0 bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
-                    <span class="text-red-500 text-sm">Falha ao carregar imagem</span>
-                  </div>
+                <img
+                  v-if="noticia.imagem_url"
+                  :src="noticia.imagem_url"
+                  :alt="safeString(noticia.titulo)"
+                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  :loading="index < 2 ? 'eager' : 'lazy'"
+                  @error="handleImageError"
+                />
+                <div v-else class="absolute inset-0 bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+                  <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
                 </div>
               </div>
-              
+
               <div class="p-4">
                 <div class="text-sm text-green-700 dark:text-green-400 mb-2">
                   {{ noticia.dataFormatada }}
                 </div>
-                
+
                 <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2 line-clamp-2">
                   {{ noticia.tituloSeguro }}
                 </h3>
-                
+
                 <p class="text-gray-600 dark:text-gray-300 mb-3 line-clamp-3">
                   {{ safeString(noticia.resumo || noticia.conteudo || 'Sem descrição disponível.') }}
                 </p>
-                
+
                 <div class="text-green-700 dark:text-green-400 font-semibold hover:underline inline-flex items-center">
-                  Ler mais 
+                  Ler mais
                   <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                   </svg>
@@ -541,9 +522,9 @@
 
           <!-- Classificados -->
           <div v-else-if="classificadosFiltrados.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <article 
-              v-for="servico in classificadosFiltrados.slice(0, 6)" 
-              :key="servico.id" 
+            <article
+              v-for="servico in classificadosFiltrados.slice(0, 6)"
+              :key="servico.id"
               class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border-l-4 border-green-500 hover:shadow-lg transition-all duration-300 hover:transform hover:-translate-y-1"
             >
               <!-- Cabeçalho do Serviço -->
@@ -587,14 +568,14 @@
 
               <!-- Ações -->
               <div class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-600">
-                <button 
+                <button
                   @click="contatarServico(servico)"
                   class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center"
                 >
                   <i class="fas fa-phone mr-2"></i>
                   Contatar
                 </button>
-                <button 
+                <button
                   @click="abrirModalAvaliacao(servico)"
                   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center"
                 >
@@ -615,7 +596,7 @@
               <p class="text-gray-500 dark:text-gray-400 mb-6">
                 {{ filtroCategoria ? 'Tente outra categoria ou verifique novamente em breve.' : 'Seja o primeiro a anunciar seu serviço!' }}
               </p>
-              <button 
+              <button
                 @click="abrirModalAssociado"
                 class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-flex items-center"
               >
@@ -627,7 +608,7 @@
 
           <!-- Ver Mais -->
           <div v-if="classificadosFiltrados.length > 6" class="text-center mt-8">
-            <button 
+            <button
               @click="verMaisClassificados"
               class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-flex items-center"
             >
@@ -645,7 +626,7 @@
             <h2 class="text-3xl font-bold text-green-700 dark:text-green-400 mb-4">Parceiros Comerciais</h2>
             <p class="text-gray-600 dark:text-gray-300">Conheça nossos parceiros e estabelecimentos locais</p>
           </div>
-          
+
           <!-- Lista de Parceiros -->
           <div v-if="colaboradoresStore.loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div v-for="n in 6" :key="n" class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden animate-pulse">
@@ -658,7 +639,7 @@
               </div>
             </div>
           </div>
-          
+
           <div v-else-if="parceirosComImagens.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div
               v-for="parceiro in parceirosComImagens"
@@ -667,22 +648,17 @@
               @click="verParceiro(parceiro)"
             >
               <div class="h-48 bg-gray-100 dark:bg-gray-700 overflow-hidden flex items-center justify-center p-4 relative">
-                <div class="image-wrapper w-full h-full">
-                  <img
-                    v-if="!parceiro.imageState?.loading && !parceiro.imageState?.error"
-                    :src="parceiro.imageState?.imageUrl"
-                    :alt="parceiro.texto_alternativo || `Logo ${parceiro.nome}`"
-                    class="max-w-full max-h-full object-contain"
-                    @load="() => parceiro.imageState?.lazyLoad()"
-                  />
-                  <div v-else-if="parceiro.imageState?.loading" class="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse flex items-center justify-center">
-                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                  </div>
-                  <div v-else-if="parceiro.imageState?.error" class="absolute inset-0 bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
-                    <span class="text-red-500 text-sm">Falha ao carregar logo</span>
-                  </div>
+                <img
+                  v-if="parceiro.imagem_url"
+                  :src="parceiro.imagem_url"
+                  :alt="parceiro.texto_alternativo || `Logo ${parceiro.nome}`"
+                  class="max-w-full max-h-full object-contain"
+                  @error="handleImageError"
+                />
+                <div v-else class="absolute inset-0 bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+                  <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
                 </div>
               </div>
 
@@ -691,7 +667,7 @@
                 <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2 line-clamp-2">
                   {{ parceiro.nome }}
                 </h3>
-                
+
                 <div v-if="parceiro.ramo" class="flex items-center text-gray-600 dark:text-gray-300 mb-3">
                   <i class="fas fa-store mr-2 text-sm"></i>
                   <span class="text-sm font-medium">{{ parceiro.ramo }}</span>
@@ -707,7 +683,7 @@
                   <!-- Telefone -->
                   <div v-if="parceiro.telefone" class="flex items-center">
                     <i class="fas fa-phone mr-2 w-4 text-green-600 dark:text-green-400"></i>
-                    <a 
+                    <a
                       :href="`tel:${parceiro.telefone}`"
                       class="hover:text-green-600 dark:hover:text-green-400 transition-colors"
                       @click.stop
@@ -745,14 +721,14 @@
     <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
       <div class="container mx-auto px-4 py-8">
         <div class="grid md:grid-cols-3 gap-8">
-          
+
           <!-- Coluna 1: Logo e Descrição -->
           <div class="space-y-4">
             <div class="flex items-center space-x-3">
               <div class="flex items-center justify-center w-12 h-12 bg-green-600 rounded-lg overflow-hidden">
-                <img 
-                  :src="logoImageUrl" 
-                  alt="Logo AMAJAC" 
+                <img
+                  :src="logoImageUrl"
+                  alt="Logo AMAJAC"
                   class="w-full h-full object-cover"
                   v-if="!logoLoading && !logoError"
                 />
@@ -821,9 +797,9 @@
                 <span class="text-gray-600 dark:text-gray-300 text-sm">{{ safeString(configuracoesStore.contato?.email_contato || 'comunicacao@amajac.org.br') }}</span>
               </li>
             </ul>
-            
+
             <!-- Botão para abrir modal de contato -->
-            <button 
+            <button
               @click="abrirModalContato"
               class="w-full bg-green-600 text-white py-2 px-4 rounded font-semibold hover:bg-green-700 transition-colors mt-4"
             >
@@ -833,7 +809,7 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Rodapé inferior -->
       <div class="bg-gray-100 dark:bg-gray-900 py-4">
         <div class="container mx-auto px-4 text-center">
@@ -841,7 +817,7 @@
             &copy; {{ new Date().getFullYear() }} {{ safeString(configuracoesStore.site?.site_nome || 'AMAJAC') }}. Todos os direitos reservados.
           </p>
           <p class="mt-1 text-gray-700 dark:text-gray-300 text-sm">
-            Desenvolvido com ❤️ por 
+            Desenvolvido com ❤️ por
             <span class="text-green-600 dark:text-green-400 font-semibold">Angelica Varella</span>
             <br>
             <span class="text-green-700 dark:text-green-500">Front-end Developer & UI/UX Designer</span>
@@ -854,30 +830,30 @@
     <div v-if="previewImageData" class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
       <div class="relative max-w-4xl max-h-full w-full">
         <!-- Botão Fechar -->
-        <button 
+        <button
           @click="fecharPreview"
           class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10 bg-black bg-opacity-50 rounded-full p-3"
         >
           <i class="fas fa-times text-xl"></i>
         </button>
-        
+
         <!-- Botões Navegação -->
-        <button 
+        <button
           v-if="temImagemAnterior"
           @click="imagemAnterior"
           class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10 bg-black bg-opacity-50 rounded-full p-3"
         >
           <i class="fas fa-chevron-left text-xl"></i>
         </button>
-        
-        <button 
+
+        <button
           v-if="temProximaImagem"
           @click="proximaImagem"
           class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10 bg-black bg-opacity-50 rounded-full p-3"
         >
           <i class="fas fa-chevron-right text-xl"></i>
         </button>
-        
+
         <!-- Conteúdo do Modal -->
         <div class="bg-gray-900 rounded-lg overflow-hidden">
           <!-- Imagem do Modal -->
@@ -887,18 +863,18 @@
               <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
               <p class="text-white text-sm">Carregando imagem...</p>
             </div>
-            
+
             <!-- Imagem CORRIGIDA -->
             <div v-else-if="!previewError" class="w-full h-full flex items-center justify-center">
               <img
-                :src="previewImageData.imageState?.imageUrl || previewImageData.imagem_url"
+                :src="previewImageData.imagem_url"
                 :alt="previewImageData.titulo || 'Imagem da galeria'"
                 class="max-w-full max-h-full object-contain"
                 @load="previewLoaded"
                 @error="previewErro"
               />
             </div>
-            
+
             <!-- Error -->
             <div v-else class="text-center text-white">
               <i class="fas fa-exclamation-triangle text-3xl text-red-400 mb-2"></i>
@@ -906,7 +882,7 @@
               <p class="text-gray-400 text-sm mt-2">URL: {{ previewImageData.imagem_url }}</p>
             </div>
           </div>
-          
+
           <!-- Informações da Imagem -->
           <div v-if="previewImageData && !previewError" class="p-6 bg-gray-800">
             <h3 class="text-xl font-semibold text-white mb-2">{{ previewImageData.titulo || 'Sem título' }}</h3>
@@ -933,7 +909,7 @@
               <h2 class="text-2xl font-bold">Avaliar Serviço</h2>
               <p class="text-green-100 mt-1">Avalie: {{ servicoSelecionado?.titulo }}</p>
             </div>
-            <button 
+            <button
               @click="fecharModalAvaliacao"
               class="text-white hover:text-green-200 transition-colors p-2 rounded-full hover:bg-green-700"
             >
@@ -966,27 +942,27 @@
                 Nota selecionada: {{ formAvaliacao.nota }}/5
               </div>
             </div>
-            
+
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Seu nome *
               </label>
-              <input 
+              <input
                 v-model="formAvaliacao.avaliador_nome"
-                type="text" 
-                required 
+                type="text"
+                required
                 placeholder="Digite seu nome"
                 class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none transition-colors"
               >
             </div>
-            
+
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Comentário (opcional)
               </label>
-              <textarea 
+              <textarea
                 v-model="formAvaliacao.comentario"
-                rows="3" 
+                rows="3"
                 placeholder="Deixe um comentário sobre o serviço..."
                 class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none transition-colors resize-vertical"
               ></textarea>
@@ -995,8 +971,8 @@
         </div>
 
         <div class="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex-shrink-0">
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             :disabled="loadingAvaliacao || formAvaliacao.nota === 0"
             @click="enviarAvaliacao"
             class="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
@@ -1020,7 +996,7 @@
               <h2 class="text-2xl font-bold">Enviar Mensagem</h2>
               <p class="text-green-100 mt-1">Entre em contato conosco</p>
             </div>
-            <button 
+            <button
               @click="fecharModalContato"
               class="text-white hover:text-green-200 transition-colors p-2 rounded-full hover:bg-green-700"
             >
@@ -1037,33 +1013,33 @@
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Seu nome *
               </label>
-              <input 
+              <input
                 v-model="formContato.nome"
-                type="text" 
-                required 
+                type="text"
+                required
                 placeholder="Digite seu nome completo"
                 class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none transition-colors"
               >
             </div>
-            
+
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Seu email *
               </label>
-              <input 
+              <input
                 v-model="formContato.email"
-                type="email" 
-                required 
+                type="email"
+                required
                 placeholder="seu@email.com"
                 class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none transition-colors"
               >
             </div>
-            
+
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Assunto *
               </label>
-              <select 
+              <select
                 v-model="formContato.assunto"
                 required
                 class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none transition-colors"
@@ -1078,15 +1054,15 @@
                 <option value="outro" class="text-gray-800 dark:text-white">Outro</option>
               </select>
             </div>
-            
+
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Sua mensagem *
               </label>
-              <textarea 
+              <textarea
                 v-model="formContato.mensagem"
-                rows="4" 
-                required 
+                rows="4"
+                required
                 placeholder="Digite sua mensagem..."
                 class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none transition-colors resize-vertical"
               ></textarea>
@@ -1095,8 +1071,8 @@
         </div>
 
         <div class="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex-shrink-0">
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             :disabled="loadingContato"
             @click="enviarMensagemContato"
             class="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
@@ -1112,7 +1088,7 @@
     </div>
 
     <!-- Toast/Notificação -->
-    <div v-if="uiStore.toast.show" 
+    <div v-if="uiStore.toast.show"
       class="fixed bottom-4 right-4 px-6 py-3 rounded-lg text-white font-medium shadow-lg z-50 transition-all duration-300"
       :class="{
         'bg-green-600': uiStore.toast.type === 'success',
@@ -1146,6 +1122,47 @@ const noticiasStore = useNoticiasStore()
 const eventosStore = useEventosStore()
 const colaboradoresStore = useColaboradoresStore()
 const galeriaStore = useGaleriaStore()
+
+// ✅ CORREÇÃO: Variáveis de imagens sem useSafeImage para melhor performance
+const heroImageUrl = ref('')
+const logoImageUrl = ref('')
+const aboutImageUrl = ref('')
+const heroLoading = ref(false)
+const logoLoading = ref(false)
+const aboutImageLoading = ref(false)
+const heroError = ref(false)
+const logoError = ref(false)
+const aboutImageError = ref(false)
+
+// ✅ CORREÇÃO: Função simples para carregar imagens
+const loadImage = (url, targetRef, loadingRef, errorRef) => {
+  if (!url) {
+    errorRef.value = true;
+    return;
+  }
+
+  loadingRef.value = true;
+  errorRef.value = false;
+  
+  const img = new Image();
+  img.onload = () => {
+    targetRef.value = url;
+    loadingRef.value = false;
+  };
+  img.onerror = () => {
+    targetRef.value = '';
+    loadingRef.value = false;
+    errorRef.value = true;
+  };
+  img.src = url;
+};
+
+// ✅ CORREÇÃO: Função genérica para tratamento de erro de imagem
+const handleImageError = (event) => {
+  console.warn('Erro ao carregar imagem:', event.target.src);
+  event.target.style.display = 'none';
+  // Você pode adicionar um fallback visual aqui se necessário
+};
 
 // ✅ VARIÁVEIS DE PAGINAÇÃO PARA GALERIA
 const paginaAtual = ref(1)
@@ -1207,12 +1224,12 @@ function abrirPreview(imagem) {
   previewImageData.value = imagem
   previewLoading.value = true
   previewError.value = false
-  
+
   const index = galeriaComImagens.value.findIndex(img => img.id === imagem.id)
   indicePreview.value = index
-  
+
   console.log('🖼️ Preview aberto:', imagem.titulo, 'Índice:', index, 'Total:', galeriaComImagens.value.length)
-  
+
   if (imagem.imagem_url) {
     const img = new Image()
     img.onload = () => {
@@ -1263,7 +1280,7 @@ function proximaImagem() {
 // ✅ NAVEGAÇÃO POR TECLADO
 const handleKeydown = (event) => {
   if (!previewImageData.value) return
-  
+
   switch (event.key) {
     case 'Escape':
       fecharPreview()
@@ -1295,28 +1312,6 @@ function verParceiro(parceiro) {
   console.log('Ver parceiro:', parceiro.nome)
   uiStore.showToast(`Visualizando ${parceiro.nome}`, 'info')
 }
-
-// ✅ useSafeImage para imagens principais (APENAS PARA IMAGENS FIXAS)
-const { 
-  imageUrl: heroImageUrl, 
-  loading: heroLoading, 
-  error: heroError,
-  setUrl: setHeroUrl 
-} = useSafeImage()
-
-const { 
-  imageUrl: logoImageUrl, 
-  loading: logoLoading,
-  error: logoError,
-  setUrl: setLogoUrl 
-} = useSafeImage()
-
-const { 
-  imageUrl: aboutImageUrl, 
-  loading: aboutImageLoading, 
-  error: aboutImageError,
-  setUrl: setAboutUrl 
-} = useSafeImage()
 
 // ✅ Estados para o modal de avaliação
 const showModalAvaliacao = ref(false)
@@ -1362,7 +1357,7 @@ const enviarAvaliacao = async () => {
   loadingAvaliacao.value = true
   try {
     await new Promise(resolve => setTimeout(resolve, 1500))
-    
+
     uiStore.showToast(`Avaliação enviada para ${servicoSelecionado.value.titulo}!`, 'success')
     fecharModalAvaliacao()
   } catch (error) {
@@ -1373,8 +1368,8 @@ const enviarAvaliacao = async () => {
 }
 
 // URL dinâmica para o dashboard
-const adminUrl = import.meta.env.DEV 
-  ? 'http://localhost:5173/admin' 
+const adminUrl = import.meta.env.DEV
+  ? 'http://localhost:5173/admin'
   : 'https://amajac.org.br/admin'
 
 // Variáveis reativas
@@ -1425,7 +1420,7 @@ const formContato = reactive({
   mensagem: ''
 })
 
-// ✅ CORREÇÃO CRÍTICA: Estados reativos SEM useSafeImage nos watchers
+// ✅ CORREÇÃO CRÍTICA: Estados reativos SEM useSafeImage
 const noticiasComImagens = ref([])
 const galeriaComImagens = ref([])
 const eventosComImagens = ref([])
@@ -1458,7 +1453,6 @@ watch(() => noticiasStore.noticiasHome, (noticias) => {
       ...noticia,
       tituloSeguro: safeString(noticia.titulo || 'Sem título'),
       dataFormatada: formatarData(noticia.data_publicacao),
-      // ✅ REMOVIDO: imageState - usaremos URL diretamente no template
     }))
   }
 })
@@ -1468,7 +1462,6 @@ watch(() => galeriaStore.imagens, (imagens) => {
   if (imagens && imagens.length > 0) {
     galeriaComImagens.value = imagens.map(imagem => ({
       ...imagem,
-      // ✅ REMOVIDO: imageState - usaremos URL diretamente no template
     }))
   }
 })
@@ -1477,7 +1470,6 @@ watch(() => eventosStore.eventosFuturos, (eventos) => {
   if (eventos && eventos.length > 0) {
     eventosComImagens.value = eventos.slice(0, 3).map(evento => ({
       ...evento,
-      // ✅ REMOVIDO: imageState - usaremos URL diretamente no template
     }))
   }
 })
@@ -1486,7 +1478,6 @@ watch(() => colaboradoresStore.parceirosAtivos, (parceiros) => {
   if (parceiros && parceiros.length > 0) {
     parceirosComImagens.value = parceiros.map(parceiro => ({
       ...parceiro,
-      // ✅ REMOVIDO: imageState - usaremos URL diretamente no template
     }))
   }
 })
@@ -1494,12 +1485,12 @@ watch(() => colaboradoresStore.parceirosAtivos, (parceiros) => {
 // ✅ CLASSIFICADOS FILTRADOS
 const classificadosFiltrados = computed(() => {
   const classificados = classificadosStore.classificados || []
-  
+
   if (!filtroCategoria.value) {
     return classificados
   }
-  
-  return classificados.filter(servico => 
+
+  return classificados.filter(servico =>
     servico.categoria_id === filtroCategoria.value
   )
 })
@@ -1515,7 +1506,7 @@ const formatarDataHora = (dataHoraString) => {
   try {
     const data = new Date(dataHoraString)
     if (isNaN(data.getTime())) return 'Data inválida'
-    
+
     return data.toLocaleString('pt-BR', {
       timeZone: 'America/Sao_Paulo',
       day: '2-digit',
@@ -1534,7 +1525,7 @@ const formatarData = (dataHoraString) => {
   try {
     const data = new Date(dataHoraString)
     if (isNaN(data.getTime())) return 'Data inválida'
-    
+
     return data.toLocaleDateString('pt-BR', {
       timeZone: 'America/Sao_Paulo',
       day: '2-digit',
@@ -1601,7 +1592,7 @@ const abrirModalContato = () => {
 const fecharModalContato = () => {
   showModalContato.value = false
   document.body.style.overflow = 'auto'
-  
+
   if (formContato) {
     formContato.nome = ''
     formContato.email = ''
@@ -1619,7 +1610,7 @@ const abrirModalAssociado = () => {
 const fecharModalAssociado = () => {
   showModalAssociado.value = false
   document.body.style.overflow = 'auto'
-  
+
   if (formAssociado) {
     Object.keys(formAssociado).forEach(key => {
       if (key === 'nacionalidade') formAssociado[key] = 'Brasileira'
@@ -1648,19 +1639,19 @@ const enviarMensagemContato = async () => {
 // Funções de Navegação
 const scrollToSection = (hash, closeMenu = false) => {
   if (closeMenu) uiStore.closeMobileMenu()
-  
+
   const element = document.querySelector(hash)
   if (!element) {
     return
   }
-  
+
   const offset = 100
   const elementPosition = element.getBoundingClientRect().top + window.scrollY
   window.scrollTo({
     top: elementPosition - offset,
     behavior: 'smooth'
   })
-  
+
   try {
     history.pushState(null, null, hash)
   } catch (error) {
@@ -1685,22 +1676,22 @@ const atualizarRelogio = () => {
   })
 }
 
-// ✅ WATCHERS PARA ATUALIZAR IMAGENS DINAMICAMENTE (APENAS PARA IMAGENS FIXAS)
+// ✅ CORREÇÃO: Watchers simplificados para imagens
 watch(() => configuracoesStore.hero?.hero_imagem_url, (newUrl) => {
   if (newUrl) {
-    setHeroUrl(newUrl)
+    loadImage(newUrl, heroImageUrl, heroLoading, heroError)
   }
 })
 
 watch(() => configuracoesStore.site?.site_logo, (newUrl) => {
   if (newUrl) {
-    setLogoUrl(newUrl)
+    loadImage(newUrl, logoImageUrl, logoLoading, logoError)
   }
 })
 
 watch(() => configuracoesStore.about?.quem_somos_imagem_url, (newUrl) => {
   if (newUrl) {
-    setAboutUrl(newUrl)
+    loadImage(newUrl, aboutImageUrl, aboutImageLoading, aboutImageError)
   }
 })
 
@@ -1715,22 +1706,23 @@ watch(previewImageData, (newVal) => {
 const carregarDadosPrioritarios = async () => {
   try {
     await configuracoesStore.carregarConfiguracoes()
-    
+
     if (configuracoesStore.hero?.hero_imagem_url) {
-      setHeroUrl(configuracoesStore.hero.hero_imagem_url)
+      loadImage(configuracoesStore.hero.hero_imagem_url, heroImageUrl, heroLoading, heroError)
     }
     if (configuracoesStore.site?.site_logo) {
-      setLogoUrl(configuracoesStore.site.site_logo)
+      loadImage(configuracoesStore.site.site_logo, logoImageUrl, logoLoading, logoError)
     }
     if (configuracoesStore.about?.quem_somos_imagem_url) {
-      setAboutUrl(configuracoesStore.about.quem_somos_imagem_url)
+      loadImage(configuracoesStore.about.quem_somos_imagem_url, aboutImageUrl, aboutImageLoading, aboutImageError)
     }
-    
+
     await classificadosStore.fetchClassificados()
     await noticiasStore.carregarNoticias()
     await colaboradoresStore.carregarColaboradores()
-    
+
   } catch (error) {
+    console.error('Erro ao carregar dados prioritários:', error)
     uiStore.showToast('Erro ao carregar conteúdo principal', 'error')
   }
 }
@@ -1738,14 +1730,14 @@ const carregarDadosPrioritarios = async () => {
 // ✅ FUNÇÃO DE CARREGAMENTO SECUNDÁRIO
 const carregarDadosSecundarios = async () => {
   const promises = [
-    eventosStore.carregarEventos().catch(err => 
+    eventosStore.carregarEventos().catch(err =>
       console.warn('Eventos não carregados:', err)
     ),
-    galeriaStore.fetchImagens().catch(err => 
+    galeriaStore.fetchImagens().catch(err =>
       console.warn('Galeria não carregada:', err)
     )
   ]
-  
+
   await Promise.allSettled(promises)
 }
 
@@ -1753,14 +1745,14 @@ const carregarDadosSecundarios = async () => {
 onMounted(async () => {
   uiStore.initializeDarkMode()
   atualizarRelogio()
-  
+
   relogioInterval.value = setInterval(atualizarRelogio, 1000)
-  
+
   // ✅ ADICIONE O EVENT LISTENER PARA O TECLADO
   document.addEventListener('keydown', handleKeydown)
-  
+
   await carregarDadosPrioritarios()
-  
+
   setTimeout(() => {
     carregarDadosSecundarios()
   }, 100)

@@ -413,7 +413,7 @@
             <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Tipo</p>
             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" :class="getClasseTipo(eventoSelecionado.tipo)">
               <i class="fas mr-1 text-xs" :class="getIconeTipo(eventoSelecionado.tipo)"></i>
-              {{ formatarTipo(eventoSeleconado.tipo) }}
+              {{ formatarTipo(eventoSelecionado.tipo) }}
             </span>
           </div>
           <div>
@@ -499,7 +499,7 @@ const eventosAuditoria = ref([
     acao: 'Tentativa de acesso negada', 
     status: 'erro', 
     ip: '192.168.1.105',
-    detalhes: 'Tentativa de acesso com senha incorreta. Esta é a 3ª tentativa falha em 10 minutos.'
+    detalhes: 'Tentativa de acesso com credenciais inválidas. Múltiplas tentativas detectadas em 10 minutos.'
   },
   { 
     id: 5, 

@@ -1,141 +1,191 @@
-﻿<template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-      <div>
-        <div class="flex justify-center">
-          <div class="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center">
-            <span class="text-white font-bold text-2xl">A</span>
-          </div>
-        </div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
-          Recuperar Senha
-        </h2>
-        <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
-          Digite seu email para receber instruções de recuperação
-        </p>
-      </div>
-      
-      <form class="mt-8 space-y-6" @submit.prevent="handleRecuperarSenha">
-        <div>
-          <label for="email" class="sr-only">Email</label>
-          <input
-            id="email"
-            v-model="email"
-            name="email"
-            type="email"
-            autocomplete="email"
-            required
-            class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm dark:bg-gray-700"
-            placeholder="Seu email"
-          >
-        </div>
+﻿<!-- src/admin/views/AdminEsqueciSenha.vue - VERSÃO CORRIGIDA -->
+<template>
+  <div class="forgot-password-page">
+    <div class="container">
+      <div class="card">
+        <h1>Recuperar Senha</h1>
+        <p>Digite seu email para receber o link de recuperação</p>
 
-        <div v-if="success" class="rounded-md bg-green-50 dark:bg-green-900 p-4">
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <div class="ml-3">
-              <h3 class="text-sm font-medium text-green-800 dark:text-green-200">
-                Email enviado!
-              </h3>
-              <div class="mt-2 text-sm text-green-700 dark:text-green-300">
-                <p>Verifique sua caixa de entrada para as instruções de recuperação.</p>
-              </div>
-            </div>
+        <form @submit.prevent="handleSubmit" class="form">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              v-model="email"
+              type="email"
+              required
+              placeholder="seu@email.com"
+            />
           </div>
-        </div>
 
-        <div v-if="error" class="rounded-md bg-red-50 dark:bg-red-900 p-4">
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div class="ml-3">
-              <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
-                Erro
-              </h3>
-              <div class="mt-2 text-sm text-red-700 dark:text-red-300">
-                <p>{{ error }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex space-x-4">
-          <button
-            type="submit"
-            :disabled="loading"
-            class="flex-1 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300"
-          >
-            <span v-if="loading">
-              <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Enviando...
-            </span>
-            <span v-else>Enviar Instruções</span>
+          <button type="submit" :disabled="loading" class="submit-btn">
+            {{ loading ? 'Enviando...' : 'Enviar Link' }}
           </button>
 
-          <RouterLink
-            to="/admin/login"
-            class="flex-1 flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-300"
-          >
-            Voltar
-          </RouterLink>
+          <div v-if="error" class="alert error">
+            {{ error }}
+          </div>
+
+          <div v-if="success" class="alert success">
+            Email enviado com sucesso! Verifique sua caixa de entrada.
+          </div>
+        </form>
+
+        <div class="links">
+          <router-link to="/admin/login" class="link">
+            ← Voltar para o Login
+          </router-link>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { supabase } from '@/supabase/client'
+import { useAdminAuth } from '/src/admin/composables/useAdminAuth'
 
-// 🔥 SOLUÇÃO DIRETA - sem usar o composable para evitar conflitos
-const loading = ref(false)
-const error = ref('')
+const { adminResetPassword, loading, error } = useAdminAuth()
 const email = ref('')
 const success = ref(false)
 
-const handleRecuperarSenha = async () => {
+// Função segura para logging
+const safeLogError = (operation, err) => {
+  console.error(`Erro na operação ${operation}:`, {
+    code: err?.code || 'unknown',
+    message: err?.message ? err.message.substring(0, 100) : 'Erro desconhecido'
+  })
+}
+
+const handleSubmit = async () => {
+  if (!email.value) {
+    error.value = 'Por favor, digite seu email'
+    return
+  }
+
   try {
-    loading.value = true
-    error.value = ''
-    success.value = false
-
-    if (!email.value) {
-      error.value = 'Por favor, digite seu e-mail'
-      return
+    const result = await adminResetPassword(email.value)
+    if (result) {
+      success.value = true
+      error.value = ''
     }
-
-    console.log('📧 Enviando recuperação para:', email.value)
-
-    // 🔥 USANDO SUPABASE DIRETAMENTE
-    const { data, error: authError } = await supabase.auth.resetPasswordForEmail(email.value, {
-      redirectTo: `${window.location.origin}/admin/reset-password`,
-    })
-
-    if (authError) {
-      console.error('❌ Erro ao recuperar senha:', authError)
-      throw authError
-    }
-
-    console.log('✅ E-mail de recuperação enviado:', data)
-    success.value = true
-    email.value = ''
-    
   } catch (err) {
-    console.error('❌ Erro completo:', err)
-    error.value = err.message || 'Erro ao enviar e-mail de recuperação'
-  } finally {
-    loading.value = false
+    safeLogError('forgot_password', err)
+    error.value = 'Erro ao enviar email. Tente novamente.'
   }
 }
 </script>
+
+<style scoped>
+.forgot-password-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+}
+
+.container {
+  width: 100%;
+  max-width: 400px;
+  padding: 1rem;
+}
+
+.card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.submit-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.alert {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.links {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+</style>

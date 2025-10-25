@@ -92,16 +92,6 @@ const routes = [
   
   // 🔐 ROTAS PÚBLICAS DE AUTENTICAÇÃO
   {
-    path: "/admin",
-    name: "AdminRoot", 
-    component: () => import("@/admin/views/AdminLogin.vue"),
-    meta: { 
-      title: "Login - Painel Admin",
-      public: true
-    }
-  },
-  
-  {
     path: "/admin/login",
     name: "AdminLogin",
     component: () => import("@/admin/views/AdminLogin.vue"),
@@ -142,6 +132,12 @@ const routes = [
     }
   },
   
+  // ✅ CORREÇÃO CRÍTICA: Rota principal do admin redireciona para dashboard
+  {
+    path: "/admin",
+    redirect: "/admin/dashboard"
+  },
+
   // ROTA PROTEGIDA: Layout Principal do Admin
   {
     path: "/admin/dashboard",
@@ -151,7 +147,7 @@ const routes = [
       title: "Dashboard - Painel Admin"
     },
     children: [
-      // Dashboard Principal
+      // ✅ CORREÇÃO: Dashboard Principal - caminho vazio dentro do layout
       {
         path: "",
         name: "AdminDashboard",
@@ -398,13 +394,9 @@ router.beforeEach(async (to, from, next) => {
   }
   
   // ✅ CORREÇÃO: Verificar autenticação apenas para rotas que requerem
-  let isAuthenticated = false
-  
-  // Se a rota requer autenticação, verifica
   if (to.meta.requiresAuth) {
-    isAuthenticated = await authStore.checkAuth()
+    const isAuthenticated = await authStore.checkAuth()
     
-    // Se não autenticado e tentando acessar área protegida
     if (!isAuthenticated) {
       uiStore.showToast('Acesso negado. Por favor, faça login.', 'error')
       next('/admin/login')
@@ -413,17 +405,15 @@ router.beforeEach(async (to, from, next) => {
   }
   
   // ✅ CORREÇÃO: Se já está autenticado e tenta acessar login/recuperação
-  if (to.meta.public) {
+  if (to.meta.public && (to.path === '/admin/login' || to.path.includes('/admin/forgot-password') || to.path.includes('/admin/reset-password'))) {
     const currentAuth = await authStore.checkAuth()
     
-    // Se autenticado e tentando acessar páginas públicas de auth, redireciona para dashboard
-    if (currentAuth && (to.path === '/admin/login' || to.path === '/admin' || to.path.includes('/admin/forgot-password') || to.path.includes('/admin/reset-password'))) {
+    if (currentAuth) {
       next('/admin/dashboard')
       return
     }
   }
 
-  // Permite acesso a todas as outras rotas
   next()
 })
 
@@ -434,14 +424,6 @@ router.afterEach((to) => {
   // Fechar menu mobile se estiver aberto
   if (uiStore.mobileMenuOpen && uiStore.closeMobileMenu) {
     uiStore.closeMobileMenu()
-  }
-
-  // Analytics (se configurado)
-  if (typeof gtag !== 'undefined') {
-    gtag('config', 'GA_MEASUREMENT_ID', {
-      page_title: to.meta.title,
-      page_path: to.path
-    })
   }
 })
 

@@ -1,15 +1,14 @@
-﻿<template>
+﻿=== C:\Users\angel\Documents\Projetos\amajac-oficial\src\views\GaleriaDetalhesView.vue ===
+<template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 transition-colors duration-200">
     <div class="container mx-auto px-4">
-      <!-- Loading State -->
-      <div v-if="loading" class="flex justify-center items-center py-12">
+      <div v-if="loading || (imagemLoading && !imagem)" class="flex justify-center items-center py-12">
         <div class="text-center">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 dark:border-green-500 mx-auto mb-4"></div>
           <p class="text-gray-600 dark:text-gray-400 transition-colors duration-200">Carregando imagem...</p>
         </div>
       </div>
 
-      <!-- Error State -->
       <div v-else-if="error" class="text-center py-12">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 max-w-md mx-auto border border-gray-200 dark:border-gray-700 transition-colors duration-200">
           <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,9 +25,7 @@
         </div>
       </div>
 
-      <!-- Imagem Details -->
       <div v-else-if="imagem" class="max-w-6xl mx-auto">
-        <!-- Breadcrumb -->
         <nav class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 mb-6 transition-colors duration-200">
           <router-link to="/" class="hover:text-green-600 transition-colors">Home</router-link>
           <span>/</span>
@@ -38,17 +35,14 @@
         </nav>
 
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-colors duration-200">
-          <!-- Imagem Principal -->
           <div class="relative bg-gray-900">
-            <!-- Loading da imagem -->
             <div v-if="imagemLoading" class="flex items-center justify-center min-h-[400px]">
               <div class="text-center">
                 <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
                 <p class="text-white text-sm">Carregando imagem...</p>
               </div>
             </div>
-            
-            <!-- Imagem -->
+
             <img
               v-else
               :src="imagemUrl"
@@ -57,8 +51,7 @@
               @load="handleImageLoad"
               @error="handleImageError"
             />
-            
-            <!-- Navegação -->
+
             <button
               v-if="temImagemAnterior"
               @click="imagemAnterior"
@@ -81,12 +74,10 @@
               </svg>
             </button>
 
-            <!-- Contador -->
             <div class="absolute top-4 left-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
               {{ indiceAtual + 1 }} / {{ totalImagens }}
             </div>
 
-            <!-- Informações Overlay -->
             <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
               <div class="text-white">
                 <h1 class="text-3xl font-bold mb-2">{{ imagem.titulo || 'Sem título' }}</h1>
@@ -107,19 +98,15 @@
             </div>
           </div>
 
-          <!-- Conteúdo -->
           <div class="p-8">
-            <!-- Descrição -->
             <div v-if="imagem.descricao" class="prose max-w-none mb-8 dark:prose-invert">
               <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 transition-colors duration-200">Descrição</h3>
               <p class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line transition-colors duration-200">{{ imagem.descricao }}</p>
             </div>
 
-            <!-- Informações Técnicas -->
             <div class="border-t border-gray-200 dark:border-gray-700 pt-6 transition-colors duration-200">
               <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 transition-colors duration-200">Informações</h3>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Categoria -->
                 <div class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg transition-colors duration-200">
                   <div class="flex-shrink-0 w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-4 transition-colors duration-200">
                     <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,7 +119,6 @@
                   </div>
                 </div>
 
-                <!-- Data de Publicação -->
                 <div class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg transition-colors duration-200">
                   <div class="flex-shrink-0 w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-4 transition-colors duration-200">
                     <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,7 +131,6 @@
                   </div>
                 </div>
 
-                <!-- Visualizações -->
                 <div v-if="imagem.visualizacoes" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg transition-colors duration-200">
                   <div class="flex-shrink-0 w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-4 transition-colors duration-200">
                     <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,7 +144,6 @@
                   </div>
                 </div>
 
-                <!-- Autor -->
                 <div v-if="imagem.autor" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg transition-colors duration-200">
                   <div class="flex-shrink-0 w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-4 transition-colors duration-200">
                     <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -174,7 +158,6 @@
               </div>
             </div>
 
-            <!-- Ações -->
             <div class="border-t border-gray-200 dark:border-gray-700 pt-6 mt-6 transition-colors duration-200">
               <div class="flex flex-col sm:flex-row gap-4">
                 <button
@@ -215,246 +198,223 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, computed, onMounted, watch, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useGaleriaStore } from '@/stores/galeria';
 import { storeToRefs } from 'pinia';
 
-export default {
-  name: 'GaleriaDetalhesView',
-  setup() {
-    const route = useRoute();
-    const router = useRouter();
-    const galeriaStore = useGaleriaStore();
-    const { imagens, imagemSelecionada, loading, error } = storeToRefs(galeriaStore);
+const route = useRoute();
+const router = useRouter();
+const galeriaStore = useGaleriaStore();
+const { imagens, imagemSelecionada, loading, error } = storeToRefs(galeriaStore);
 
-    const imagem = ref(null);
-    const indiceAtual = ref(0);
-    const imagemLoading = ref(false);
-    const imagemUrl = ref('');
+const imagem = ref(null);
+const indiceAtual = ref(0);
+const imagemLoading = ref(false);
+const imagemUrl = ref('');
 
-    // Computed
-    const totalImagens = computed(() => imagens.value.length);
-    
-    const temImagemAnterior = computed(() => {
-      return indiceAtual.value > 0;
-    });
+// --- Computed ---
+const totalImagens = computed(() => imagens.value.length);
+const temImagemAnterior = computed(() => indiceAtual.value > 0);
+const temProximaImagem = computed(() => indiceAtual.value < imagens.value.length - 1);
 
-    const temProximaImagem = computed(() => {
-      return indiceAtual.value < imagens.value.length - 1;
-    });
+// --- Methods ---
 
-    // Methods
-    const handleImageLoad = () => {
-      imagemLoading.value = false;
-    };
+const handleImageLoad = () => {
+  imagemLoading.value = false;
+};
 
-    const handleImageError = (event) => {
-      console.error('❌ Erro ao carregar imagem:', imagemUrl.value);
-      imagemLoading.value = false;
-      // Tentar fallback para URL original se estiver usando URL processada
-      if (imagem.value?.imagem_url && imagemUrl.value !== imagem.value.imagem_url) {
-        imagemUrl.value = imagem.value.imagem_url;
-        imagemLoading.value = true;
-      } else {
-        event.target.src = '/placeholder-image.jpg';
-      }
-    };
-
-    const formatarCategoria = (categoria) => {
-      if (!categoria) return 'Sem categoria';
-      return categoria.charAt(0).toUpperCase() + categoria.slice(1);
-    };
-
-    const formatarData = (dataString) => {
-      if (!dataString) return '';
-      try {
-        const data = new Date(dataString);
-        return data.toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        });
-      } catch {
-        return '';
-      }
-    };
-
-    const imagemAnterior = () => {
-      if (temImagemAnterior.value) {
-        const novaImagem = imagens.value[indiceAtual.value - 1];
-        navegarParaImagem(novaImagem.id, indiceAtual.value - 1);
-      }
-    };
-
-    const proximaImagem = () => {
-      if (temProximaImagem.value) {
-        const novaImagem = imagens.value[indiceAtual.value + 1];
-        navegarParaImagem(novaImagem.id, indiceAtual.value + 1);
-      }
-    };
-
-    const navegarParaImagem = (imagemId, novoIndice) => {
-      // Navegação mais eficiente - apenas atualiza a rota
-      router.push(`/galeria/${imagemId}`);
-      indiceAtual.value = novoIndice;
-      
-      // Atualiza a imagem atual sem recarregar tudo
-      const novaImagem = imagens.value[novoIndice];
-      if (novaImagem) {
-        imagem.value = novaImagem;
-        imagemUrl.value = novaImagem.imagem_url || novaImagem.url || '';
-        imagemLoading.value = true;
-        
-        // Incrementar visualizações
-        galeriaStore.incrementarVisualizacoes(imagemId);
-      }
-    };
-
-    const compartilharImagem = async () => {
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: imagem.value.titulo || 'Imagem da Galeria AMAJAC',
-            text: imagem.value.descricao || 'Confira esta imagem da galeria da AMAJAC',
-            url: window.location.href
-          });
-        } catch (err) {
-          console.log('Erro ao compartilhar:', err);
-        }
-      } else {
-        // Fallback para copiar URL
-        navigator.clipboard.writeText(window.location.href)
-          .then(() => {
-            alert('URL copiada para a área de transferência!');
-          })
-          .catch(() => {
-            // Fallback mais básico
-            const textArea = document.createElement('textarea');
-            textArea.value = window.location.href;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert('URL copiada para a área de transferência!');
-          });
-      }
-    };
-
-    const downloadImagem = () => {
-      if (imagemUrl.value) {
-        const link = document.createElement('a');
-        link.href = imagemUrl.value;
-        link.download = imagem.value.titulo ? `${imagem.value.titulo}.jpg` : 'imagem-galeria-amajac.jpg';
-        link.target = '_blank';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } else {
-        alert('Não foi possível fazer o download da imagem.');
-      }
-    };
-
-    // Keyboard navigation
-    const handleKeydown = (event) => {
-      switch (event.key) {
-        case 'ArrowLeft':
-          event.preventDefault();
-          imagemAnterior();
-          break;
-        case 'ArrowRight':
-          event.preventDefault();
-          proximaImagem();
-          break;
-        case 'Escape':
-          router.push('/galeria');
-          break;
-      }
-    };
-
-    // Load imagem data
-    const loadImagem = async () => {
-      const id = route.params.id;
-      if (id) {
-        console.log('🔄 Carregando imagem ID:', id);
-        
-        // Se já temos a imagem na store, use-a
-        const imagemExistente = imagens.value.find(img => img.id === id);
-        if (imagemExistente) {
-          imagem.value = imagemExistente;
-          imagemUrl.value = imagemExistente.imagem_url || imagemExistente.url || '';
-          indiceAtual.value = imagens.value.findIndex(img => img.id === id);
-          imagemLoading.value = true;
-          console.log('✅ Imagem carregada da store:', imagem.value.titulo);
-        } else {
-          // Se não temos, busque da API
-          await galeriaStore.fetchImagemById(id);
-          if (imagemSelecionada.value) {
-            imagem.value = imagemSelecionada.value;
-            imagemUrl.value = imagemSelecionada.value.imagem_url || imagemSelecionada.value.url || '';
-            // Encontrar índice atual
-            indiceAtual.value = imagens.value.findIndex(img => img.id === imagem.value.id);
-            imagemLoading.value = true;
-            console.log('✅ Imagem carregada da API:', imagem.value.titulo);
-          }
-        }
-
-        // Incrementar visualizações
-        if (imagem.value) {
-          galeriaStore.incrementarVisualizacoes(id);
-        }
-      }
-    };
-
-    onMounted(() => {
-      console.log('🎯 GaleriaDetalhes montada');
-      
-      // Carregar todas as imagens se necessário
-      if (imagens.value.length === 0) {
-        console.log('📦 Carregando todas as imagens...');
-        galeriaStore.fetchImagens().then(() => {
-          loadImagem();
-        });
-      } else {
-        loadImagem();
-      }
-
-      document.addEventListener('keydown', handleKeydown);
-    });
-
-    onUnmounted(() => {
-      document.removeEventListener('keydown', handleKeydown);
-    });
-
-    watch(() => route.params.id, (newId) => {
-      console.log('🔄 ID da rota mudou:', newId);
-      if (newId) {
-        loadImagem();
-      }
-    });
-
-    return {
-      imagem,
-      loading,
-      error,
-      imagemLoading,
-      imagemUrl,
-      temImagemAnterior,
-      temProximaImagem,
-      totalImagens,
-      indiceAtual,
-      handleImageLoad,
-      handleImageError,
-      formatarCategoria,
-      formatarData,
-      imagemAnterior,
-      proximaImagem,
-      compartilharImagem,
-      downloadImagem
-    };
+const handleImageError = (event) => {
+  console.error('❌ Erro ao carregar imagem:', imagemUrl.value);
+  imagemLoading.value = false;
+  // Tentar fallback para URL original se estiver usando URL processada
+  if (imagem.value?.imagem_url && imagemUrl.value !== imagem.value.imagem_url) {
+    // Se a imagem for uma versão otimizada e falhar, tenta a URL original
+    imagemUrl.value = imagem.value.imagem_url;
+    imagemLoading.value = true;
+  } else {
+    // Se a URL original falhar ou não existir, usa placeholder
+    event.target.src = '/placeholder-image.jpg';
   }
 };
+
+const formatarCategoria = (categoria) => {
+  if (!categoria) return 'Sem categoria';
+  return categoria.charAt(0).toUpperCase() + categoria.slice(1);
+};
+
+const formatarData = (dataString) => {
+  if (!dataString) return '';
+  try {
+    const data = new Date(dataString);
+    return data.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+  } catch {
+    return '';
+  }
+};
+
+/**
+ * Controla a navegação (anterior/próxima) e atualiza a rota.
+ * @param {number} delta - -1 para anterior, 1 para próxima.
+ */
+const navegar = (delta) => {
+  const novoIndice = indiceAtual.value + delta;
+  if (novoIndice >= 0 && novoIndice < imagens.value.length) {
+    const novaImagem = imagens.value[novoIndice];
+    // Atualiza a rota, o que irá acionar o 'watch' e o 'loadImagem'
+    router.push(`/galeria/${novaImagem.id}`);
+  }
+}
+
+const imagemAnterior = () => navegar(-1);
+const proximaImagem = () => navegar(1);
+
+const compartilharImagem = async () => {
+  if (!imagem.value) return;
+  
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: imagem.value.titulo || 'Imagem da Galeria AMAJAC',
+        text: imagem.value.descricao || 'Confira esta imagem da galeria da AMAJAC',
+        url: window.location.href
+      });
+    } catch (err) {
+      // Ignora erro se for cancelamento do usuário
+      if (err.name !== 'AbortError') {
+         console.error('Erro ao compartilhar:', err);
+      }
+    }
+  } else {
+    // Fallback para copiar URL (navegadores sem a API Share)
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert('URL copiada para a área de transferência!');
+    } catch (e) {
+      // Fallback mais básico para navegadores muito antigos
+      const textArea = document.createElement('textarea');
+      textArea.value = window.location.href;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      alert('URL copiada para a área de transferência!');
+    }
+  }
+};
+
+const downloadImagem = () => {
+  if (imagemUrl.value) {
+    const link = document.createElement('a');
+    link.href = imagemUrl.value;
+    // Remove caracteres inválidos para nome de arquivo
+    const fileName = imagem.value.titulo ? `${imagem.value.titulo}.jpg` : 'imagem-galeria-amajac.jpg';
+    link.download = fileName.replace(/[/\\?%*:|"<>]/g, '-'); 
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } else {
+    alert('Não foi possível fazer o download da imagem.');
+  }
+};
+
+// Keyboard navigation
+const handleKeydown = (event) => {
+  if (imagem.value) {
+    switch (event.key) {
+      case 'ArrowLeft':
+        event.preventDefault();
+        imagemAnterior();
+        break;
+      case 'ArrowRight':
+        event.preventDefault();
+        proximaImagem();
+        break;
+      case 'Escape':
+        router.push('/galeria');
+        break;
+    }
+  }
+};
+
+/**
+ * Carrega os dados da imagem com base no ID da rota.
+ * @param {string} idFromRoute - O ID da imagem a ser carregada.
+ */
+const loadImagem = async (idFromRoute) => {
+  const id = idFromRoute || route.params.id;
+  if (!id) return;
+
+  // 1. Reset state
+  imagem.value = null;
+  imagemLoading.value = true;
+  galeriaStore.setError(null);
+
+  // 2. Tenta encontrar a imagem no array de imagens carregadas
+  let targetImagem = imagens.value.find(img => img.id === id);
+  let index = imagens.value.findIndex(img => img.id === id);
+
+  if (!targetImagem) {
+    // Não encontrada na store local, busca na API
+    await galeriaStore.fetchImagemById(id);
+
+    if (error.value) { 
+      imagemLoading.value = false;
+      return;
+    }
+
+    if (imagemSelecionada.value) {
+        targetImagem = imagemSelecionada.value;
+        // Tenta encontrar o índice novamente (se a store tiver sido atualizada)
+        index = imagens.value.findIndex(img => img.id === targetImagem.id);
+    }
+  }
+
+  // 3. Atualiza o estado da View
+  if (targetImagem) {
+    imagem.value = targetImagem;
+    imagemUrl.value = targetImagem.imagem_url || targetImagem.url || '';
+    indiceAtual.value = index !== -1 ? index : 0;
+    // O evento @load/onerror no template irá definir imagemLoading para false
+  } else {
+     // Caso a store não encontre a imagem (API retornou 404/vazio)
+     galeriaStore.setError('A imagem solicitada não foi encontrada.');
+     imagemLoading.value = false;
+  }
+};
+
+// --- Lifecycle Hooks and Watchers ---
+
+onMounted(async () => {
+  // Carregar todas as imagens se necessário (para navegação)
+  if (imagens.value.length === 0) {
+    // Não aguarda essa promessa, pois o loadImagem principal será chamado logo em seguida.
+    galeriaStore.fetchImagens().catch(e => console.error('Erro ao carregar lista de imagens:', e));
+  }
+
+  // Carregamento inicial
+  await loadImagem();
+
+  document.addEventListener('keydown', handleKeydown);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeydown);
+});
+
+// Watcher para reagir à mudança de rota (navegação ou URL direta)
+watch(() => route.params.id, (newId, oldId) => {
+  // Chama loadImagem apenas se o ID mudar
+  if (newId && newId !== oldId) {
+    loadImagem(newId);
+  }
+}, { immediate: false }); 
 </script>
 
 <style scoped>
@@ -484,11 +444,11 @@ button:hover {
   .text-3xl {
     font-size: 1.5rem;
   }
-  
+
   .p-8 {
     padding: 1.5rem;
   }
-  
+
   .gap-4 {
     gap: 1rem;
   }

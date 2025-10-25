@@ -1,0 +1,1928 @@
+[
+  {
+    "file": "src\\admin\\components\\AdminEsqueciSenha.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      125,
+      139
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "issue": "passwords",
+    "matches": 1,
+    "severity": "CRITICAL",
+    "lines": [
+      147
+    ],
+    "sample": [
+      "senha:', authError)\r\n      throw authError\r\n    }\r\n\r\n    console.log('"
+    ]
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      140,
+      151
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\components\\ModalDetalhesAuditoria.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      300
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioAuditoriaCompleto.vue",
+    "issue": "consoleLog",
+    "matches": 7,
+    "severity": "LOW",
+    "lines": [
+      571,
+      581,
+      591
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioAuditoriaCompleto.vue",
+    "issue": "alertUsage",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      575
+    ],
+    "sample": [
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioPortal.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      153
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useAdminAuth.js",
+    "issue": "passwords",
+    "matches": 2,
+    "severity": "CRITICAL",
+    "lines": [
+      98,
+      122
+    ],
+    "sample": [
+      "senha:', err)\r\n      error.value = err.message\r\n      uiStore.showToast('",
+      "senha:', err)\r\n      error.value = err.message\r\n      uiStore.showToast('"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useAuditoriaCompleta.js",
+    "issue": "consoleLog",
+    "matches": 3,
+    "severity": "LOW",
+    "lines": [
+      14,
+      45,
+      63
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useClassificados.js",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      39
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useColaboradores.js",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      39
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "issue": "consoleLog",
+    "matches": 16,
+    "severity": "LOW",
+    "lines": [
+      15,
+      27,
+      38
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useDashboardStats.js",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      14,
+      64
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useDatabaseReport.js",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      14,
+      84
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useGaleria.js",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      18,
+      31,
+      50
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useImageUpload.js",
+    "issue": "consoleLog",
+    "matches": 8,
+    "severity": "LOW",
+    "lines": [
+      87,
+      119,
+      123
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useMensagens.js",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      22
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useNoticias.js",
+    "issue": "consoleLog",
+    "matches": 9,
+    "severity": "LOW",
+    "lines": [
+      18,
+      24,
+      41
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useRelatorio.js",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      13,
+      96
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminClassificados.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      508
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminClassificados.vue",
+    "issue": "alertUsage",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      600
+    ],
+    "sample": [
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminConfiguracoes.vue",
+    "issue": "consoleLog",
+    "matches": 3,
+    "severity": "LOW",
+    "lines": [
+      764,
+      798,
+      834
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminConfiguracoesCompleto.vue",
+    "issue": "consoleLog",
+    "matches": 3,
+    "severity": "LOW",
+    "lines": [
+      497,
+      531,
+      567
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminDashboard.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      524,
+      555
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminEsqueciSenha.vue",
+    "issue": "passwords",
+    "matches": 1,
+    "severity": "CRITICAL",
+    "lines": [
+      126
+    ],
+    "sample": [
+      "senha:', authError)\r\n      throw authError\r\n    }\r\n\r\n    console.log('"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminEsqueciSenha.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      118,
+      130
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleria.vue",
+    "issue": "consoleLog",
+    "matches": 11,
+    "severity": "LOW",
+    "lines": [
+      494,
+      506,
+      514
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleriaForm.vue",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      457,
+      468,
+      480
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminMensagens.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      701
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "issue": "consoleLog",
+    "matches": 8,
+    "severity": "LOW",
+    "lines": [
+      316,
+      331,
+      365
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "issue": "alertUsage",
+    "matches": 9,
+    "severity": "LOW",
+    "lines": [
+      335,
+      349,
+      354
+    ],
+    "sample": [
+      "alert(",
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticias.vue",
+    "issue": "alertUsage",
+    "matches": 3,
+    "severity": "LOW",
+    "lines": [
+      592,
+      610,
+      629
+    ],
+    "sample": [
+      "alert(",
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminSolicitacoesSocio.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      494,
+      539
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminSolicitacoesSocio.vue",
+    "issue": "alertUsage",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      512
+    ],
+    "sample": [
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AuditoriaView.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      750
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AuditoriaView.vue",
+    "issue": "alertUsage",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      625,
+      630
+    ],
+    "sample": [
+      "alert(",
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\BackupView.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      534
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\BackupView.vue",
+    "issue": "alertUsage",
+    "matches": 5,
+    "severity": "LOW",
+    "lines": [
+      423,
+      444,
+      461
+    ],
+    "sample": [
+      "alert(",
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\App.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      22
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\components\\AvaliacoesClassificado.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      321,
+      332
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\components\\ContatoSection.vue",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      188,
+      191,
+      203
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\components\\EventosSection.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      244
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\components\\FooterComponent.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      165,
+      168
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\components\\ModalCadastroAssociado.vue",
+    "issue": "alertUsage",
+    "matches": 9,
+    "severity": "LOW",
+    "lines": [
+      404,
+      413,
+      424
+    ],
+    "sample": [
+      "alert(",
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\components\\ParceiroCard.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      355
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\components\\public\\ClassificadosSection.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      297
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\components\\public\\GaleriaSection.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      91,
+      101
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "issue": "consoleLog",
+    "matches": 16,
+    "severity": "LOW",
+    "lines": [
+      18,
+      32,
+      51
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\composables\\useOpenMeteoWeather.js",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      25,
+      34,
+      52
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\composables\\usePublicNoticias.js",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      15,
+      29,
+      45
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\composables\\useSafeImage.js",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      83
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\stores\\classificados.js",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      50,
+      58,
+      308
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\stores\\colaboradores.js",
+    "issue": "consoleLog",
+    "matches": 8,
+    "severity": "LOW",
+    "lines": [
+      25,
+      33,
+      45
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\stores\\configuracoes.js",
+    "issue": "consoleLog",
+    "matches": 8,
+    "severity": "LOW",
+    "lines": [
+      140,
+      149,
+      152
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "issue": "consoleLog",
+    "matches": 15,
+    "severity": "LOW",
+    "lines": [
+      67,
+      75,
+      89
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\stores\\galeria.js",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      58,
+      70
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "issue": "consoleLog",
+    "matches": 13,
+    "severity": "LOW",
+    "lines": [
+      37,
+      52,
+      56
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\utils\\exportUtils.js",
+    "issue": "xssPatterns",
+    "matches": 1,
+    "severity": "HIGH",
+    "lines": [
+      182
+    ],
+    "sample": [
+      "document.write"
+    ]
+  },
+  {
+    "file": "src\\utils\\exportUtils.js",
+    "issue": "documentWrite",
+    "matches": 1,
+    "severity": "MEDIUM",
+    "lines": [
+      182
+    ],
+    "sample": [
+      "document.write"
+    ]
+  },
+  {
+    "file": "src\\utils\\exportUtils.js",
+    "issue": "consoleLog",
+    "matches": 3,
+    "severity": "LOW",
+    "lines": [
+      51,
+      82,
+      121
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\views\\EventoDetalhesView.vue",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      329,
+      336,
+      354
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\views\\EventoDetalhesView.vue",
+    "issue": "alertUsage",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      317,
+      334
+    ],
+    "sample": [
+      "alert(",
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\views\\GaleriaDetalhesView.vue",
+    "issue": "alertUsage",
+    "matches": 3,
+    "severity": "LOW",
+    "lines": [
+      297,
+      306,
+      323
+    ],
+    "sample": [
+      "alert(",
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\views\\HomeView.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      1231,
+      1312
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\views\\NoticiaDetalhesView.vue",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      238,
+      246,
+      263
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\views\\NoticiaDetalhesView.vue",
+    "issue": "alertUsage",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      244
+    ],
+    "sample": [
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\views\\NoticiaIndividual.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      278
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": ".netlify\\functions-serve\\fetch-site-configuration\\netlify\\functions\\fetch-site-configuration.js",
+    "issue": "sqlInjection",
+    "matches": 5,
+    "severity": "HIGH",
+    "lines": [
+      10918,
+      10953,
+      11055
+    ],
+    "sample": [
+      "DELETE\", `${this.url}/admin/users/${",
+      "DELETE\", `${this.url}/admin/users/${params.userId}/factors/${"
+    ]
+  },
+  {
+    "file": ".netlify\\functions-serve\\fetch-site-configuration\\netlify\\functions\\fetch-site-configuration.js",
+    "issue": "insecureRegex",
+    "matches": 2,
+    "severity": "MEDIUM",
+    "lines": [
+      959,
+      4409
+    ],
+    "sample": [
+      "new RegExp(V)",
+      "new RegExp(\"[,()"
+    ]
+  },
+  {
+    "file": ".netlify\\functions-serve\\fetch-site-configuration\\netlify\\functions\\fetch-site-configuration.js",
+    "issue": "consoleLog",
+    "matches": 25,
+    "severity": "LOW",
+    "lines": [
+      5361,
+      6351,
+      8120
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": ".netlify\\functions-serve\\fetch-site-configuration\\netlify\\functions\\fetch-site-configuration.js",
+    "issue": "alertUsage",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      6049
+    ],
+    "sample": [
+      "alert("
+    ]
+  },
+  {
+    "file": "security-scanner.js",
+    "issue": "debuggerStatements",
+    "matches": 3,
+    "severity": "MEDIUM",
+    "lines": [
+      20,
+      20,
+      52
+    ],
+    "sample": [
+      "debugger",
+      "debugger"
+    ]
+  },
+  {
+    "file": "security-scanner.js",
+    "issue": "consoleLog",
+    "matches": 17,
+    "severity": "LOW",
+    "lines": [
+      112,
+      113,
+      120
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\components\\AdminEsqueciSenha.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      125,
+      139
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "issue": "passwords",
+    "matches": 1,
+    "severity": "CRITICAL",
+    "lines": [
+      147
+    ],
+    "sample": [
+      "senha:', authError)\r\n      throw authError\r\n    }\r\n\r\n    console.log('"
+    ]
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      140,
+      151
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\components\\ModalDetalhesAuditoria.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      300
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioAuditoriaCompleto.vue",
+    "issue": "consoleLog",
+    "matches": 7,
+    "severity": "LOW",
+    "lines": [
+      571,
+      581,
+      591
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioAuditoriaCompleto.vue",
+    "issue": "alertUsage",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      575
+    ],
+    "sample": [
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioPortal.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      153
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useAdminAuth.js",
+    "issue": "passwords",
+    "matches": 2,
+    "severity": "CRITICAL",
+    "lines": [
+      98,
+      122
+    ],
+    "sample": [
+      "senha:', err)\r\n      error.value = err.message\r\n      uiStore.showToast('",
+      "senha:', err)\r\n      error.value = err.message\r\n      uiStore.showToast('"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useAuditoriaCompleta.js",
+    "issue": "consoleLog",
+    "matches": 3,
+    "severity": "LOW",
+    "lines": [
+      14,
+      45,
+      63
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useClassificados.js",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      39
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useColaboradores.js",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      39
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "issue": "consoleLog",
+    "matches": 16,
+    "severity": "LOW",
+    "lines": [
+      15,
+      27,
+      38
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useDashboardStats.js",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      14,
+      64
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useDatabaseReport.js",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      14,
+      84
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useGaleria.js",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      18,
+      31,
+      50
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useImageUpload.js",
+    "issue": "consoleLog",
+    "matches": 8,
+    "severity": "LOW",
+    "lines": [
+      87,
+      119,
+      123
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useMensagens.js",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      22
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useNoticias.js",
+    "issue": "consoleLog",
+    "matches": 9,
+    "severity": "LOW",
+    "lines": [
+      18,
+      24,
+      41
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\composables\\useRelatorio.js",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      13,
+      96
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminClassificados.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      508
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminClassificados.vue",
+    "issue": "alertUsage",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      600
+    ],
+    "sample": [
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminConfiguracoes.vue",
+    "issue": "consoleLog",
+    "matches": 3,
+    "severity": "LOW",
+    "lines": [
+      764,
+      798,
+      834
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminConfiguracoesCompleto.vue",
+    "issue": "consoleLog",
+    "matches": 3,
+    "severity": "LOW",
+    "lines": [
+      497,
+      531,
+      567
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminDashboard.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      524,
+      555
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminEsqueciSenha.vue",
+    "issue": "passwords",
+    "matches": 1,
+    "severity": "CRITICAL",
+    "lines": [
+      126
+    ],
+    "sample": [
+      "senha:', authError)\r\n      throw authError\r\n    }\r\n\r\n    console.log('"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminEsqueciSenha.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      118,
+      130
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleria.vue",
+    "issue": "consoleLog",
+    "matches": 11,
+    "severity": "LOW",
+    "lines": [
+      494,
+      506,
+      514
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleriaForm.vue",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      457,
+      468,
+      480
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminMensagens.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      701
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "issue": "consoleLog",
+    "matches": 8,
+    "severity": "LOW",
+    "lines": [
+      316,
+      331,
+      365
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "issue": "alertUsage",
+    "matches": 9,
+    "severity": "LOW",
+    "lines": [
+      335,
+      349,
+      354
+    ],
+    "sample": [
+      "alert(",
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticias.vue",
+    "issue": "alertUsage",
+    "matches": 3,
+    "severity": "LOW",
+    "lines": [
+      592,
+      610,
+      629
+    ],
+    "sample": [
+      "alert(",
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminSolicitacoesSocio.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      494,
+      539
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AdminSolicitacoesSocio.vue",
+    "issue": "alertUsage",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      512
+    ],
+    "sample": [
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AuditoriaView.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      750
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\AuditoriaView.vue",
+    "issue": "alertUsage",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      625,
+      630
+    ],
+    "sample": [
+      "alert(",
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\BackupView.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      534
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\admin\\views\\BackupView.vue",
+    "issue": "alertUsage",
+    "matches": 5,
+    "severity": "LOW",
+    "lines": [
+      423,
+      444,
+      461
+    ],
+    "sample": [
+      "alert(",
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\App.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      22
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\components\\AvaliacoesClassificado.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      321,
+      332
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\components\\ContatoSection.vue",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      188,
+      191,
+      203
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\components\\EventosSection.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      244
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\components\\FooterComponent.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      165,
+      168
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\components\\ModalCadastroAssociado.vue",
+    "issue": "alertUsage",
+    "matches": 9,
+    "severity": "LOW",
+    "lines": [
+      404,
+      413,
+      424
+    ],
+    "sample": [
+      "alert(",
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\components\\ParceiroCard.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      355
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\components\\public\\ClassificadosSection.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      297
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\components\\public\\GaleriaSection.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      91,
+      101
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "issue": "consoleLog",
+    "matches": 16,
+    "severity": "LOW",
+    "lines": [
+      18,
+      32,
+      51
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\composables\\useOpenMeteoWeather.js",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      25,
+      34,
+      52
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\composables\\usePublicNoticias.js",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      15,
+      29,
+      45
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\composables\\useSafeImage.js",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      83
+    ],
+    "sample": [
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\stores\\classificados.js",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      50,
+      58,
+      308
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\stores\\colaboradores.js",
+    "issue": "consoleLog",
+    "matches": 8,
+    "severity": "LOW",
+    "lines": [
+      25,
+      33,
+      45
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\stores\\configuracoes.js",
+    "issue": "consoleLog",
+    "matches": 8,
+    "severity": "LOW",
+    "lines": [
+      140,
+      149,
+      152
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "issue": "consoleLog",
+    "matches": 15,
+    "severity": "LOW",
+    "lines": [
+      67,
+      75,
+      89
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\stores\\galeria.js",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      58,
+      70
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "issue": "consoleLog",
+    "matches": 13,
+    "severity": "LOW",
+    "lines": [
+      37,
+      52,
+      56
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\utils\\exportUtils.js",
+    "issue": "xssPatterns",
+    "matches": 1,
+    "severity": "HIGH",
+    "lines": [
+      182
+    ],
+    "sample": [
+      "document.write"
+    ]
+  },
+  {
+    "file": "src\\utils\\exportUtils.js",
+    "issue": "documentWrite",
+    "matches": 1,
+    "severity": "MEDIUM",
+    "lines": [
+      182
+    ],
+    "sample": [
+      "document.write"
+    ]
+  },
+  {
+    "file": "src\\utils\\exportUtils.js",
+    "issue": "consoleLog",
+    "matches": 3,
+    "severity": "LOW",
+    "lines": [
+      51,
+      82,
+      121
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\views\\EventoDetalhesView.vue",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      329,
+      336,
+      354
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\views\\EventoDetalhesView.vue",
+    "issue": "alertUsage",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      317,
+      334
+    ],
+    "sample": [
+      "alert(",
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\views\\GaleriaDetalhesView.vue",
+    "issue": "alertUsage",
+    "matches": 3,
+    "severity": "LOW",
+    "lines": [
+      297,
+      306,
+      323
+    ],
+    "sample": [
+      "alert(",
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\views\\HomeView.vue",
+    "issue": "consoleLog",
+    "matches": 2,
+    "severity": "LOW",
+    "lines": [
+      1231,
+      1312
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\views\\NoticiaDetalhesView.vue",
+    "issue": "consoleLog",
+    "matches": 4,
+    "severity": "LOW",
+    "lines": [
+      238,
+      246,
+      263
+    ],
+    "sample": [
+      "console.log",
+      "console.log"
+    ]
+  },
+  {
+    "file": "src\\views\\NoticiaDetalhesView.vue",
+    "issue": "alertUsage",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      244
+    ],
+    "sample": [
+      "alert("
+    ]
+  },
+  {
+    "file": "src\\views\\NoticiaIndividual.vue",
+    "issue": "consoleLog",
+    "matches": 1,
+    "severity": "LOW",
+    "lines": [
+      278
+    ],
+    "sample": [
+      "console.log"
+    ]
+  }
+]

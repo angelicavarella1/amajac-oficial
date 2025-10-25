@@ -1,4 +1,5 @@
-﻿<template>
+﻿=== C:\Users\angel\Documents\Projetos\amajac-oficial\src\views\EventosView.vue ===
+<template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 transition-colors duration-300">
     <div class="container mx-auto px-4">
       <div class="text-center mb-12">
@@ -64,35 +65,29 @@
             :key="evento.id"
             class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/50 overflow-hidden hover:shadow-lg dark:hover:shadow-gray-900 transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 dark:border-gray-700"
           >
-            <!-- ✅ ATUALIZADO: Imagem com useSafeImage() -->
             <div class="relative aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700 overflow-hidden">
-              <!-- Loading State -->
-              <div v-if="evento.imageLoading" class="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse flex items-center justify-center">
+              <div v-if="evento.imageState.loading" class="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse flex items-center justify-center">
                 <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
               </div>
+
+              <div v-else-if="evento.imageState.error" class="absolute inset-0 bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
+                <span class="text-red-500 text-xs">Falha ao carregar imagem</span>
+              </div>
               
-              <!-- Imagem Carregada -->
               <img
-                v-else-if="evento.imagem_url"
-                :src="evento.imageUrl"
+                v-else-if="evento.imageState.imageUrl"
+                :src="evento.imageState.imageUrl"
                 :alt="evento.imagem_alt || evento.titulo"
                 class="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-                :ref="el => evento.imageRef = el"
                 loading="lazy"
               />
-              
-              <!-- Fallback para Sem Imagem -->
+
               <div v-else class="w-full h-48 flex items-center justify-center bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
                 <svg class="w-12 h-12 text-green-300 dark:text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
-              </div>
-              
-              <!-- Error State -->
-              <div v-if="evento.imageError" class="absolute inset-0 bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
-                <span class="text-red-500 text-xs">Falha ao carregar imagem</span>
               </div>
 
               <div class="absolute top-3 left-3">
@@ -171,9 +166,9 @@
               {{ filtroStatus ? 'Nenhum evento encontrado' : 'Nenhum evento programado' }}
             </h3>
             <p class="text-gray-500 dark:text-gray-400 transition-colors duration-300">
-              {{ 
-                filtroStatus === 'futuros' 
-                  ? 'Não há eventos futuros no momento. Fique atento!' 
+              {{
+                filtroStatus === 'futuros'
+                  ? 'Não há eventos futuros no momento. Fique atento!'
                   : filtroStatus === 'passados'
                   ? 'Não há eventos realizados para exibir.'
                   : 'Não há eventos programados no momento. Volte em breve!'
@@ -186,133 +181,108 @@
   </div>
 </template>
 
-<script>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+<script setup>
+import { ref, computed, onMounted, watch } from 'vue';
 import { useEventosStore } from '@/stores/eventos';
 import { storeToRefs } from 'pinia';
 import { useSafeImage } from '@/composables/useSafeImage';
 
-export default {
-  name: 'EventosView',
-  setup() {
-    const eventosStore = useEventosStore();
-    const { todos: eventos, loading } = storeToRefs(eventosStore); 
-    const { eventosFuturos, eventosPassados } = storeToRefs(eventosStore);
+const eventosStore = useEventosStore();
+// Desestruturação das referências do Pinia
+const { todos: eventos, loading, eventosFuturos, eventosPassados } = storeToRefs(eventosStore);
 
-    const filtroStatus = ref(null);
+const filtroStatus = ref(null);
+const eventosProcessados = ref([]); // Ref para armazenar eventos com estado de imagem anexado
 
-    // ✅ ATUALIZADO: Eventos com useSafeImage() para cada imagem
-    const eventosComImagens = computed(() => {
-      const todosEventos = eventos.value?.filter(Boolean) || [];
+/**
+ * Observa o carregamento dos eventos da store e anexa o estado de imagem (loading/error)
+ * a cada evento usando useSafeImage.
+ */
+watch(eventos, (newEvents) => {
+  if (newEvents && newEvents.length > 0) {
+    eventosProcessados.value = newEvents.filter(Boolean).map(evento => {
+      // Cria o objeto reativo de estado da imagem uma ÚNICA vez por evento.
+      const imageState = useSafeImage(evento.imagem_url || '');
 
-      return todosEventos.map(evento => {
-        // ✅ NOVO: Criar useSafeImage para cada evento no loop
-        const { 
-          imageUrl, 
-          loading: imageLoading, 
-          error: imageError,
-          setUrl,
-          lazyLoad 
-        } = useSafeImage()
-
-        // ✅ NOVO: Inicializar a imagem do evento
-        if (evento.imagem_url) {
-          setUrl(evento.imagem_url)
-        }
-
-        return {
-          ...evento,
-          imageUrl,
-          imageLoading,
-          imageError,
-          imageRef: null,
-          setImageUrl: setUrl,
-          lazyLoadImage: lazyLoad
-        }
-      })
-    })
-
-    const eventosFiltrados = computed(() => {
-      const todosEventos = eventosComImagens.value || [];
-
-      if (filtroStatus.value === 'futuros') {
-        const futurosIds = Array.isArray(eventosFuturos.value) 
-          ? eventosFuturos.value.map(e => e.id) 
-          : [];
-        return todosEventos.filter(evento => futurosIds.includes(evento.id));
-      }
-      
-      if (filtroStatus.value === 'passados') {
-        const passadosIds = Array.isArray(eventosPassados.value) 
-          ? eventosPassados.value.map(e => e.id) 
-          : [];
-        return todosEventos.filter(evento => passadosIds.includes(evento.id));
-      }
-
-      return todosEventos;
+      return {
+        ...evento,
+        // Anexa o objeto reativo completo para acesso no template
+        imageState: imageState
+      };
     });
+  } else {
+    eventosProcessados.value = [];
+  }
+}, { immediate: true });
 
-    const formatarData = (dataString) => {
-      if (!dataString) return 'Data a definir';
-      const data = new Date(dataString); 
-      if (isNaN(data.getTime())) return 'Data inválida';
-      return data.toLocaleDateString('pt-BR', { 
-        weekday: 'short', 
-        day: '2-digit', 
-        month: '2-digit', 
-        year: 'numeric' 
-      }).replace(',', '');
-    };
 
-    const formatarPreco = (preco) => {
-      if (preco === null || preco === undefined || preco === '') return 'Valor a definir';
-      if (preco === 0 || preco === '0') return 'Gratuito';
-      const precoNumerico = typeof preco === 'string' ? parseFloat(preco.replace(',', '.')) : preco;
-      if (!isNaN(precoNumerico)) return `R$ ${precoNumerico.toFixed(2).replace('.', ',')}`;
-      return preco;
-    };
+const eventosFiltrados = computed(() => {
+  // Usa a lista processada como fonte
+  const todosEventos = eventosProcessados.value || []; 
 
-    const isEventoFuturo = (evento) => {
-      const futuros = Array.isArray(eventosFuturos.value) ? eventosFuturos.value : [];
-      return futuros.some(e => e.id === evento.id);
-    };
+  if (filtroStatus.value === 'futuros') {
+    const futurosIds = Array.isArray(eventosFuturos.value)
+      ? eventosFuturos.value.map(e => e.id)
+      : [];
+    return todosEventos.filter(evento => futurosIds.includes(evento.id));
+  }
 
-    const incrementarVisualizacoes = async (eventoId) => {
-      try {
-        if (eventosStore.incrementarVisualizacoes) {
-          await eventosStore.incrementarVisualizacoes(eventoId);
-        }
-      } catch (e) {
-        console.error('Erro ao incrementar visualizações:', e);
-      }
-    };
+  if (filtroStatus.value === 'passados') {
+    const passadosIds = Array.isArray(eventosPassados.value)
+      ? eventosPassados.value.map(e => e.id)
+      : [];
+    return todosEventos.filter(evento => passadosIds.includes(evento.id));
+  }
 
-    onUnmounted(() => {
-      // Limpeza de recursos se necessário
-    });
+  return todosEventos;
+});
 
-    onMounted(async () => {
-      try {
-        if (eventosStore.carregarEventos) {
-          await eventosStore.carregarEventos();
-        }
-      } catch (e) {
-        console.error('Erro ao carregar eventos:', e);
-      }
-    });
-
-    return {
-      eventos: eventosComImagens,
-      loading,
-      filtroStatus,
-      eventosFiltrados,
-      formatarData,
-      formatarPreco,
-      isEventoFuturo,
-      incrementarVisualizacoes,
-    };
-  },
+const formatarData = (dataString) => {
+  if (!dataString) return 'Data a definir';
+  const data = new Date(dataString);
+  if (isNaN(data.getTime())) return 'Data inválida';
+  return data.toLocaleDateString('pt-BR', {
+    weekday: 'short',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  }).replace(',', '');
 };
+
+const formatarPreco = (preco) => {
+  if (preco === null || preco === undefined || preco === '') return 'Valor a definir';
+  if (preco === 0 || preco === '0') return 'Gratuito';
+  const precoNumerico = typeof preco === 'string' ? parseFloat(preco.replace(',', '.')) : preco;
+  if (!isNaN(precoNumerico)) return `R$ ${precoNumerico.toFixed(2).replace('.', ',')}`;
+  return preco;
+};
+
+const isEventoFuturo = (evento) => {
+  const futuros = Array.isArray(eventosFuturos.value) ? eventosFuturos.value : [];
+  return futuros.some(e => e.id === evento.id);
+};
+
+const incrementarVisualizacoes = async (eventoId) => {
+  try {
+    if (eventosStore.incrementarVisualizacoes) {
+      await eventosStore.incrementarVisualizacoes(eventoId);
+    }
+  } catch (e) {
+    console.error('Erro ao incrementar visualizações:', e);
+  }
+};
+
+onMounted(async () => {
+  try {
+    if (eventosStore.carregarEventos) {
+      await eventosStore.carregarEventos();
+    }
+  } catch (e) {
+    console.error('Erro ao carregar eventos:', e);
+  }
+});
+
+// onUnmounted hook opcionalmente removido/mantido, mantendo apenas o necessário.
 </script>
 
 <style scoped>

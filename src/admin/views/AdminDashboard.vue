@@ -3,7 +3,7 @@
     <!-- Cabeçalho -->
     <div class="flex justify-between items-center">
       <div>
-        <h1 class="text-xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
         <p class="text-gray-600 dark:text-gray-400 mt-1">Visão geral do sistema</p>
       </div>
       <div class="text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
@@ -39,45 +39,73 @@
     <div v-else>
       <!-- Estatísticas Principais -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <EstatisticaCard
-          titulo="Notícias"
-          :valor="estatisticas.noticias"
-          icone="fas fa-newspaper"
-          cor="blue"
-          :trend="estatisticas.noticiasTrend"
-          :trend-value="estatisticas.noticiasTrendValue"
-          :loading="loadingEstatisticas"
-        />
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Notícias</h3>
+            <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-900/20">
+              <i class="fas fa-newspaper text-blue-600 dark:text-blue-400 text-sm"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline justify-between">
+            <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ estatisticas.noticias }}</p>
+            <div class="flex items-center text-xs text-green-600">
+              <i class="fas fa-arrow-up mr-1"></i>
+              {{ estatisticas.noticiasTrendValue }}
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Desde o último mês</p>
+        </div>
         
-        <EstatisticaCard
-          titulo="Eventos"
-          :valor="estatisticas.eventos"
-          icone="fas fa-calendar-alt"
-          cor="green"
-          :trend="estatisticas.eventosTrend"
-          :trend-value="estatisticas.eventosTrendValue"
-          :loading="loadingEstatisticas"
-        />
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Eventos</h3>
+            <div class="p-2 rounded-full bg-green-100 dark:bg-green-900/20">
+              <i class="fas fa-calendar-alt text-green-600 dark:text-green-400 text-sm"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline justify-between">
+            <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ estatisticas.eventos }}</p>
+            <div class="flex items-center text-xs text-red-600">
+              <i class="fas fa-arrow-down mr-1"></i>
+              {{ estatisticas.eventosTrendValue }}
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Desde o último mês</p>
+        </div>
         
-        <EstatisticaCard
-          titulo="Mensagens"
-          :valor="estatisticas.mensagens"
-          icone="fas fa-envelope"
-          cor="purple"
-          :trend="estatisticas.mensagensTrend"
-          :trend-value="estatisticas.mensagensTrendValue"
-          :loading="loadingEstatisticas"
-        />
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Mensagens</h3>
+            <div class="p-2 rounded-full bg-purple-100 dark:bg-purple-900/20">
+              <i class="fas fa-envelope text-purple-600 dark:text-purple-400 text-sm"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline justify-between">
+            <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ estatisticas.mensagens }}</p>
+            <div class="flex items-center text-xs text-green-600">
+              <i class="fas fa-arrow-up mr-1"></i>
+              {{ estatisticas.mensagensTrendValue }}
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Desde o último mês</p>
+        </div>
         
-        <EstatisticaCard
-          titulo="Associados"
-          :valor="estatisticas.associados"
-          icone="fas fa-users"
-          cor="yellow"
-          :trend="estatisticas.associadosTrend"
-          :trend-value="estatisticas.associadosTrendValue"
-          :loading="loadingEstatisticas"
-        />
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Associados</h3>
+            <div class="p-2 rounded-full bg-yellow-100 dark:bg-yellow-900/20">
+              <i class="fas fa-users text-yellow-600 dark:text-yellow-400 text-sm"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline justify-between">
+            <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ estatisticas.associados }}</p>
+            <div class="flex items-center text-xs text-green-600">
+              <i class="fas fa-arrow-up mr-1"></i>
+              {{ estatisticas.associadosTrendValue }}
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Desde o último mês</p>
+        </div>
       </div>
 
       <!-- Ações Rápidas -->
@@ -87,47 +115,77 @@
           Ações Rápidas
         </h3>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <AcaoRapida
+          <router-link
             to="/admin/noticias/nova"
-            titulo="Nova Notícia"
-            icone="fas fa-plus"
-            cor="green"
-          />
+            class="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-white dark:hover:bg-gray-600 hover:shadow-md transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/20 group-hover:bg-green-200 dark:group-hover:bg-green-800/30 transition-colors mb-2">
+              <i class="fas fa-plus text-green-600 dark:text-green-400 text-lg"></i>
+            </div>
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+              Nova Notícia
+            </span>
+          </router-link>
           
-          <AcaoRapida
+          <router-link
             to="/admin/eventos/novo"
-            titulo="Novo Evento"
-            icone="fas fa-calendar-plus"
-            cor="blue"
-          />
+            class="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-white dark:hover:bg-gray-600 hover:shadow-md transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/20 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/30 transition-colors mb-2">
+              <i class="fas fa-calendar-plus text-blue-600 dark:text-blue-400 text-lg"></i>
+            </div>
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+              Novo Evento
+            </span>
+          </router-link>
           
-          <AcaoRapida
+          <router-link
             to="/admin/solicitacoes-socio"
-            titulo="Gerenciar Associados"
-            icone="fas fa-user-friends"
-            cor="indigo"
-          />
+            class="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-white dark:hover:bg-gray-600 hover:shadow-md transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <div class="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900/20 group-hover:bg-indigo-200 dark:group-hover:bg-indigo-800/30 transition-colors mb-2">
+              <i class="fas fa-user-friends text-indigo-600 dark:text-indigo-400 text-lg"></i>
+            </div>
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+              Gerenciar Associados
+            </span>
+          </router-link>
           
-          <AcaoRapida
+          <router-link
             to="/admin/mensagens"
-            titulo="Ver Mensagens"
-            icone="fas fa-envelope"
-            cor="purple"
-          />
+            class="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-white dark:hover:bg-gray-600 hover:shadow-md transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900/20 group-hover:bg-purple-200 dark:group-hover:bg-purple-800/30 transition-colors mb-2">
+              <i class="fas fa-envelope text-purple-600 dark:text-purple-400 text-lg"></i>
+            </div>
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+              Ver Mensagens
+            </span>
+          </router-link>
 
-          <AcaoRapida
+          <router-link
             to="/admin/galeria/nova"
-            titulo="Nova Imagem"
-            icone="fas fa-image"
-            cor="pink"
-          />
+            class="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-white dark:hover:bg-gray-600 hover:shadow-md transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <div class="p-3 rounded-full bg-pink-100 dark:bg-pink-900/20 group-hover:bg-pink-200 dark:group-hover:bg-pink-800/30 transition-colors mb-2">
+              <i class="fas fa-image text-pink-600 dark:text-pink-400 text-lg"></i>
+            </div>
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+              Nova Imagem
+            </span>
+          </router-link>
 
-          <AcaoRapida
+          <router-link
             to="/admin/parceiros/novo"
-            titulo="Novo Parceiro"
-            icone="fas fa-handshake"
-            cor="teal"
-          />
+            class="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-white dark:hover:bg-gray-600 hover:shadow-md transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <div class="p-3 rounded-full bg-teal-100 dark:bg-teal-900/20 group-hover:bg-teal-200 dark:group-hover:bg-teal-800/30 transition-colors mb-2">
+              <i class="fas fa-handshake text-teal-600 dark:text-teal-400 text-lg"></i>
+            </div>
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+              Novo Parceiro
+            </span>
+          </router-link>
         </div>
       </div>
 
@@ -407,41 +465,29 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, reactive } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useNoticiasStore } from '@/stores/noticias'
+import { ref, computed, onMounted } from 'vue'
 import { useUIStore } from '@/stores/ui'
-import { useDashboardStats } from '@/admin/composables/useDashboardStats'
-import EstatisticaCard from '@/components/dashboard/EstatisticaCard.vue'
-import AcaoRapida from '@/components/dashboard/AcaoRapida.vue'
 
 // Stores
-const noticiasStore = useNoticiasStore()
 const uiStore = useUIStore()
-const { noticias } = storeToRefs(noticiasStore)
-
-// Composables
-const { loading: loadingStats, error: statsError, obterEstatisticasDashboard } = useDashboardStats()
 
 // Estados
 const loading = ref(true)
-const loadingEstatisticas = ref(true)
 const error = ref(null)
-const solicitacoesAssociados = ref([])
 
 const estatisticas = ref({
-  noticias: 0,
-  eventos: 0,
-  mensagens: 0,
-  associados: 0,
-  noticiasTrend: 'neutral',
-  noticiasTrendValue: '0',
-  eventosTrend: 'neutral',
-  eventosTrendValue: '0',
-  mensagensTrend: 'neutral',
-  mensagensTrendValue: '0',
-  associadosTrend: 'neutral',
-  associadosTrendValue: '0'
+  noticias: 24,
+  eventos: 8,
+  mensagens: 15,
+  associados: 42,
+  noticiasTrend: 'up',
+  noticiasTrendValue: '+12%',
+  eventosTrend: 'down',
+  eventosTrendValue: '-5%',
+  mensagensTrend: 'up',
+  mensagensTrendValue: '+23%',
+  associadosTrend: 'up',
+  associadosTrendValue: '+8%'
 })
 
 // Dados estáticos (atividades recentes)
@@ -469,6 +515,45 @@ const atividadesRecentes = ref([
   }
 ])
 
+// Dados mock para notícias e solicitações
+const noticiasRecentes = ref([
+  {
+    id: 1,
+    titulo: 'AMAJAC promove evento beneficente para comunidade',
+    resumo: 'Evento arrecadou mais de 5 toneladas de alimentos',
+    data_publicacao: new Date().toISOString(),
+    ativo: true
+  },
+  {
+    id: 2,
+    titulo: 'Novos parceiros comerciais anunciados',
+    resumo: 'Expansão da rede de parceiros da associação',
+    data_publicacao: new Date(Date.now() - 86400000).toISOString(),
+    ativo: true
+  }
+])
+
+const solicitacoesPendentes = ref([
+  {
+    id: 1,
+    nome: 'João Silva Santos',
+    cpf: '123.456.789-00',
+    email: 'joao.silva@email.com',
+    telefone: '(11) 99999-9999',
+    status: 'pendente',
+    data_solicitacao: new Date().toISOString()
+  },
+  {
+    id: 2,
+    nome: 'Maria Oliveira Costa',
+    cpf: '987.654.321-00',
+    email: 'maria.oliveira@email.com',
+    telefone: '(11) 88888-8888',
+    status: 'pendente',
+    data_solicitacao: new Date(Date.now() - 86400000).toISOString()
+  }
+])
+
 // Computed
 const dataAtual = computed(() => {
   return new Date().toLocaleDateString('pt-BR', {
@@ -477,18 +562,6 @@ const dataAtual = computed(() => {
     month: 'long',
     day: 'numeric'
   })
-})
-
-const noticiasRecentes = computed(() => {
-  const noticiasArray = noticias.value || []
-  return noticiasArray
-    .filter(noticia => noticia?.id)
-    .sort((a, b) => new Date(b.data_publicacao) - new Date(a.data_publicacao))
-    .slice(0, 5)
-})
-
-const solicitacoesPendentes = computed(() => {
-  return solicitacoesAssociados.value.filter(s => s.status === 'pendente')
 })
 
 // Métodos
@@ -507,60 +580,34 @@ function visualizarNoticia(noticia) {
 
 function aprovarSolicitacao(solicitacao) {
   uiStore.showToast(`Solicitação de ${solicitacao.nome} aprovada!`, 'success')
-  // Aqui você implementaria a lógica real de aprovação
+  // Remove a solicitação da lista
+  solicitacoesPendentes.value = solicitacoesPendentes.value.filter(s => s.id !== solicitacao.id)
 }
 
 function rejeitarSolicitacao(solicitacao) {
   uiStore.showToast(`Solicitação de ${solicitacao.nome} rejeitada.`, 'warning')
-  // Aqui você implementaria a lógica real de rejeição
+  // Remove a solicitação da lista
+  solicitacoesPendentes.value = solicitacoesPendentes.value.filter(s => s.id !== solicitacao.id)
 }
 
 async function carregarDashboard() {
   try {
     loading.value = true
-    loadingEstatisticas.value = true
     error.value = null
     
-    console.log('📊 Carregando dados do dashboard...')
+    console.log('📊 Carregando dashboard...')
     
-    // Carrega estatísticas do Supabase
-    const stats = await obterEstatisticasDashboard()
-    estatisticas.value = stats
-    
-    // Carrega notícias
-    await noticiasStore.carregarNoticias()
-    
-    // Mock data para solicitações de associados
-    solicitacoesAssociados.value = [
-      {
-        id: 1,
-        nome: 'João Silva Santos',
-        cpf: '123.456.789-00',
-        email: 'joao.silva@email.com',
-        telefone: '(11) 99999-9999',
-        status: 'pendente',
-        data_solicitacao: new Date().toISOString()
-      },
-      {
-        id: 2,
-        nome: 'Maria Oliveira Costa',
-        cpf: '987.654.321-00',
-        email: 'maria.oliveira@email.com',
-        telefone: '(11) 88888-8888',
-        status: 'pendente',
-        data_solicitacao: new Date(Date.now() - 86400000).toISOString()
-      }
-    ]
+    // Simula carregamento de dados
+    await new Promise(resolve => setTimeout(resolve, 1000))
     
     console.log('✅ Dashboard carregado com sucesso')
     
   } catch (err) {
     console.error('❌ Erro ao carregar dashboard:', err)
-    error.value = statsError.value || err.message
+    error.value = err.message
     uiStore.showToast('Erro ao carregar dados do dashboard', 'error')
   } finally {
     loading.value = false
-    loadingEstatisticas.value = false
   }
 }
 

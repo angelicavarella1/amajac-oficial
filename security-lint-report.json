@@ -1,0 +1,2242 @@
+[
+  {
+    "file": "src\\admin\\components\\AdminEsqueciSenha.vue",
+    "line": 21,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "<form class=\"mt-8 space-y-6\" @submit.prevent=\"handleRecuperarSenha\">"
+  },
+  {
+    "file": "src\\admin\\components\\AdminEsqueciSenha.vue",
+    "line": 130,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "redirectTo: `${window.location.origin}/admin/reset-password`"
+  },
+  {
+    "file": "src\\admin\\components\\AdminEsqueciSenha.vue",
+    "line": 125,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📧 Enviando email de recuperação para:', email.value)"
+  },
+  {
+    "file": "src\\admin\\components\\AdminEsqueciSenha.vue",
+    "line": 139,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Email de recuperação enviado com sucesso')"
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 3,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "<div class=\"reset-password-container\">"
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 4,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "<form @submit.prevent=\"handleResetPassword\" class=\"reset-form\">"
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 8,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "<label for=\"newPassword\">Nova Senha</label>"
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 10,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "id=\"newPassword\""
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 11,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "v-model=\"newPassword\""
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 12,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "type=\"password\""
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 15,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "placeholder=\"Digite sua nova senha\""
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 20,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "<label for=\"confirmPassword\">Confirmar Senha</label>"
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 22,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "id=\"confirmPassword\""
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 23,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "v-model=\"confirmPassword\""
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 24,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "type=\"password\""
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 27,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "placeholder=\"Confirme sua nova senha\""
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 32,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "{{ loading ? 'Atualizando...' : 'Atualizar Senha' }}"
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 51,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "const newPassword = ref('')"
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 52,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "const confirmPassword = ref('')"
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 78,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "newPassword.value = ''"
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 79,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "confirmPassword.value = ''"
+  },
+  {
+    "file": "src\\admin\\components\\AdminResetSenha.vue",
+    "line": 83,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "safeLogError('reset_password_component', err)"
+  },
+  {
+    "file": "src\\admin\\components\\ModalDetalhesAuditoria.vue",
+    "line": 300,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Dados copiados para a área de transferência')"
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioAuditoriaCompleto.vue",
+    "line": 571,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ CSV exportado com sucesso')"
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioAuditoriaCompleto.vue",
+    "line": 581,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🔄 Iniciando carregamento da auditoria...')"
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioAuditoriaCompleto.vue",
+    "line": 591,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🎯 Filtros aplicados para API:', filtros)"
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioAuditoriaCompleto.vue",
+    "line": 597,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📊 Dados recebidos da API:', {"
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioAuditoriaCompleto.vue",
+    "line": 612,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📋 Tabelas disponíveis para filtro:', tabelasDisponiveis.value)"
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioAuditoriaCompleto.vue",
+    "line": 625,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Auditoria carregada com sucesso:', {"
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioAuditoriaCompleto.vue",
+    "line": 651,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🚀 Componente RelatorioAuditoriaCompleto montado')"
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioAuditoriaCompleto.vue",
+    "line": 575,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Erro ao exportar os dados.')"
+  },
+  {
+    "file": "src\\admin\\components\\RelatorioPortal.vue",
+    "line": 153,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Estatísticas carregadas rapidamente:', estatisticas.value);"
+  },
+  {
+    "file": "src\\admin\\composables\\useAdminAuth.js",
+    "line": 89,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "redirectTo: `${window.location.origin}/admin/reset-password`,"
+  },
+  {
+    "file": "src\\admin\\composables\\useAuditoriaCompleta.js",
+    "line": 14,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🚀 Buscando logs OTIMIZADO...')"
+  },
+  {
+    "file": "src\\admin\\composables\\useAuditoriaCompleta.js",
+    "line": 45,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ ${data?.length || 0} logs carregados rapidamente`)"
+  },
+  {
+    "file": "src\\admin\\composables\\useAuditoriaCompleta.js",
+    "line": 63,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📈 Estatísticas RÁPIDAS...')"
+  },
+  {
+    "file": "src\\admin\\composables\\useClassificados.js",
+    "line": 39,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ ${data.length} classificados carregados (${admin ? 'admin' : 'público'})`)"
+  },
+  {
+    "file": "src\\admin\\composables\\useColaboradores.js",
+    "line": 39,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ ${data.length} colaboradores carregados (${admin ? 'admin' : 'público'})`)"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 15,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🔄 Iniciando carregamento de configurações...')"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 27,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ ${data?.length || 0} configurações carregadas do banco`)"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 38,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('💾 Tentando atualizar configuração:', chave, '=', valor)"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 51,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`📝 Chave '${chave}' não encontrada, tentando inserir...`)"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 59,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Configuração atualizada com sucesso:', updateData)"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 87,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Configuração inserida com sucesso:', insertData)"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 132,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Configurações mapeadas:', agrupadas)"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 142,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📝 Salvando múltiplas configurações...')"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 157,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Processamento de configurações concluído')"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 167,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📤 Iniciando upload de imagem...')"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 179,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📁 Fazendo upload para:', caminho)"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 198,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Upload concluído:', urlData.publicUrl)"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 208,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🗑️ Tentando deletar imagem:', url)"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 229,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Imagem deletada com sucesso')"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 238,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🧪 Testando conexão com o banco...')"
+  },
+  {
+    "file": "src\\admin\\composables\\useConfiguracoes.js",
+    "line": 250,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Conexão com o banco estabelecida com sucesso')"
+  },
+  {
+    "file": "src\\admin\\composables\\useDashboardStats.js",
+    "line": 14,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🚀 Buscando estatísticas OTIMIZADAS...')"
+  },
+  {
+    "file": "src\\admin\\composables\\useDashboardStats.js",
+    "line": 64,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Estatísticas carregadas rapidamente:', estatisticas)"
+  },
+  {
+    "file": "src\\admin\\composables\\useDatabaseReport.js",
+    "line": 14,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🎯 Gerando relatório completo do banco...')"
+  },
+  {
+    "file": "src\\admin\\composables\\useDatabaseReport.js",
+    "line": 84,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Relatório gerado com dados REAIS:', relatorio.estatisticas.resumo)"
+  },
+  {
+    "file": "src\\admin\\composables\\useGaleria.js",
+    "line": 18,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🔄 Buscando galeria do Supabase...')"
+  },
+  {
+    "file": "src\\admin\\composables\\useGaleria.js",
+    "line": 31,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ ${data?.length || 0} imagens carregadas`)"
+  },
+  {
+    "file": "src\\admin\\composables\\useGaleria.js",
+    "line": 50,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('💾 Salvando imagem na tabela galeria...', dadosImagem)"
+  },
+  {
+    "file": "src\\admin\\composables\\useGaleria.js",
+    "line": 71,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Imagem salva na tabela galeria:', data)"
+  },
+  {
+    "file": "src\\admin\\composables\\useImageUpload.js",
+    "line": 87,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`📐 Compressão: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(compressedFile.size / 102"
+  },
+  {
+    "file": "src\\admin\\composables\\useImageUpload.js",
+    "line": 119,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🚀 INICIANDO UPLOAD...')"
+  },
+  {
+    "file": "src\\admin\\composables\\useImageUpload.js",
+    "line": 123,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Arquivo validado')"
+  },
+  {
+    "file": "src\\admin\\composables\\useImageUpload.js",
+    "line": 128,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📐 Comprimindo imagem...')"
+  },
+  {
+    "file": "src\\admin\\composables\\useImageUpload.js",
+    "line": 138,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📁 Informações do upload:', {"
+  },
+  {
+    "file": "src\\admin\\composables\\useImageUpload.js",
+    "line": 160,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Upload storage concluído:', data)"
+  },
+  {
+    "file": "src\\admin\\composables\\useImageUpload.js",
+    "line": 175,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🌐 URL pública gerada:', urlData.publicUrl)"
+  },
+  {
+    "file": "src\\admin\\composables\\useImageUpload.js",
+    "line": 223,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🗑️ Imagem excluída:', filePath)"
+  },
+  {
+    "file": "src\\admin\\composables\\useMensagens.js",
+    "line": 22,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ ${data.length} mensagens carregadas`)"
+  },
+  {
+    "file": "src\\admin\\composables\\useNoticias.js",
+    "line": 18,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📰 Carregando notícias do banco...')"
+  },
+  {
+    "file": "src\\admin\\composables\\useNoticias.js",
+    "line": 24,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ ${dados.length} notícias carregadas`)"
+  },
+  {
+    "file": "src\\admin\\composables\\useNoticias.js",
+    "line": 41,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`🔍 Buscando notícia com ID: ${id}`)"
+  },
+  {
+    "file": "src\\admin\\composables\\useNoticias.js",
+    "line": 51,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Notícia carregada:', noticiaEncontrada)"
+  },
+  {
+    "file": "src\\admin\\composables\\useNoticias.js",
+    "line": 68,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📝 Criando nova notícia...')"
+  },
+  {
+    "file": "src\\admin\\composables\\useNoticias.js",
+    "line": 92,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✏️ Atualizando notícia com ID: ${id}`)"
+  },
+  {
+    "file": "src\\admin\\composables\\useNoticias.js",
+    "line": 125,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`🗑️ Deletando notícia com ID: ${id}`)"
+  },
+  {
+    "file": "src\\admin\\composables\\useNoticias.js",
+    "line": 153,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`🔄 Alterando status da notícia ${id} para ${ativo ? 'ativo' : 'inativo'}`)"
+  },
+  {
+    "file": "src\\admin\\composables\\useNoticias.js",
+    "line": 166,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`⭐ Alterando destaque da notícia ${id} para ${destaque ? 'destaque' : 'não destaque'}`)"
+  },
+  {
+    "file": "src\\admin\\composables\\useRelatorio.js",
+    "line": 13,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📊 Iniciando geração de relatório...')"
+  },
+  {
+    "file": "src\\admin\\composables\\useRelatorio.js",
+    "line": 96,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Relatório gerado com sucesso:', relatorio.data)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminClassificados.vue",
+    "line": 508,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📋 Classificados carregados:', classificados.value.length)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminClassificados.vue",
+    "line": 600,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert(`Visualizando: ${classificado.titulo}\\nAssociado: ${classificado.associado_nome}\\nCategoria: $"
+  },
+  {
+    "file": "src\\admin\\views\\AdminConfiguracoes.vue",
+    "line": 764,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📊 Configurações carregadas do banco:', configuracoesDb.value)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminConfiguracoes.vue",
+    "line": 798,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Configurações mapeadas:', settings)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminConfiguracoes.vue",
+    "line": 834,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`📝 Salvando: ${dbKey} = ${value}`)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminConfiguracoesCompleto.vue",
+    "line": 497,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📊 Configurações carregadas do banco:', configuracoesDb.value)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminConfiguracoesCompleto.vue",
+    "line": 531,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Configurações mapeadas:', settings)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminConfiguracoesCompleto.vue",
+    "line": 567,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`📝 Salvando: ${dbKey} = ${value}`)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminDashboard.vue",
+    "line": 524,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📊 Carregando dados do dashboard...')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminDashboard.vue",
+    "line": 555,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Dashboard carregado com sucesso')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminEsqueciSenha.vue",
+    "line": 3,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "<div class=\"forgot-password-page\">"
+  },
+  {
+    "file": "src\\admin\\views\\AdminEsqueciSenha.vue",
+    "line": 73,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "safeLogError('forgot_password', err)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleria.vue",
+    "line": 494,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🔄 Carregando galeria do banco...')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleria.vue",
+    "line": 506,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📊 Resultado da consulta galeria:', { data, error: supabaseError })"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleria.vue",
+    "line": 514,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ ${data.length} imagens encontradas na galeria`)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleria.vue",
+    "line": 525,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`   ${index + 1}. ${imagem.titulo}`)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleria.vue",
+    "line": 526,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`      URL: ${imagem.imagem_url}`)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleria.vue",
+    "line": 527,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`      Categoria: ${imagem.categoria}`)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleria.vue",
+    "line": 530,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📭 Nenhuma imagem encontrada na tabela galeria')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleria.vue",
+    "line": 544,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ Imagem carregada: ${imagem.titulo}`)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleria.vue",
+    "line": 645,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('Editar imagem:', imagem.id)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleria.vue",
+    "line": 672,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ Imagem \"${deletedTitle}\" excluída com sucesso`)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleria.vue",
+    "line": 688,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🚀 AdminGaleria montado - carregando imagens reais...')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleriaForm.vue",
+    "line": 457,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🚀 Iniciando processo de salvamento...')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleriaForm.vue",
+    "line": 468,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Upload concluído:', uploadResult.publicUrl)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleriaForm.vue",
+    "line": 480,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('💾 Dados para salvar na tabela galeria:', imageData)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminGaleriaForm.vue",
+    "line": 496,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Imagem salva na tabela galeria:', imagemSalva)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminLogin.vue",
+    "line": 53,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "<label for=\"password\" class=\"sr-only\">Senha</label>"
+  },
+  {
+    "file": "src\\admin\\views\\AdminLogin.vue",
+    "line": 55,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "id=\"password\""
+  },
+  {
+    "file": "src\\admin\\views\\AdminLogin.vue",
+    "line": 56,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "v-model=\"form.password\""
+  },
+  {
+    "file": "src\\admin\\views\\AdminLogin.vue",
+    "line": 57,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "name=\"password\""
+  },
+  {
+    "file": "src\\admin\\views\\AdminLogin.vue",
+    "line": 58,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "type=\"password\""
+  },
+  {
+    "file": "src\\admin\\views\\AdminLogin.vue",
+    "line": 59,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "autocomplete=\"current-password\""
+  },
+  {
+    "file": "src\\admin\\views\\AdminLogin.vue",
+    "line": 62,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "placeholder=\"Senha\""
+  },
+  {
+    "file": "src\\admin\\views\\AdminLogin.vue",
+    "line": 83,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "to=\"/admin/esqueci-senha\""
+  },
+  {
+    "file": "src\\admin\\views\\AdminLogin.vue",
+    "line": 135,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "password: '',"
+  },
+  {
+    "file": "src\\admin\\views\\AdminMensagens.vue",
+    "line": 701,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('Exportando mensagens...')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 316,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📖 Carregando notícia para edição:', isEditing.value)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 331,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Notícia carregada para edição')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 365,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Preview da imagem criado:', imageUrl)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 368,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📤 Iniciando upload para o servidor...')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 373,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Imagem salva no servidor:', publicUrl)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 421,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('💾 Salvando notícia:', dadosNoticia)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 426,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Notícia atualizada:', resultado)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 429,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Notícia criada:', resultado)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 335,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Erro ao carregar notícia para edição: ' + error.message)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 349,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Tipo de arquivo não permitido. Use apenas PNG, JPG, JPEG ou WEBP.')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 354,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('O arquivo é muito grande. Tamanho máximo: 10MB')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 377,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Erro ao fazer upload da imagem: ' + error.message)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 392,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('O título é obrigatório')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 396,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('O resumo é obrigatório')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 400,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('O conteúdo é obrigatório')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 404,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('O autor é obrigatório')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticiaForm.vue",
+    "line": 437,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert(`Erro ao salvar notícia: ${error.message}`)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticias.vue",
+    "line": 592,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Erro ao alterar status da notícia')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticias.vue",
+    "line": 610,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Erro ao alterar destaque da notícia')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminNoticias.vue",
+    "line": 629,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Erro ao excluir notícia')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminSolicitacoesSocio.vue",
+    "line": 494,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`Solicitação ${tipo === 'aprovar' ? 'aprovada' : 'rejeitada'}:`, solicitacao)"
+  },
+  {
+    "file": "src\\admin\\views\\AdminSolicitacoesSocio.vue",
+    "line": 539,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('SolicitacoesSociosView carregada')"
+  },
+  {
+    "file": "src\\admin\\views\\AdminSolicitacoesSocio.vue",
+    "line": 512,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert(`${tipo === 'success' ? '✅' : '❌'} ${mensagem}`)"
+  },
+  {
+    "file": "src\\admin\\views\\AuditoriaView.vue",
+    "line": 750,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('AuditoriaView carregada')"
+  },
+  {
+    "file": "src\\admin\\views\\AuditoriaView.vue",
+    "line": 625,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Exportando relatório em PDF...')"
+  },
+  {
+    "file": "src\\admin\\views\\AuditoriaView.vue",
+    "line": 630,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Exportando dados em CSV...')"
+  },
+  {
+    "file": "src\\admin\\views\\BackupView.vue",
+    "line": 534,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('BackupView carregado')"
+  },
+  {
+    "file": "src\\admin\\views\\BackupView.vue",
+    "line": 423,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Erro ao criar backup: ' + error.message)"
+  },
+  {
+    "file": "src\\admin\\views\\BackupView.vue",
+    "line": 444,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert(`Backup ${tipo} criado com sucesso!`)"
+  },
+  {
+    "file": "src\\admin\\views\\BackupView.vue",
+    "line": 461,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Cache limpo com sucesso!')"
+  },
+  {
+    "file": "src\\admin\\views\\BackupView.vue",
+    "line": 480,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Logs antigos removidos com sucesso!')"
+  },
+  {
+    "file": "src\\admin\\views\\BackupView.vue",
+    "line": 498,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Banco de dados otimizado com sucesso!')"
+  },
+  {
+    "file": "src\\App.vue",
+    "line": 22,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('Autenticação inicializada com sucesso')"
+  },
+  {
+    "file": "src\\components\\AvaliacoesClassificado.vue",
+    "line": 321,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🛠️ Iniciando sistema de avaliações para:', props.classificadoId);"
+  },
+  {
+    "file": "src\\components\\AvaliacoesClassificado.vue",
+    "line": 332,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🧪 Limpando recursos de avaliações');"
+  },
+  {
+    "file": "src\\components\\ContatoSection.vue",
+    "line": 188,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(\"ContatoSection.vue: Carregando configurações...\");"
+  },
+  {
+    "file": "src\\components\\ContatoSection.vue",
+    "line": 191,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(\"ContatoSection.vue: Configurações carregadas com sucesso.\");"
+  },
+  {
+    "file": "src\\components\\ContatoSection.vue",
+    "line": 203,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(\"ContatoSection.vue: Enviando mensagem:\", form.value);"
+  },
+  {
+    "file": "src\\components\\ContatoSection.vue",
+    "line": 206,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(\"ContatoSection.vue: Mensagem enviada com sucesso!\");"
+  },
+  {
+    "file": "src\\components\\EventosSection.vue",
+    "line": 244,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🎯 Carregando EventosSection')"
+  },
+  {
+    "file": "src\\components\\FooterComponent.vue",
+    "line": 165,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(\"FooterComponent: Carregando configurações...\");"
+  },
+  {
+    "file": "src\\components\\FooterComponent.vue",
+    "line": 168,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(\"FooterComponent: Configurações carregadas com sucesso.\");"
+  },
+  {
+    "file": "src\\components\\ModalCadastroAssociado.vue",
+    "line": 404,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('CEP inválido. Digite um CEP com 8 dígitos.')"
+  },
+  {
+    "file": "src\\components\\ModalCadastroAssociado.vue",
+    "line": 413,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('CEP não encontrado. Verifique o número digitado.')"
+  },
+  {
+    "file": "src\\components\\ModalCadastroAssociado.vue",
+    "line": 424,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Erro ao buscar CEP. Tente novamente.')"
+  },
+  {
+    "file": "src\\components\\ModalCadastroAssociado.vue",
+    "line": 479,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Você precisa aceitar os termos e condições')"
+  },
+  {
+    "file": "src\\components\\ModalCadastroAssociado.vue",
+    "line": 486,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('CPF inválido. Verifique o número digitado.')"
+  },
+  {
+    "file": "src\\components\\ModalCadastroAssociado.vue",
+    "line": 492,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Por favor, preencha todos os campos obrigatórios do endereço.')"
+  },
+  {
+    "file": "src\\components\\ModalCadastroAssociado.vue",
+    "line": 507,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('CPF já cadastrado. Entre em contato conosco se precisar de ajuda.')"
+  },
+  {
+    "file": "src\\components\\ModalCadastroAssociado.vue",
+    "line": 548,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('CPF já cadastrado no sistema. Entre em contato conosco se precisar de ajuda.')"
+  },
+  {
+    "file": "src\\components\\ModalCadastroAssociado.vue",
+    "line": 550,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Erro ao enviar cadastro. Tente novamente ou entre em contato conosco.')"
+  },
+  {
+    "file": "src\\components\\ParceiroCard.vue",
+    "line": 355,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('Abrir galeria no índice:', index)"
+  },
+  {
+    "file": "src\\components\\public\\ClassificadosSection.vue",
+    "line": 297,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🎯 ClassificadosSection montado')"
+  },
+  {
+    "file": "src\\components\\public\\GaleriaSection.vue",
+    "line": 91,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🏠 CARREGANDO GALERIA PARA HOME...')"
+  },
+  {
+    "file": "src\\components\\public\\GaleriaSection.vue",
+    "line": 101,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ GALERIA HOME:', data)"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 18,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🔄 Iniciando carregamento de configurações...')"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 32,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ ${data?.length || 0} configurações carregadas do banco`)"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 51,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`💾 Tentando salvar: ${chave} = ${valor}`)"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 69,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`📝 Atualizando configuração existente (ID: ${existingConfig.id})`)"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 87,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🆕 Criando nova configuração')"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 106,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Configuração salva com sucesso:', result)"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 134,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📝 Salvando múltiplas configurações...')"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 148,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Processamento de configurações concluído')"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 214,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Configurações mapeadas:', agrupadas)"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 225,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📤 Iniciando upload de imagem...')"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 237,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📁 Fazendo upload para:', caminho)"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 256,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Upload concluído:', urlData.publicUrl)"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 267,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🗑️ Tentando deletar imagem:', url)"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 288,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Imagem deletada com sucesso')"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 298,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🧪 Testando conexão com o banco...')"
+  },
+  {
+    "file": "src\\composables\\useConfiguracoes.js",
+    "line": 310,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Conexão com o banco estabelecida com sucesso')"
+  },
+  {
+    "file": "src\\composables\\useI18n.js",
+    "line": 29,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "'admin.senha': 'Senha',"
+  },
+  {
+    "file": "src\\composables\\useOpenMeteoWeather.js",
+    "line": 25,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🌤️ Buscando dados do clima...')"
+  },
+  {
+    "file": "src\\composables\\useOpenMeteoWeather.js",
+    "line": 34,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📊 Dados do clima recebidos:', data)"
+  },
+  {
+    "file": "src\\composables\\useOpenMeteoWeather.js",
+    "line": 52,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Clima carregado com sucesso:', {"
+  },
+  {
+    "file": "src\\composables\\useOpenMeteoWeather.js",
+    "line": 67,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🔄 Usando dados mockados para desenvolvimento')"
+  },
+  {
+    "file": "src\\composables\\usePublicNoticias.js",
+    "line": 15,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📰 [PUBLICO] Buscando notícias públicas...')"
+  },
+  {
+    "file": "src\\composables\\usePublicNoticias.js",
+    "line": 29,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ [PUBLICO] ${noticias.value.length} notícias públicas carregadas`)"
+  },
+  {
+    "file": "src\\composables\\usePublicNoticias.js",
+    "line": 45,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`📰 [PUBLICO] Buscando notícia ID: ${id}`)"
+  },
+  {
+    "file": "src\\composables\\usePublicNoticias.js",
+    "line": 60,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ [PUBLICO] Notícia carregada:', data?.titulo)"
+  },
+  {
+    "file": "src\\composables\\useSafeImage.js",
+    "line": 83,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Imagem carregada com sucesso:', safeUrl)"
+  },
+  {
+    "file": "src\\router\\index.js",
+    "line": 116,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "path: \"/admin/forgot-password\","
+  },
+  {
+    "file": "src\\router\\index.js",
+    "line": 117,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "name: \"AdminForgotPassword\","
+  },
+  {
+    "file": "src\\router\\index.js",
+    "line": 118,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "component: () => import(\"@/admin/components/AdminEsqueciSenha.vue\"),"
+  },
+  {
+    "file": "src\\router\\index.js",
+    "line": 120,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "title: \"Recuperar Senha - Painel Admin\","
+  },
+  {
+    "file": "src\\router\\index.js",
+    "line": 126,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "path: \"/admin/reset-password\","
+  },
+  {
+    "file": "src\\router\\index.js",
+    "line": 127,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "name: \"AdminResetPassword\","
+  },
+  {
+    "file": "src\\router\\index.js",
+    "line": 128,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "component: () => import(\"@/admin/components/AdminResetSenha.vue\"),"
+  },
+  {
+    "file": "src\\router\\index.js",
+    "line": 130,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "title: \"Nova Senha - Painel Admin\","
+  },
+  {
+    "file": "src\\router\\index.js",
+    "line": 136,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "path: \"/admin/esqueci-senha\","
+  },
+  {
+    "file": "src\\router\\index.js",
+    "line": 137,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "name: \"AdminEsqueciSenha\","
+  },
+  {
+    "file": "src\\router\\index.js",
+    "line": 138,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "component: () => import(\"@/admin/views/AdminEsqueciSenha.vue\"),"
+  },
+  {
+    "file": "src\\router\\index.js",
+    "line": 140,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "title: \"Recuperar Senha - Painel Admin\","
+  },
+  {
+    "file": "src\\router\\index.js",
+    "line": 420,
+    "rule": "PASSWORD_IN_LOG",
+    "message": "Nunca inclua 'senha' em mensagens de log ou erro",
+    "severity": "CRITICAL",
+    "code": "if (currentAuth && (to.path === '/admin/login' || to.path === '/admin' || to.path.includes('/admin/f"
+  },
+  {
+    "file": "src\\stores\\classificados.js",
+    "line": 50,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📋 Nenhum classificado no Supabase, usando dados mockados...');"
+  },
+  {
+    "file": "src\\stores\\classificados.js",
+    "line": 58,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('❌ Erro ao buscar classificados, usando dados mockados:', error.message);"
+  },
+  {
+    "file": "src\\stores\\classificados.js",
+    "line": 308,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🏠 Usando classificados mockados para home');"
+  },
+  {
+    "file": "src\\stores\\classificados.js",
+    "line": 316,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🏠 Erro ao buscar classificados para home, usando mock:', error.message);"
+  },
+  {
+    "file": "src\\stores\\colaboradores.js",
+    "line": 25,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🤝 Parceiros retornados do cache.')"
+  },
+  {
+    "file": "src\\stores\\colaboradores.js",
+    "line": 33,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🤝 Carregando parceiros...')"
+  },
+  {
+    "file": "src\\stores\\colaboradores.js",
+    "line": 45,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ ${itens.value.length} parceiros carregados com sucesso`)"
+  },
+  {
+    "file": "src\\stores\\colaboradores.js",
+    "line": 106,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ Parceiro ${id} atualizado com sucesso.`)"
+  },
+  {
+    "file": "src\\stores\\colaboradores.js",
+    "line": 122,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ Novo parceiro criado com sucesso.`)"
+  },
+  {
+    "file": "src\\stores\\colaboradores.js",
+    "line": 152,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ Parceiro ${id} excluído com sucesso.`)"
+  },
+  {
+    "file": "src\\stores\\colaboradores.js",
+    "line": 166,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📤 Store: Iniciando upload de imagem...', file.name)"
+  },
+  {
+    "file": "src\\stores\\colaboradores.js",
+    "line": 186,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Store: Imagem upload com sucesso:', publicUrl)"
+  },
+  {
+    "file": "src\\stores\\configuracoes.js",
+    "line": 140,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🔄 Store: Iniciando carregamento de configurações do banco...')"
+  },
+  {
+    "file": "src\\stores\\configuracoes.js",
+    "line": 149,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ ${data.length} configurações carregadas do banco`)"
+  },
+  {
+    "file": "src\\stores\\configuracoes.js",
+    "line": 152,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Store: Configurações mapeadas com sucesso')"
+  },
+  {
+    "file": "src\\stores\\configuracoes.js",
+    "line": 154,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('ℹ️ Nenhuma configuração encontrada no banco.')"
+  },
+  {
+    "file": "src\\stores\\configuracoes.js",
+    "line": 246,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`⚡ Atualizado: ${secao}.${chave} = ${valor}`)"
+  },
+  {
+    "file": "src\\stores\\configuracoes.js",
+    "line": 259,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "if (!this.hero.hero_imagem_url) return console.log('❌ Nenhuma imagem do hero definida')"
+  },
+  {
+    "file": "src\\stores\\configuracoes.js",
+    "line": 262,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(res.ok ? '✅ Imagem do hero acessível' : `❌ Imagem não acessível (${res.status})`)"
+  },
+  {
+    "file": "src\\stores\\configuracoes.js",
+    "line": 269,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🔄 Recarregando configurações...')"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 67,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📅 Eventos em cache, não recarregando.')"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 75,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📅 Carregando eventos do banco...')"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 89,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ ${todos.value.length} eventos carregados com sucesso`)"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 105,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`📅 Carregando evento ID: ${id}`)"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 122,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Evento carregado:', data)"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 146,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📝 Criando novo evento...', dadosEvento)"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 188,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Evento criado:', novoEvento)"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 208,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✏️ Atualizando evento ID:', id)"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 255,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Evento atualizado:', eventoAtualizado)"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 275,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`🗑️ Excluindo evento ID: ${id}`)"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 292,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Evento excluído com sucesso')"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 318,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`⭐ Alternando destaque do evento ID ${id} para: ${novoDestaque}`)"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 334,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Destaque alterado com sucesso:', eventoAtualizado.destaque)"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 356,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`🔄 Alternando status do evento ID ${id} para: ${novoAtivo}`)"
+  },
+  {
+    "file": "src\\stores\\eventos.js",
+    "line": 372,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Status alterado com sucesso:', eventoAtualizado.ativo)"
+  },
+  {
+    "file": "src\\stores\\galeria.js",
+    "line": 58,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🔄 Buscando imagens da galeria do Supabase...');"
+  },
+  {
+    "file": "src\\stores\\galeria.js",
+    "line": 70,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ ${data?.length || 0} imagens carregadas da galeria`);"
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "line": 37,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📰 Store: Iniciando carregamento de notícias...')"
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "line": 52,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`✅ Store: ${data?.length || 0} notícias carregadas do banco`)"
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "line": 56,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log(`   📄 \"${noticia.titulo}\" - ativo: ${noticia.ativo} - data: ${noticia.data_publicacao}`"
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "line": 89,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📝 Store: Criando nova notícia...', noticiaData)"
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "line": 112,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Store: Notícia criada com sucesso:', data)"
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "line": 126,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📝 Store: Atualizando notícia...', id, noticiaData)"
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "line": 151,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Store: Notícia atualizada com sucesso:', data)"
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "line": 168,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🗑️ Store: Excluindo notícia...', id)"
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "line": 180,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Store: Notícia excluída com sucesso')"
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "line": 193,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🔄 Store: Alterando status da notícia...', id, ativo)"
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "line": 210,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Store: Status alterado com sucesso:', data)"
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "line": 227,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('📤 Store: Iniciando upload de imagem...', file.name)"
+  },
+  {
+    "file": "src\\stores\\noticias.js",
+    "line": 247,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Store: Imagem upload com sucesso:', publicUrl)"
+  },
+  {
+    "file": "src\\views\\EventoDetalhesView.vue",
+    "line": 329,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('Erro ao compartilhar:', err)"
+  },
+  {
+    "file": "src\\views\\EventoDetalhesView.vue",
+    "line": 336,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('Erro ao copiar URL:', err)"
+  },
+  {
+    "file": "src\\views\\EventoDetalhesView.vue",
+    "line": 354,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🔄 Carregando evento ID:', id)"
+  },
+  {
+    "file": "src\\views\\EventoDetalhesView.vue",
+    "line": 383,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Evento carregado:', evento.value)"
+  },
+  {
+    "file": "src\\views\\EventoDetalhesView.vue",
+    "line": 317,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('🚫 Funcionalidade de Inscrição em Desenvolvimento. Aguarde!')"
+  },
+  {
+    "file": "src\\views\\EventoDetalhesView.vue",
+    "line": 334,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('🔗 URL do evento copiada para a área de transferência!')"
+  },
+  {
+    "file": "src\\views\\GaleriaDetalhesView.vue",
+    "line": 297,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('URL copiada para a área de transferência!');"
+  },
+  {
+    "file": "src\\views\\GaleriaDetalhesView.vue",
+    "line": 306,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('URL copiada para a área de transferência!');"
+  },
+  {
+    "file": "src\\views\\GaleriaDetalhesView.vue",
+    "line": 323,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('Não foi possível fazer o download da imagem.');"
+  },
+  {
+    "file": "src\\views\\HomeView.vue",
+    "line": 1231,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🖼️ Preview aberto:', imagem.titulo, 'Índice:', index, 'Total:', galeriaComImagens.valu"
+  },
+  {
+    "file": "src\\views\\HomeView.vue",
+    "line": 1312,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('Ver parceiro:', parceiro.nome)"
+  },
+  {
+    "file": "src\\views\\NoticiaDetalhesView.vue",
+    "line": 238,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('Erro ao compartilhar:', err)"
+  },
+  {
+    "file": "src\\views\\NoticiaDetalhesView.vue",
+    "line": 246,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('Erro ao copiar URL:', err)"
+  },
+  {
+    "file": "src\\views\\NoticiaDetalhesView.vue",
+    "line": 263,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('🆔 Buscando notícia com ID:', id)"
+  },
+  {
+    "file": "src\\views\\NoticiaDetalhesView.vue",
+    "line": 271,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('✅ Notícia carregada:', noticia.value.titulo)"
+  },
+  {
+    "file": "src\\views\\NoticiaDetalhesView.vue",
+    "line": 244,
+    "rule": "ALERT_USAGE",
+    "message": "Evite alert() - use toasts ou modais customizados",
+    "severity": "MEDIUM",
+    "code": "alert('URL da notícia copiada para a área de transferência!')"
+  },
+  {
+    "file": "src\\views\\NoticiaIndividual.vue",
+    "line": 278,
+    "rule": "CONSOLE_IN_PRODUCTION",
+    "message": "Remover console.log antes do deploy em produção",
+    "severity": "MEDIUM",
+    "code": "console.log('Compartilhamento cancelado ou não suportado')"
+  }
+]

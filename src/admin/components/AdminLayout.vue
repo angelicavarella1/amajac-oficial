@@ -1,9 +1,9 @@
-﻿<template>
+﻿=== C:\Users\angel\Documents\Projetos\amajac-oficial\src\admin\components\AdminLayout.vue ===
+<template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300 lg:flex">
-    
-    <!-- Overlay para mobile -->
-    <div 
-      v-if="sidebarOpen && !isLargeScreen" 
+
+    <div
+      v-if="sidebarOpen && !isLargeScreen"
       class="fixed inset-0 flex z-40 lg:hidden"
       @click="sidebarOpen = false"
       aria-hidden="true"
@@ -11,12 +11,11 @@
       <div class="fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity duration-300"></div>
     </div>
 
-    <!-- Sidebar -->
-    <div 
-      class="fixed inset-y-0 left-0 flex flex-col z-50 lg:static lg:translate-x-0 lg:flex-shrink-0" 
+    <div
+      class="fixed inset-y-0 left-0 flex flex-col z-50 lg:static lg:translate-x-0 lg:flex-shrink-0"
       :class="{ 'pointer-events-none': !sidebarOpen && !isLargeScreen }"
     >
-      <div 
+      <div
         id="sidebar-menu"
         :class="[
           'flex flex-col flex-1 bg-emerald-600 dark:bg-emerald-800 border-r border-emerald-700 dark:border-emerald-900',
@@ -27,22 +26,21 @@
         :aria-modal="sidebarOpen && !isLargeScreen"
         aria-label="Menu de Navegação Principal"
       >
-        <!-- Header do Sidebar -->
         <div class="flex items-center justify-between h-16 flex-shrink-0 px-3 border-b border-emerald-700 dark:border-emerald-900">
           <div class="flex items-center">
             <div class="relative">
-              <img 
-                class="h-7 w-7 rounded-full object-cover border-2 border-white" 
-                :src="displayUser.avatar" 
-                :alt="`Avatar de ${displayUser.name}`"
-                loading="lazy"
-                @error="handleImageError"
+              <!-- LOGO NO LUGAR DO AVATAR - PRIMEIRO LUGAR -->
+              <img
+                class="h-7 w-7 rounded-full object-cover border-2 border-white bg-white p-0.5"
+                src="/images/logo-amajac.png"
+                alt="Logo AMAJAC"
+                loading="eager"
               >
               <div class="absolute -bottom-1 -right-1 w-2 h-2 bg-emerald-300 border-2 border-white dark:border-gray-800 rounded-full" title="Online"></div>
             </div>
             <span class="ml-2 text-lg font-bold text-white truncate max-w-[120px]">AMAJAC Admin</span>
           </div>
-          <button 
+          <button
             @click="sidebarOpen = false"
             class="lg:hidden p-1 rounded-md text-emerald-200 hover:text-white hover:bg-emerald-700 transition-colors"
             aria-label="Fechar menu lateral"
@@ -51,7 +49,6 @@
           </button>
         </div>
 
-        <!-- Navegação Principal -->
         <nav class="flex-1 px-2 py-3 space-y-1 overflow-y-auto sidebar-scroll" aria-label="Links do Dashboard">
           <router-link
             v-for="item in navigation"
@@ -72,16 +69,15 @@
           </router-link>
         </nav>
 
-        <!-- Menu do Usuário -->
         <div class="flex-shrink-0 border-t border-emerald-700 dark:border-emerald-900 p-2 user-menu">
           <div class="flex items-center">
             <div class="flex-shrink-0">
-              <img 
-                class="h-8 w-8 rounded-full object-cover border-2 border-white" 
-                :src="displayUser.avatar" 
-                :alt="`Avatar de ${displayUser.name}`"
-                loading="lazy"
-                @error="handleImageError"
+              <!-- LOGO NO LUGAR DO AVATAR - SEGUNDO LUGAR -->
+              <img
+                class="h-8 w-8 rounded-full object-cover border-2 border-white bg-white p-0.5"
+                src="/images/logo-amajac.png"
+                alt="Logo AMAJAC"
+                loading="eager"
               >
             </div>
             <div class="ml-2 flex-1 overflow-hidden min-w-0">
@@ -99,18 +95,17 @@
               <i class="fas fa-ellipsis-v text-xs"></i>
             </button>
           </div>
-          
-          <!-- Dropdown do Usuário -->
-          <div 
-            v-if="userMenuOpen" 
-            id="user-menu-panel" 
-            ref="userMenuPanelRef" 
-            class="mt-1 space-y-1 bg-emerald-700 rounded-md p-1 shadow-lg" 
+
+          <div
+            v-if="userMenuOpen"
+            id="user-menu-panel"
+            ref="userMenuPanelRef"
+            class="mt-1 space-y-1 bg-emerald-700 rounded-md p-1 shadow-lg"
             role="menu"
             aria-orientation="vertical"
           >
             <router-link
-              to="/admin/configuracoes"
+              to="/admin/dashboard/configuracoes"
               class="flex items-center px-2 py-1 text-xs text-white hover:bg-emerald-600 rounded-md transition-colors focus:outline-none focus:bg-emerald-600"
               role="menuitem"
               @click="userMenuOpen = false"
@@ -123,8 +118,8 @@
               role="menuitem"
               :disabled="isLoggingOut"
             >
-              <i 
-                class="fas mr-2 w-3" 
+              <i
+                class="fas mr-2 w-3"
                 :class="isLoggingOut ? 'fa-spinner fa-spin' : 'fa-sign-out-alt'"
                 aria-hidden="true"
               ></i>
@@ -135,9 +130,7 @@
       </div>
     </div>
 
-    <!-- Conteúdo Principal -->
     <div class="flex flex-col flex-1 lg:min-w-0 lg:ml-0">
-      <!-- Header -->
       <header class="flex-shrink-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
           <div class="flex items-center">
@@ -150,14 +143,13 @@
             >
               <i class="fas fa-bars text-lg" aria-hidden="true"></i>
             </button>
-            
-            <!-- Breadcrumbs -->
+
             <nav class="hidden lg:flex ml-4" aria-label="Caminho de navegação">
               <ol class="flex items-center space-x-2">
                 <li>
-                  <router-link 
-                    to="/admin" 
-                    class="text-gray-400 hover:text-gray-500 transition-colors focus:outline-none focus:text-gray-500" 
+                  <router-link
+                    to="/admin/dashboard"
+                    class="text-gray-400 hover:text-gray-500 transition-colors focus:outline-none focus:text-gray-500"
                     aria-label="Início"
                   >
                     <i class="fas fa-home" aria-hidden="true"></i>
@@ -170,8 +162,8 @@
                       :to="crumb.href"
                       :class="[
                         'text-sm font-medium transition-colors focus:outline-none focus:underline',
-                        index === breadcrumbs.length - 1 
-                          ? 'text-gray-900 dark:text-white cursor-default' 
+                        index === breadcrumbs.length - 1
+                          ? 'text-gray-900 dark:text-white cursor-default'
                           : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                       ]"
                       :aria-current="index === breadcrumbs.length - 1 ? 'page' : undefined"
@@ -184,11 +176,9 @@
             </nav>
           </div>
 
-          <!-- Controles do Header -->
           <div class="flex items-center space-x-4">
-            <!-- Loading Indicator -->
-            <div 
-              v-if="isLoading" 
+            <div
+              v-if="isLoading"
               class="flex items-center text-gray-400"
               aria-label="Carregando"
             >
@@ -196,7 +186,6 @@
               <span class="text-sm">Carregando...</span>
             </div>
 
-            <!-- Botão Dark Mode -->
             <button
               @click="toggleDarkMode"
               class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -205,14 +194,13 @@
               <i :class="uiStore.isDark ? 'fas fa-sun' : 'fas fa-moon'" aria-hidden="true"></i>
             </button>
 
-            <!-- Notificações -->
             <button
               @click="toggleNotifications"
               class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 relative"
               aria-label="Notificações"
             >
               <i class="fas fa-bell" aria-hidden="true"></i>
-              <span 
+              <span
                 v-if="unreadNotifications > 0"
                 class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center"
               >
@@ -223,28 +211,23 @@
         </div>
       </header>
 
-      <!-- Conteúdo Principal -->
       <main class="flex-1 overflow-y-auto focus:outline-none" tabindex="0">
         <div class="py-6">
           <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- REMOVIDO: Page Header duplicado - cada página já tem seu próprio título -->
-            <!-- Router View -->
             <router-view />
           </div>
         </div>
       </main>
     </div>
 
-    <!-- Toast Notification -->
-    <ToastNotification 
+    <ToastNotification
       :show="uiStore.toast.show"
       :type="uiStore.toast.type"
       :message="uiStore.toast.message"
       @close="uiStore.hideToast()"
     />
 
-    <!-- Notifications Panel -->
-    <div 
+    <div
       v-if="notificationsOpen"
       class="fixed inset-0 z-50 overflow-y-auto"
       aria-labelledby="notifications-title"
@@ -253,7 +236,7 @@
     >
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="notificationsOpen = false"></div>
-        
+
         <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
           <div class="flex items-center justify-between mb-4">
             <h3 id="notifications-title" class="text-lg font-medium text-gray-900 dark:text-white">
@@ -266,7 +249,7 @@
               <i class="fas fa-times"></i>
             </button>
           </div>
-          
+
           <div class="text-center text-gray-500 dark:text-gray-400">
             <i class="fas fa-bell-slash text-3xl mb-2"></i>
             <p>Nenhuma notificação</p>
@@ -304,80 +287,79 @@ const unreadNotifications = ref(0)
 const userMenuButtonRef = ref(null)
 const userMenuPanelRef = ref(null)
 
-// Dados do Usuário
+// Dados do Usuário - SIMPLIFICADO
 const displayUser = computed(() => {
   if (!authStore.user) {
     return {
       name: 'Carregando...',
-      role: 'Desconectado',
-      avatar: '/images/placeholder-avatar.jpg'
+      role: 'Desconectado'
     }
   }
+  
   const roleDisplay = authStore.user.nivel === 'super' ? 'Super Administrador' : 'Administrador'
+  
   return {
     name: authStore.user.nome || 'Administrador',
-    role: roleDisplay,
-    avatar: authStore.user.avatar || '/images/placeholder-avatar.jpg'
+    role: roleDisplay
   }
 })
 
 // REMOVIDO: currentPageTitle e currentPageDescription não são mais usados no template
-// mas mantemos para o título da página e breadcrumbs
 const currentPageTitle = computed(() => {
   return breadcrumbs.value[breadcrumbs.value.length - 1]?.name || 'Dashboard'
 })
 
 const currentPageDescription = computed(() => {
   const descriptions = {
-    '/admin': 'Visão geral do sistema administrativo',
-    '/admin/noticias': 'Gerencie as notícias do portal',
-    '/admin/eventos': 'Organize eventos e atividades',
-    '/admin/solicitacoes-socio': 'Gerencie solicitações de associados',
-    '/admin/parceiros': 'Administre parceiros comerciais',
-    '/admin/galeria': 'Gerencie a galeria de imagens',
-    '/admin/classificados': 'Controle os classificados',
-    '/admin/mensagens': 'Visualize mensagens recebidas',
-    '/admin/configuracoes': 'Configure o sistema',
-    '/admin/relatorios': 'Acesse relatórios e estatísticas',
-    '/admin/monitor': 'Monitore o uso do Supabase',
-    '/admin/backup': 'Faça backup e limpeza do banco',
-    '/admin/auditoria': 'Relatório completo de auditoria'
+    '/admin/dashboard': 'Visão geral do sistema administrativo',
+    '/admin/dashboard/noticias': 'Gerencie as notícias do portal',
+    '/admin/dashboard/eventos': 'Organize eventos e atividades',
+    '/admin/dashboard/solicitacoes-socio': 'Gerencie solicitações de associados',
+    '/admin/dashboard/parceiros': 'Administre parceiros comerciais',
+    '/admin/dashboard/galeria': 'Gerencie a galeria de imagens',
+    '/admin/dashboard/classificados': 'Controle os classificados',
+    '/admin/dashboard/mensagens': 'Visualize mensagens recebidas',
+    '/admin/dashboard/configuracoes': 'Configure o sistema',
+    '/admin/dashboard/relatorios': 'Acesse relatórios e estatísticas',
+    '/admin/dashboard/monitor': 'Monitore o uso do Supabase',
+    '/admin/dashboard/backup': 'Faça backup e limpeza do banco',
+    '/admin/dashboard/auditoria': 'Relatório completo de auditoria'
   }
   return descriptions[route.path] || 'Página administrativa'
 })
 
-// Navegação Principal
+// ✅ CORREÇÃO CRÍTICA: Navegação atualizada para /admin/dashboard
 const navigation = ref([
-  { name: 'Dashboard', href: '/admin', icon: 'fas fa-tachometer-alt' },
-  { name: 'Notícias', href: '/admin/noticias', icon: 'fas fa-file-alt' },
-  { name: 'Eventos', href: '/admin/eventos', icon: 'fas fa-calendar' },
-  { name: 'Associados', href: '/admin/solicitacoes-socio', icon: 'fas fa-users' },
-  { name: 'Parceiros Comerciais', href: '/admin/parceiros', icon: 'fas fa-handshake' },
-  { name: 'Galeria', href: '/admin/galeria', icon: 'fas fa-images' },
-  { name: 'Classificados', href: '/admin/classificados', icon: 'fas fa-list' },
-  { name: 'Mensagens', href: '/admin/mensagens', icon: 'fas fa-envelope' },
-  { name: 'Monitor Supabase', href: '/admin/monitor', icon: 'fas fa-chart-bar' },
-  { name: 'Backup & Limpeza', href: '/admin/backup', icon: 'fas fa-database' },
-  { name: 'Auditoria', href: '/admin/auditoria', icon: 'fas fa-clipboard-list' },
-  { name: 'Configurações', href: '/admin/configuracoes', icon: 'fas fa-cog' },
-  { name: 'Relatórios', href: '/admin/relatorios', icon: 'fas fa-chart-pie' }
+  { name: 'Dashboard', href: '/admin/dashboard', icon: 'fas fa-tachometer-alt' },
+  { name: 'Notícias', href: '/admin/dashboard/noticias', icon: 'fas fa-file-alt' },
+  { name: 'Eventos', href: '/admin/dashboard/eventos', icon: 'fas fa-calendar' },
+  { name: 'Associados', href: '/admin/dashboard/solicitacoes-socio', icon: 'fas fa-users' },
+  { name: 'Parceiros Comerciais', href: '/admin/dashboard/parceiros', icon: 'fas fa-handshake' },
+  { name: 'Galeria', href: '/admin/dashboard/galeria', icon: 'fas fa-images' },
+  { name: 'Classificados', href: '/admin/dashboard/classificados', icon: 'fas fa-list' },
+  { name: 'Mensagens', href: '/admin/dashboard/mensagens', icon: 'fas fa-envelope' },
+  { name: 'Monitor Supabase', href: '/admin/dashboard/monitor', icon: 'fas fa-chart-bar' },
+  { name: 'Backup & Limpeza', href: '/admin/dashboard/backup', icon: 'fas fa-database' },
+  { name: 'Auditoria', href: '/admin/dashboard/auditoria', icon: 'fas fa-clipboard-list' },
+  { name: 'Configurações', href: '/admin/dashboard/configuracoes', icon: 'fas fa-cog' },
+  { name: 'Relatórios', href: '/admin/dashboard/relatorios', icon: 'fas fa-chart-pie' }
 ])
 
-// Breadcrumbs
+// ✅ CORREÇÃO CRÍTICA: Breadcrumbs atualizados para /admin/dashboard
 const breadcrumbs = computed(() => {
-  const baseBreadcrumb = { name: 'Dashboard', href: '/admin', icon: 'fas fa-tachometer-alt' }
-  
-  if (route.path === '/admin') {
+  const baseBreadcrumb = { name: 'Dashboard', href: '/admin/dashboard', icon: 'fas fa-tachometer-alt' }
+
+  if (route.path === '/admin/dashboard') {
     return [baseBreadcrumb]
   }
 
   const crumbs = [baseBreadcrumb]
-  const pathArray = route.path.split('/').filter(path => path && path !== 'admin')
+  const pathArray = route.path.split('/').filter(path => path && path !== 'admin' && path !== 'dashboard')
 
   pathArray.forEach((segment, index) => {
-    const href = '/admin/' + pathArray.slice(0, index + 1).join('/')
-    
-    const navItem = navigation.value.find(item => 
+    const href = '/admin/dashboard/' + pathArray.slice(0, index + 1).join('/')
+
+    const navItem = navigation.value.find(item =>
       item.href === href || item.href.includes(segment)
     )
 
@@ -388,9 +370,8 @@ const breadcrumbs = computed(() => {
       })
     } else {
       const routeRecord = router.resolve(href)
-      const name = routeRecord.meta?.breadcrumbName || 
-                   formatBreadcrumbName(segment)
-      
+      const name = routeRecord.meta?.breadcrumbName || formatBreadcrumbName(segment)
+
       if (name && !crumbs.some(crumb => crumb.name === name)) {
         crumbs.push({
           name: name,
@@ -429,13 +410,9 @@ function toggleNotifications() {
   notificationsOpen.value = !notificationsOpen.value
 }
 
-function handleImageError(event) {
-  event.target.src = '/images/placeholder-avatar.jpg'
-}
-
 async function logout() {
   if (isLoggingOut.value) return
-  
+
   isLoggingOut.value = true
   try {
     await authStore.signOut()
@@ -444,7 +421,7 @@ async function logout() {
   } catch (error) {
     console.error('Erro ao fazer logout:', error)
     uiStore.showToast(
-      error.response?.data?.message || 'Erro ao fazer logout. Tente novamente.', 
+      error.response?.data?.message || 'Erro ao fazer logout. Tente novamente.',
       'error'
     )
   } finally {
@@ -462,7 +439,7 @@ const closeDropdownsOnClickOutside = (event) => {
       userMenuOpen.value = false
     }
   }
-  
+
   if (notificationsOpen.value && !event.target.closest('[aria-label="Notificações"]')) {
     notificationsOpen.value = false
   }
@@ -501,7 +478,7 @@ watch(() => route.path, async (newPath, oldPath) => {
     isLoading.value = true
     userMenuOpen.value = false
     notificationsOpen.value = false
-    
+
     if (!isLargeScreen.value) sidebarOpen.value = false
 
     await nextTick()
@@ -516,24 +493,23 @@ watch(breadcrumbs, (newBreadcrumbs) => {
   const pageTitle = newBreadcrumbs
     .map(crumb => crumb.name)
     .join(' | ') + ' | AMAJAC Admin'
-  
+
   document.title = pageTitle
-  
+
   const metaDescription = document.querySelector('meta[name="description"]')
   if (metaDescription) {
-    metaDescription.setAttribute('content', 
+    metaDescription.setAttribute('content',
       `Painel Administrativo AMAJAC - ${newBreadcrumbs.slice(-1)[0]?.name || 'Dashboard'}`
     )
   }
 })
 
-// Lifecycle
 onMounted(() => {
   uiStore.initializeDarkMode()
   window.addEventListener('resize', handleResize)
   document.addEventListener('click', closeDropdownsOnClickOutside)
   document.addEventListener('keydown', handleKeydown)
-  
+
   // Preload Font Awesome se não estiver carregado
   if (!document.querySelector('link[href*="font-awesome"]')) {
     const fontAwesomeLink = document.createElement('link')
@@ -578,7 +554,7 @@ onUnmounted(() => {
   .lg-min-w-0 {
     min-width: 0;
   }
-  
+
   .lg-sidebar-open {
     transform: translateX(0);
   }
@@ -607,7 +583,7 @@ a:focus-visible,
   .bg-emerald-600 {
     background-color: #004d40;
   }
-  
+
   .border-emerald-700 {
     border-color: #00332c;
   }

@@ -7,7 +7,7 @@
         <p class="text-gray-600 dark:text-gray-400 mt-1">Crie e gerencie os eventos da AMAJAC</p>
       </div>
       <router-link
-        to="/admin/eventos/novo"
+        to="/admin/dashboard/eventos/novo"
         class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center"
       >
         <i class="fas fa-plus mr-2"></i>
@@ -170,8 +170,8 @@
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-10 w-10">
                     <img
-                      class="h-10 w-10 rounded-lg object-cover"
-                      :src="evento?.imagem_url || '/placeholder-event.jpg'"
+                      class="h-10 w-10 rounded-lg object-cover bg-gray-200 dark:bg-gray-700"
+                      :src="evento?.imagem_url || '/images/logo-amajac.png'"
                       :alt="evento?.titulo || 'Evento'"
                       @error="handleImageError"
                     >
@@ -227,7 +227,7 @@
 
                   <!-- Editar -->
                   <router-link
-                    :to="`/admin/eventos/editar/${evento?.id}`"
+                    :to="`/admin/dashboard/eventos/editar/${evento?.id}`"
                     class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors p-2 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20"
                     title="Editar"
                   >
@@ -275,7 +275,7 @@
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhum evento encontrado</h3>
         <p class="text-gray-500 dark:text-gray-400 mb-6">Comece criando seu primeiro evento.</p>
         <router-link
-          to="/admin/eventos/novo"
+          to="/admin/dashboard/eventos/novo"
           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors inline-flex items-center"
         >
           <i class="fas fa-plus mr-2"></i>
@@ -479,7 +479,10 @@ const formatTime = (dateString) => {
 }
 
 const handleImageError = (event) => {
-  event.target.src = '/placeholder-event.jpg'
+  // ✅ CORREÇÃO: Usa a logo AMAJAC como fallback em vez de placeholder que não existe
+  event.target.src = '/images/logo-amajac.png'
+  // ✅ CORREÇÃO: Previne loop infinito
+  event.target.onerror = null
 }
 
 const visualizarEvento = (evento) => {

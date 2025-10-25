@@ -1,8 +1,8 @@
-﻿<template>
-  <section v-if="configuracoesStore.sistema?.info_galeria_ativado === 'true'" 
+﻿=== C:\Users\angel\Documents\Projetos\amajac-oficial\src\components\GaleriaSection.vue ===
+<template>
+  <section v-if="configuracoesStore.sistema?.info_galeria_ativado === 'true'"
            class="py-16 bg-white dark:bg-gray-900 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Header -->
       <div class="text-center mb-12">
         <h2 class="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
           Nossa Galeria
@@ -12,7 +12,6 @@
         </p>
       </div>
 
-      <!-- Filters -->
       <div class="flex flex-wrap justify-center gap-4 mb-8">
         <button
           v-for="category in categories"
@@ -29,7 +28,6 @@
         </button>
       </div>
 
-      <!-- Loading State -->
       <div v-if="galeriaStore.loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <div v-for="n in 8" :key="n" class="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
           <div class="aspect-w-16 aspect-h-9 overflow-hidden">
@@ -42,7 +40,6 @@
         </div>
       </div>
 
-      <!-- Gallery Grid -->
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <div
           v-for="image in imagensPaginadas"
@@ -50,27 +47,21 @@
           class="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-500 cursor-pointer border border-gray-200 dark:border-gray-700"
           @click="openLightbox(image)"
         >
-          <!-- Image -->
           <div class="aspect-w-16 aspect-h-9 overflow-hidden">
-            <!-- Loading State -->
-            <div v-if="image.imageLoading" class="w-full h-64 bg-gray-300 dark:bg-gray-700 animate-pulse flex items-center justify-center">
+            <div v-if="image.imageState.loading" class="w-full h-64 bg-gray-300 dark:bg-gray-700 animate-pulse flex items-center justify-center">
               <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
               </svg>
             </div>
-            
-            <!-- Image Loaded -->
+
             <img
-              v-else-if="!image.imageError && image.imageUrl"
-              :src="image.imageUrl"
+              v-else-if="!image.imageState.error && image.imageState.imageUrl"
+              :src="image.imageState.imageUrl"
               :alt="image.titulo || 'Imagem da galeria'"
               class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               :loading="imagensPaginadas.indexOf(image) < 4 ? 'eager' : 'lazy'"
-              @load="image.handleLoad"
-              @error="image.handleError"
             />
-            
-            <!-- Error State -->
+
             <div v-else class="w-full h-64 bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
               <div class="text-center">
                 <i class="fas fa-exclamation-triangle text-red-500 text-lg mb-1"></i>
@@ -79,7 +70,6 @@
             </div>
           </div>
 
-          <!-- Overlay -->
           <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-end">
             <div class="p-4 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
               <h3 class="text-white font-semibold text-lg mb-1">{{ safeString(image.titulo || 'Sem título') }}</h3>
@@ -87,7 +77,6 @@
             </div>
           </div>
 
-          <!-- View Icon -->
           <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div class="bg-white bg-opacity-90 rounded-full p-2">
               <i class="fas fa-expand text-gray-800 text-sm"></i>
@@ -96,7 +85,6 @@
         </div>
       </div>
 
-      <!-- Load More -->
       <div v-if="hasMore && !galeriaStore.loading" class="text-center mt-12">
         <button
           @click="loadMore"
@@ -114,7 +102,6 @@
         </button>
       </div>
 
-      <!-- Empty State -->
       <div v-if="filteredImages.length === 0 && !galeriaStore.loading" class="text-center py-12">
         <i class="fas fa-images text-6xl text-gray-400 mb-4"></i>
         <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
@@ -126,15 +113,11 @@
       </div>
     </div>
 
-    <!-- Lightbox Modal -->
     <div v-if="lightboxOpen" class="fixed inset-0 z-50 overflow-y-auto">
       <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <!-- Overlay -->
         <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity" @click="closeLightbox"></div>
 
-        <!-- Content -->
         <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
-          <!-- Close Button -->
           <div class="absolute top-4 right-4 z-10">
             <button
               @click="closeLightbox"
@@ -144,7 +127,6 @@
             </button>
           </div>
 
-          <!-- Navigation -->
           <button
             v-if="hasPrevious"
             @click="previousImage"
@@ -161,15 +143,13 @@
             <i class="fas fa-chevron-right text-xl"></i>
           </button>
 
-          <!-- Image Loading -->
           <div v-if="imagemModalLoading" class="flex items-center justify-center min-h-96">
-            <div class="text-center">
+            <div class="text-center py-16">
               <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
               <p class="text-gray-600 dark:text-gray-400">Carregando imagem...</p>
             </div>
           </div>
 
-          <!-- Image -->
           <div v-else class="bg-white dark:bg-gray-800 p-4">
             <img
               :src="imagemModalUrl"
@@ -180,7 +160,6 @@
             />
           </div>
 
-          <!-- Info -->
           <div v-if="currentImage && !imagemModalError" class="bg-gray-50 dark:bg-gray-700 px-6 py-4">
             <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
               {{ safeString(currentImage.titulo || 'Sem título') }}
@@ -195,7 +174,6 @@
             </div>
           </div>
 
-          <!-- Error State -->
           <div v-else-if="imagemModalError" class="bg-red-50 dark:bg-red-900/20 px-6 py-8 text-center">
             <i class="fas fa-exclamation-triangle text-red-500 text-3xl mb-2"></i>
             <h3 class="text-lg font-semibold text-red-800 dark:text-red-300 mb-2">Erro ao carregar imagem</h3>
@@ -208,7 +186,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { useGaleriaStore } from '@/stores/galeria'
 import { useConfiguracoesStore } from '@/stores/configuracoes'
 import { useSafeImage } from '@/composables/useSafeImage'
@@ -217,16 +195,18 @@ const galeriaStore = useGaleriaStore()
 const configuracoesStore = useConfiguracoesStore()
 
 // Estados do componente
-const loading = ref(false)
-const loadingMore = ref(false)
 const lightboxOpen = ref(false)
 const activeCategory = ref('all')
 const currentPage = ref(1)
 const itemsPerPage = ref(12)
+const loadingMore = ref(false)
 const currentImageIndex = ref(0)
 const imagemModalLoading = ref(false)
 const imagemModalError = ref(false)
 const imagemModalUrl = ref('')
+
+// Novo estado para armazenar as imagens processadas com useSafeImage
+const galleryItems = ref([]) 
 
 // Categorias baseadas nos dados reais
 const categories = ref([
@@ -237,43 +217,32 @@ const categories = ref([
   { id: 'comunidade', name: 'Comunidade' }
 ])
 
-// Computed properties
-const imagensComEstado = computed(() => {
-  return galeriaStore.imagens.map(imagem => {
-    // Se já foi processada, retorna
-    if (imagem._processed) return imagem
-    
-    const imageState = ref({
-      loading: true,
-      error: false,
-      url: imagem.imagem_url || ''
+// Observa as imagens da store e aplica o useSafeImage
+watch(() => galeriaStore.imagens, (newImages) => {
+  if (newImages.length > 0) {
+    // Mapeia as imagens e anexa o estado reativo da imagem (loading/error/url)
+    galleryItems.value = newImages.map(imagem => {
+      // O useSafeImage é chamado aqui para criar um objeto de estado reativo para CADA imagem.
+      const imageState = useSafeImage(imagem.imagem_url || '')
+
+      return {
+        ...imagem,
+        // Anexa o objeto reativo completo
+        imageState: imageState
+      }
     })
+  } else {
+    galleryItems.value = []
+  }
+}, { immediate: true }) // Roda na montagem para buscar imagens iniciais
 
-    return {
-      ...imagem,
-      imageLoading: imageState.value.loading,
-      imageError: imageState.value.error,
-      imageUrl: imageState.value.url,
-      
-      handleLoad: () => {
-        imageState.value.loading = false
-        imageState.value.error = false
-      },
-      handleError: () => {
-        imageState.value.loading = false
-        imageState.value.error = true
-      },
-      
-      _processed: true
-    }
-  })
-})
 
+// Computed properties
 const filteredImages = computed(() => {
-  let filtered = imagensComEstado.value
+  let filtered = galleryItems.value // Usa a ref processada
 
   if (activeCategory.value !== 'all') {
-    filtered = filtered.filter(image => 
+    filtered = filtered.filter(image =>
       image.categoria?.toLowerCase() === activeCategory.value.toLowerCase()
     )
   }
@@ -299,6 +268,7 @@ const hasNext = computed(() => currentImageIndex.value < filteredImages.value.le
 // Métodos
 const safeString = (str) => {
   if (typeof str !== 'string') return ''
+  // Remove tags HTML/caracteres perigosos
   return str.replace(/[<>"']/g, '').trim()
 }
 
@@ -332,10 +302,11 @@ const openLightbox = (image) => {
   if (index !== -1) {
     currentImageIndex.value = index
     lightboxOpen.value = true
-    imagemModalUrl.value = image.imagem_url || image.imageUrl || ''
+    // Usa a URL do estado reativo se disponível
+    imagemModalUrl.value = image.imageState?.imageUrl || image.imagem_url || ''
     imagemModalLoading.value = true
     imagemModalError.value = false
-    
+
     document.body.style.overflow = 'hidden'
   }
 }
@@ -361,7 +332,8 @@ const nextImage = () => {
   if (hasNext.value) {
     currentImageIndex.value++
     const novaImagem = filteredImages.value[currentImageIndex.value]
-    imagemModalUrl.value = novaImagem.imagem_url || novaImagem.imageUrl || ''
+    // Usa a URL do estado reativo
+    imagemModalUrl.value = novaImagem.imageState?.imageUrl || novaImagem.imagem_url || ''
     imagemModalLoading.value = true
     imagemModalError.value = false
   }
@@ -371,13 +343,15 @@ const previousImage = () => {
   if (hasPrevious.value) {
     currentImageIndex.value--
     const novaImagem = filteredImages.value[currentImageIndex.value]
-    imagemModalUrl.value = novaImagem.imagem_url || novaImagem.imageUrl || ''
+    // Usa a URL do estado reativo
+    imagemModalUrl.value = novaImagem.imageState?.imageUrl || novaImagem.imagem_url || ''
     imagemModalLoading.value = true
     imagemModalError.value = false
   }
 }
 
 const loadMore = async () => {
+  if (!hasMore.value) return
   loadingMore.value = true
   // Simular carregamento para melhor UX
   await new Promise(resolve => setTimeout(resolve, 500))
@@ -388,7 +362,7 @@ const loadMore = async () => {
 // Navegação por teclado no lightbox
 const handleKeydown = (event) => {
   if (!lightboxOpen.value) return
-  
+
   switch (event.key) {
     case 'Escape':
       closeLightbox()
@@ -421,7 +395,6 @@ onMounted(() => {
 })
 
 // Cleanup
-import { onUnmounted } from 'vue'
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeydown)
 })
@@ -462,7 +435,7 @@ onUnmounted(() => {
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
 }
 
-/* Responsividade */
+/* Responsividade - Adapte estas media queries ao seu projeto Tailwind */
 @media (max-width: 640px) {
   .grid {
     grid-template-columns: 1fr;

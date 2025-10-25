@@ -22,7 +22,7 @@ export const useAuthStore = defineStore('auth', {
       
       // 🚨 Robustez: Validação inicial para evitar requisição vazia
       if (!email || !password) {
-          throw new Error('E-mail e senha são obrigatórios.');
+          throw new Error('Credenciais obrigatórias.');
       }
 
       try {
@@ -35,7 +35,7 @@ export const useAuthStore = defineStore('auth', {
         if (error) {
             // 🚨 Tratamento de Erro Amigável (400 Bad Request/Credenciais Inválidas)
             if (error.message.includes('Invalid login credentials')) {
-                throw new Error("E-mail ou senha incorretos.");
+                throw new Error("Credenciais inválidas.");
             }
             // 🚨 Tratamento de E-mail Não Confirmado (Se aplicável)
             if (error.message.includes('Email not confirmed')) {

@@ -79,7 +79,7 @@ export function useGaleria(admin = false) {
     } catch (err) {
       console.error('❌ Erro completo ao adicionar imagem:', err)
       error.value = err.message
-      uiStore.showToast('Erro ao adicionar imagem: ' + err.message, 'error')
+      uiStore.showToast('Erro na operação. Tente novamente.', 'error')
       throw err
     } finally {
       loading.value = false

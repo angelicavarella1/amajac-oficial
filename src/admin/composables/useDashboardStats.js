@@ -1,4 +1,4 @@
-// src/admin/composables/useDashboardStats.js - VERSÃO OTIMIZADA
+// src/admin/composables/useDashboardStats.js - VERSÃO CORRIGIDA
 import { ref } from 'vue'
 import { supabase } from '@/supabase'
 
@@ -33,11 +33,11 @@ export const useDashboardStats = () => {
           .select('*', { count: 'exact', head: true })
           .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()),
 
-        // Sócios ativos
+        // ✅ SÓCIOS ATIVOS - CORREÇÃO FINAL
         supabase
           .from('socios')
           .select('*', { count: 'exact', head: true })
-          .eq('ativo', true)
+          .eq('status', 'ativo')  // ← FILTRA POR status='ativo'
       ]
 
       // Executa todas as queries em paralelo
@@ -50,7 +50,7 @@ export const useDashboardStats = () => {
         mensagens: results[2].count || 0,
         associados: results[3].count || 0,
         
-        // Trends simuladas (você pode implementar cálculo real depois)
+        // Trends simuladas
         noticiasTrend: 'up',
         noticiasTrendValue: '+5%',
         eventosTrend: 'neutral',
