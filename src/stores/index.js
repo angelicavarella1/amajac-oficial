@@ -1,14 +1,14 @@
-﻿import { createPinia } from 'pinia'
+﻿// src/stores/index.js
+export { useConfigStore } from '@/shared/stores/useConfigStore'
+export { useUIStore } from '@/shared/stores/ui'
+export { useThemeStore } from '@/shared/stores/themeStore'
 
-export const pinia = createPinia()
-
-// Re-export todos os stores para importação conveniente
-export { useAuthStore } from './auth.js'
-export { useConfigStore } from './config.js'
-// ✅ CORRIGIDO: O nome re-exportado deve ser 'useUIStore' para corresponder à exportação em './ui.js'
-export { useUIStore } from './ui.js' 
-export { useNoticiasStore } from './noticias.js'
-export { useEventosStore } from './eventos.js'
-export { useColaboradoresStore } from './colaboradores.js'
-export { useGaleriaStore } from './galeria.js'
-export { useMensagensStore } from './mensagens.js'
+// Módulos
+export { useNoticiasStore } from '@/modules/noticias/stores/noticias'
+export { useEventosStore } from '@/modules/eventos/stores/eventos'
+export { useGaleriaStore } from '@/modules/galeria/stores/galeria'
+export { useClassificadosStore } from '@/modules/classificados/stores/classificados'
+export { useColaboradoresStore } from '@/modules/colaboradores/stores/colaboradores'
+export { useMensagensStore } from '@/modules/mensagens/stores/mensagens'
+export { useAuthStore } from '@/modules/auth/stores/auth'
+export { useAvaliacoesStore } from '@/modules/classificados/stores/avaliacoes'

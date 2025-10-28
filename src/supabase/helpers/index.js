@@ -1,4 +1,4 @@
-﻿// Funções auxiliares para formatação
+// Funções auxiliares para formatação
 export const formatarData = (dataString) => {
   if (!dataString) return '';
   
@@ -26,10 +26,12 @@ export const BUCKETS = {
   PERFIS: 'perfis'
 };
 
-// Função para extrair caminho do arquivo de uma URL
+// Função para extrair caminho do arquivo de uma URL - CORRIGIDA
 export const extrairCaminhoArquivo = (url) => {
   if (!url) return '';
-  const matches = url.match(/\/([^\/]+\/[^\/]+)$/);
+  
+  // CORREÇÃO: Removidos os escapes desnecessários da barra /
+  const matches = url.match(/\/([^/]+\/[^/]+)$/);
   return matches ? matches[1] : '';
 };
 

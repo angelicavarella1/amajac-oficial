@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="space-y-6">
     <div class="flex justify-between items-center">
       <div>
@@ -14,8 +14,18 @@
           @click="$router.push('/admin/noticias')"
           class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white px-4 py-2 rounded-lg transition-colors flex items-center"
         >
-          <i class="fas fa-arrow-left mr-2"></i>
+          <i class="fas fa-arrow-left mr-2"/>
           Voltar
+        </button>
+        
+        <!-- BOTÃO DE TESTE TEMPORÁRIO -->
+        <button 
+          v-if="!isEditing"
+          @click="testarUploadCorrigido"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center text-sm"
+        >
+          <i class="fas fa-vial mr-2"/>
+          Testar Upload
         </button>
       </div>
     </div>
@@ -23,7 +33,7 @@
     <!-- ALERTA DE ERRO -->
     <div v-if="noticiasStore.error" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
       <div class="flex items-center">
-        <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400 mr-3"></i>
+        <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400 mr-3"/>
         <div>
           <h3 class="text-sm font-medium text-red-800 dark:text-red-300">Erro</h3>
           <p class="text-sm text-red-700 dark:text-red-400 mt-1">{{ noticiasStore.error }}</p>
@@ -47,7 +57,7 @@
                 class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                 placeholder="Digite o título da notícia"
                 required
-              >
+              />
             </div>
 
             <div>
@@ -61,7 +71,7 @@
                 placeholder="Digite um resumo da notícia (máximo 300 caracteres)"
                 maxlength="300"
                 required
-              ></textarea>
+              />
               <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 text-right">
                 {{ form.resumo?.length || 0 }}/300 caracteres
               </div>
@@ -77,7 +87,7 @@
                 class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
                 placeholder="Digite o conteúdo completo da notícia..."
                 required
-              ></textarea>
+              />
             </div>
           </div>
         </div>
@@ -91,7 +101,7 @@
               class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-gray-400 dark:hover:border-gray-500 transition-colors cursor-pointer"
               @click="triggerFileInput"
             >
-              <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+              <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"/>
               <p class="text-lg font-medium text-gray-900 dark:text-white mb-2">Clique para fazer upload</p>
               <p class="text-sm text-gray-500 dark:text-gray-400">PNG, JPG, JPEG, WEBP até 10MB</p>
               <input 
@@ -100,23 +110,23 @@
                 accept=".png,.jpg,.jpeg,.webp"
                 class="hidden"
                 @change="handleImageUpload"
-              >
+              />
             </div>
 
             <div v-else class="relative">
-              <img :src="form.imagem_url" alt="Preview" class="w-full h-64 object-cover rounded-lg">
+              <img :src="form.imagem_url" alt="Preview" class="w-full h-64 object-cover rounded-lg"/>
               <button
                 @click="form.imagem_url = ''"
                 class="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition-colors"
               >
-                <i class="fas fa-times"></i>
+                <i class="fas fa-times"/>
               </button>
             </div>
 
             <!-- INFORMAÇÕES SOBRE FORMATOS ACEITOS -->
             <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
               <div class="flex items-start">
-                <i class="fas fa-info-circle text-blue-600 dark:text-blue-400 mt-0.5 mr-3"></i>
+                <i class="fas fa-info-circle text-blue-600 dark:text-blue-400 mt-0.5 mr-3"/>
                 <div class="text-sm">
                   <h4 class="font-medium text-blue-800 dark:text-blue-300">Formatos de imagem aceitos:</h4>
                   <ul class="text-blue-700 dark:text-blue-400 mt-1 list-disc list-inside space-y-1">
@@ -132,7 +142,7 @@
             </div>
 
             <div v-if="uploading" class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-              <i class="fas fa-spinner fa-spin"></i>
+              <i class="fas fa-spinner fa-spin"/>
               <span>Fazendo upload...</span>
             </div>
           </div>
@@ -155,7 +165,7 @@
                     v-model="form.ativo"
                     :value="true"
                     class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300"
-                  >
+                  />
                   <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Ativa</span>
                 </label>
                 <label class="flex items-center">
@@ -164,7 +174,7 @@
                     v-model="form.ativo"
                     :value="false"
                     class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300"
-                  >
+                  />
                   <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Inativa (Rascunho)</span>
                 </label>
               </div>
@@ -178,7 +188,7 @@
                 type="date"
                 v-model="form.data_publicacao"
                 class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-              >
+              />
             </div>
 
             <div>
@@ -187,7 +197,7 @@
                   type="checkbox"
                   v-model="form.destaque"
                   class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-                >
+                />
                 <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Destacar esta notícia</span>
               </label>
             </div>
@@ -227,7 +237,7 @@
               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
               placeholder="Digite o nome do autor"
               required
-            >
+            />
           </div>
         </div>
 
@@ -254,7 +264,7 @@
                 :class="form.destaque ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300'" 
                 class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
               >
-                <i class="fas fa-star mr-1 text-xs"></i>
+                <i class="fas fa-star mr-1 text-xs"/>
                 {{ form.destaque ? 'Sim' : 'Não' }}
               </span>
             </div>
@@ -280,7 +290,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useNoticiasStore } from '@/stores/noticias'
+import { useNoticiasStore } from '@/modules/noticias/stores/noticias'
 
 const route = useRoute()
 const router = useRouter()
@@ -292,24 +302,64 @@ const uploading = ref(false)
 
 const isEditing = computed(() => route.params.id)
 
-// FORMULÁRIO CORRIGIDO - COM VALORES PADRÃO MELHORES
+// FORMULÁRIO CORRIGIDO
 const form = ref({
   titulo: '',
   resumo: '',
   conteudo: '',
   imagem_url: '',
   autor: 'AMAJAC',
-  ativo: false, // Padrão como rascunho
+  ativo: false,
   destaque: false,
   data_publicacao: new Date().toISOString().split('T')[0],
   visualizacoes: 0
 })
 
 onMounted(async () => {
+  // 🧪 TESTE TEMPORÁRIO - descomente para testar upload
+  // await testarUploadCorrigido()
+  
   if (isEditing.value) {
     await loadNoticia()
+  } else {
+    // Inicialização para nova notícia
+    form.value = {
+      titulo: '',
+      resumo: '',
+      conteudo: '',
+      imagem_url: '',
+      autor: 'AMAJAC',
+      ativo: false,
+      destaque: false,
+      data_publicacao: new Date().toISOString().split('T')[0],
+      visualizacoes: 0
+    }
   }
 })
+
+// 🧪 FUNÇÃO DE TESTE TEMPORÁRIA
+const testarUploadCorrigido = async () => {
+  try {
+    console.log('🧪 TESTE: Upload no bucket NOTICIAS (corrigido)...')
+    
+    // Cria um arquivo de teste
+    const blob = new Blob(['conteúdo de teste para notícia'], { type: 'image/png' })
+    const testFile = new File([blob], 'teste-noticia-corrigido.png', { type: 'image/png' })
+    
+    console.log('📤 Fazendo upload no bucket "noticias"...')
+    const url = await noticiasStore.uploadImagem(testFile)
+    
+    console.log('🎉 UPLOAD FUNCIONOU! URL:', url)
+    alert('✅ SUCESSO! Upload funcionou no bucket "noticias":\n' + url)
+    
+    // Preenche automaticamente no formulário para teste
+    form.value.imagem_url = url
+    
+  } catch (error) {
+    console.error('💥 FALHA NO UPLOAD:', error)
+    alert('❌ ERRO no upload:\n' + error.message + '\n\nVerifique o console para detalhes.')
+  }
+}
 
 async function loadNoticia() {
   try {
@@ -358,19 +408,23 @@ async function handleImageUpload(event) {
   uploading.value = true
 
   try {
-    // Cria preview local
+    // 1. Cria preview local
     const imageUrl = URL.createObjectURL(file)
     form.value.imagem_url = imageUrl
     
-    console.log('✅ Preview da imagem criado:', imageUrl)
+    console.log('📷 Preview local criado:', imageUrl)
     
-    // FAZ UPLOAD REAL PARA O SUPABASE STORAGE
-    console.log('📤 Iniciando upload para o servidor...')
+    // 2. Faz upload REAL para o Supabase (bucket 'noticias')
+    console.log('📤 Iniciando upload para Supabase (bucket noticias)...', file.name)
     const publicUrl = await noticiasStore.uploadImagem(file)
     
-    // Substitui o blob URL pela URL pública permanente
+    console.log('✅ Upload concluído. URL pública:', publicUrl)
+    
+    // 3. Substitui o blob URL pela URL pública permanente
     form.value.imagem_url = publicUrl
-    console.log('✅ Imagem salva no servidor:', publicUrl)
+    
+    // 4. Limpa o blob URL da memória
+    URL.revokeObjectURL(imageUrl)
     
   } catch (error) {
     console.error('❌ Erro ao fazer upload da imagem:', error)
@@ -410,7 +464,7 @@ async function saveNoticia(publicar = false) {
       titulo: form.value.titulo.trim(),
       resumo: form.value.resumo.trim(),
       conteudo: form.value.conteudo.trim(),
-      imagem_url: form.value.imagem_url, // Agora é uma URL permanente
+      imagem_url: form.value.imagem_url,
       autor: form.value.autor.trim(),
       ativo: publicar ? true : form.value.ativo,
       destaque: form.value.destaque,
@@ -453,3 +507,7 @@ function formatDate(dateString) {
   }
 }
 </script>
+
+<style scoped>
+/* Estilos mantidos do seu original */
+</style>

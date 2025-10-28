@@ -1,24 +1,24 @@
-﻿// src/supabase/client.js
+// src/supabase/client.js
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-// Validação robusta das variáveis de ambiente
+// Validacao robusta das variaveis de ambiente
 if (!supabaseUrl || !supabaseAnonKey) {
-  const errorMessage = 'Variáveis de ambiente do Supabase não configuradas corretamente'
+  const errorMessage = 'Variaveis de ambiente do Supabase nao configuradas corretamente'
   console.error('❌ ' + errorMessage)
-  console.error('VITE_SUPABASE_URL:', supabaseUrl ? 'Definida' : 'Não definida')
-  console.error('VITE_SUPABASE_ANON_KEY:', supabaseAnonKey ? 'Definida' : 'Não definida')
+  console.error('VITE_SUPABASE_URL:', supabaseUrl ? 'Definida' : 'Nao definida')
+  console.error('VITE_SUPABASE_ANON_KEY:', supabaseAnonKey ? 'Definida' : 'Nao definida')
   throw new Error(errorMessage)
 }
 
-// Verificar se as URLs são válidas
+// Checar se as URLs sao validas
 if (!supabaseUrl.startsWith('https://')) {
   console.warn('⚠️  URL do Supabase pode estar mal formatada:', supabaseUrl)
 }
 
-// Configuração otimizada do cliente Supabase
+// Configuracao otimizada do cliente Supabase
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
@@ -42,7 +42,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   }
 })
 
-// Log de inicialização (apenas em desenvolvimento)
+// Log de inicializacao (apenas em desenvolvimento)
 if (import.meta.env.DEV) {
   console.log('🚀 Supabase client inicializado:', {
     url: supabaseUrl?.substring(0, 20) + '...',
@@ -51,20 +51,20 @@ if (import.meta.env.DEV) {
   })
 }
 
-// Função auxiliar para verificar conexão
+// Funcao auxiliar para checar conexao
 export const testSupabaseConnection = async () => {
   try {
-    // Tenta uma query simples para testar a conexão
-    const { data, error } = await supabase.from('socios').select('id').limit(1)
-    
+    // Tenta uma query simples para testar a conexao
+    const { error } = await supabase.from('socios').select('id').limit(1) // ✅ Removida variável não usada
+
     if (error) {
-      console.error('❌ Erro na conexão com Supabase:', {
+      console.error('❌ Erro na conexao com Supabase:', {
         code: error.code,
         message: error.message,
         details: error.details
       })
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: {
           code: error.code,
           message: error.message,
@@ -72,38 +72,38 @@ export const testSupabaseConnection = async () => {
         }
       }
     }
-    
-    console.log('✅ Conexão com Supabase estabelecida com sucesso')
-    return { 
-      success: true, 
-      data: { 
+
+    console.log('✅ Conexao com Supabase estabelecida com sucesso')
+    return {
+      success: true,
+      data: {
         connected: true,
         tablesAccessible: true
       }
     }
   } catch (error) {
-    console.error('❌ Falha crítica na conexão com Supabase:', error.message)
-    return { 
-      success: false, 
+    console.error('❌ Falha critica na conexao com Supabase:', error.message)
+    return {
+      success: false,
       error: {
         code: 'CONNECTION_FAILED',
         message: error.message,
-        details: 'Falha na conexão com o servidor'
+        details: 'Falha na conexao com o servidor'
       }
     }
   }
 }
 
-// Função segura para queries
+// Funcao segura para queries
 export const safeQuery = async (table, query = {}) => {
   try {
-    // Validação básica da tabela
+    // Validacao basica da tabela
     if (!table || typeof table !== 'string') {
-      throw new Error('Nome da tabela é obrigatório e deve ser uma string')
+      throw new Error('Nome da tabela e obrigatorio e deve ser uma string')
     }
 
     let supabaseQuery = supabase.from(table).select(query.select || '*')
-    
+
     // Aplicar filtros se fornecidos
     if (query.filters && Array.isArray(query.filters)) {
       query.filters.forEach(filter => {
@@ -111,31 +111,31 @@ export const safeQuery = async (table, query = {}) => {
           if (supabaseQuery[filter.operator]) {
             supabaseQuery = supabaseQuery[filter.operator](filter.column, filter.value)
           } else {
-            console.warn(`⚠️ Operador não suportado: ${filter.operator}`)
+            console.warn(`⚠️ Operador nao suportado: ${filter.operator}`)
           }
         }
       })
     }
-    
-    // Aplicar ordenação se fornecida
+
+    // Aplicar ordenacao se fornecida
     if (query.order && query.order.column) {
-      supabaseQuery = supabaseQuery.order(query.order.column, { 
-        ascending: query.order.ascending !== false 
+      supabaseQuery = supabaseQuery.order(query.order.column, {
+        ascending: query.order.ascending !== false
       })
     }
-    
-    // Aplicar paginação se fornecida
+
+    // Aplicar paginacao se fornecida
     if (query.range && typeof query.range.from === 'number' && typeof query.range.to === 'number') {
       supabaseQuery = supabaseQuery.range(query.range.from, query.range.to)
     }
-    
+
     // Aplicar limite se fornecido
     if (query.limit && typeof query.limit === 'number') {
       supabaseQuery = supabaseQuery.limit(query.limit)
     }
-    
+
     const { data, error, count } = await supabaseQuery
-    
+
     if (error) {
       console.error(`❌ Erro na query da tabela ${table}:`, {
         code: error.code,
@@ -145,61 +145,61 @@ export const safeQuery = async (table, query = {}) => {
       })
       throw error
     }
-    
-    return { 
-      data, 
+
+    return {
+      data,
       error: null,
       count: count || data?.length
     }
   } catch (error) {
     console.error(`❌ Erro na safeQuery para tabela ${table}:`, error)
-    return { 
-      data: null, 
+    return {
+      data: null,
       error,
       count: 0
     }
   }
 }
 
-// Função para verificar autenticação do usuário
+// Funcao para checar autenticacao do usuario
 export const getCurrentUser = async () => {
   try {
     const { data: { user }, error } = await supabase.auth.getUser()
-    
+
     if (error) {
-      console.error('❌ Erro ao obter usuário atual:', error)
+      console.error('❌ Erro ao obter usuario atual:', error)
       return { user: null, error }
     }
-    
+
     return { user, error: null }
   } catch (error) {
-    console.error('❌ Erro inesperado ao obter usuário:', error)
+    console.error('❌ Erro inesperado ao obter usuario:', error)
     return { user: null, error }
   }
 }
 
-// Função para verificar se o usuário é admin
+// Funcao para checar se o usuario e admin
 export const isUserAdmin = async () => {
   try {
     const { user, error } = await getCurrentUser()
-    
+
     if (error || !user) {
       return false
     }
-    
-    // Buscar perfil do usuário para verificar role
+
+    // Buscar perfil do usuario para verificar role
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single()
-    
+
     return profile?.role === 'admin'
   } catch (error) {
-    console.error('❌ Erro ao verificar role do usuário:', error)
+    console.error('❌ Erro ao verificar role do usuario:', error)
     return false
   }
 }
 
-// Exportação padrão
+// Exportacao padrao
 export default supabase

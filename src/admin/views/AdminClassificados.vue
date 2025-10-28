@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="space-y-6">
     <!-- Cabeçalho -->
     <div class="flex justify-between items-center">
@@ -10,7 +10,7 @@
         to="/admin/classificados/novo"
         class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
       >
-        <i class="fas fa-plus mr-2"></i>
+        <i class="fas fa-plus mr-2"/>
         Novo Classificado
       </router-link>
     </div>
@@ -69,8 +69,8 @@
             v-model="filters.search"
             placeholder="Buscar serviços ou associados..."
             class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          >
-          <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          />
+          <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"/>
         </div>
       </div>
     </div>
@@ -81,7 +81,7 @@
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-              <i class="fas fa-tools text-blue-600 dark:text-blue-400 text-xl"></i>
+              <i class="fas fa-tools text-blue-600 dark:text-blue-400 text-xl"/>
             </div>
           </div>
           <div class="ml-4">
@@ -95,7 +95,7 @@
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-              <i class="fas fa-check-circle text-green-600 dark:text-green-400 text-xl"></i>
+              <i class="fas fa-check-circle text-green-600 dark:text-green-400 text-xl"/>
             </div>
           </div>
           <div class="ml-4">
@@ -109,7 +109,7 @@
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center">
-              <i class="fas fa-clock text-yellow-600 dark:text-yellow-400 text-xl"></i>
+              <i class="fas fa-clock text-yellow-600 dark:text-yellow-400 text-xl"/>
             </div>
           </div>
           <div class="ml-4">
@@ -123,7 +123,7 @@
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center">
-              <i class="fas fa-times-circle text-red-600 dark:text-red-400 text-xl"></i>
+              <i class="fas fa-times-circle text-red-600 dark:text-red-400 text-xl"/>
             </div>
           </div>
           <div class="ml-4">
@@ -137,7 +137,7 @@
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
-              <i class="fas fa-star text-purple-600 dark:text-purple-400 text-xl"></i>
+              <i class="fas fa-star text-purple-600 dark:text-purple-400 text-xl"/>
             </div>
           </div>
           <div class="ml-4">
@@ -152,7 +152,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
       <!-- Loading State -->
       <div v-if="loading && classificados.length === 0" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"/>
       </div>
 
       <!-- Table Content -->
@@ -187,7 +187,7 @@
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-12 w-12">
                     <div class="w-12 h-12 bg-gradient-to-br from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-lg flex items-center justify-center">
-                      <i :class="getCategoriaIcon(classificado.categoria_id)" class="text-green-600 dark:text-green-400 text-lg"></i>
+                      <i :class="getCategoriaIcon(classificado.categoria_id)" class="text-green-600 dark:text-green-400 text-lg"/>
                     </div>
                   </div>
                   <div class="ml-4">
@@ -208,7 +208,7 @@
                   {{ classificado.associado_nome }}
                 </div>
                 <div class="text-sm text-gray-500 dark:text-gray-400">
-                  <i class="fas fa-phone mr-1 text-gray-400"></i>{{ classificado.telefone }}
+                  <i class="fas fa-phone mr-1 text-gray-400"/>{{ classificado.telefone }}
                 </div>
                 <div class="text-xs text-gray-400 dark:text-gray-500 truncate max-w-xs">
                   {{ classificado.email }}
@@ -217,7 +217,7 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                   <div class="flex items-center">
-                    <i class="fas fa-star text-yellow-400 mr-1"></i>
+                    <i class="fas fa-star text-yellow-400 mr-1"/>
                     <span class="text-sm font-medium text-gray-900 dark:text-white">
                       {{ classificado.avaliacao_media || '0.0' }}
                     </span>
@@ -233,11 +233,11 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex flex-col space-y-1">
                   <span :class="getStatusBadgeClass(classificado.status)" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium w-fit">
-                    <i :class="getStatusIcon(classificado.status)" class="mr-1"></i>
+                    <i :class="getStatusIcon(classificado.status)" class="mr-1"/>
                     {{ getStatusText(classificado.status) }}
                   </span>
                   <div class="text-xs text-gray-500 dark:text-gray-400">
-                    <i class="fas fa-calendar mr-1"></i>
+                    <i class="fas fa-calendar mr-1"/>
                     {{ formatDate(classificado.validade) }}
                     <span v-if="isExpirado(classificado.validade) && classificado.status === 'aprovado'" class="text-red-500 ml-1">
                       (Expirado)
@@ -257,7 +257,7 @@
                     class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors p-2 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     title="Aprovar classificado"
                   >
-                    <i class="fas fa-check"></i>
+                    <i class="fas fa-check"/>
                   </button>
 
                   <!-- Reprovar -->
@@ -267,7 +267,7 @@
                     class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                     title="Reprovar classificado"
                   >
-                    <i class="fas fa-times"></i>
+                    <i class="fas fa-times"/>
                   </button>
 
                   <!-- Renovar -->
@@ -277,7 +277,7 @@
                     class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-colors p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     title="Renovar classificado"
                   >
-                    <i class="fas fa-sync-alt"></i>
+                    <i class="fas fa-sync-alt"/>
                   </button>
 
                   <!-- Visualizar -->
@@ -286,7 +286,7 @@
                     class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-colors p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     title="Visualizar classificado"
                   >
-                    <i class="fas fa-eye"></i>
+                    <i class="fas fa-eye"/>
                   </button>
 
                   <!-- Editar -->
@@ -295,7 +295,7 @@
                     class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors p-2 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     title="Editar classificado"
                   >
-                    <i class="fas fa-edit"></i>
+                    <i class="fas fa-edit"/>
                   </router-link>
 
                   <!-- Excluir -->
@@ -304,7 +304,7 @@
                     class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                     title="Excluir classificado"
                   >
-                    <i class="fas fa-trash"></i>
+                    <i class="fas fa-trash"/>
                   </button>
                 </div>
               </td>
@@ -315,14 +315,14 @@
 
       <!-- Empty State -->
       <div v-if="!loading && classificadosFiltrados.length === 0" class="text-center py-12">
-        <i class="fas fa-tools text-4xl text-gray-400 mb-4"></i>
+        <i class="fas fa-tools text-4xl text-gray-400 mb-4"/>
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhum classificado encontrado</h3>
         <p class="text-gray-500 dark:text-gray-400 mb-6">Não há classificados que correspondam aos filtros selecionados.</p>
         <button
           @click="limparFiltros"
           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors inline-flex items-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
         >
-          <i class="fas fa-times mr-2"></i>
+          <i class="fas fa-times mr-2"/>
           Limpar Filtros
         </button>
       </div>
@@ -360,7 +360,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useClassificadosStore } from '@/stores/classificados'
+import { useClassificadosStore } from '@/modules/classificados/stores/classificados'
 
 const router = useRouter()
 const classificadosStore = useClassificadosStore()

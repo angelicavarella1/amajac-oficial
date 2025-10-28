@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="space-y-6">
     <!-- Cabeçalho -->
     <div class="flex justify-between items-center">
@@ -55,7 +55,7 @@
             v-model="filters.search"
             placeholder="Buscar notícias..."
             class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500"
-          >
+          />
           <svg class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
@@ -135,7 +135,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
       <!-- Loading State -->
       <div v-if="loading && noticias.length === 0" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"/>
       </div>
 
       <!-- Error State -->
@@ -192,7 +192,7 @@
                       :src="noticia?.imagem_url || '/placeholder-news.jpg'"
                       :alt="noticia?.titulo || 'Notícia'"
                       @error="handleImageError"
-                    >
+                    />
                   </div>
                   <div class="ml-4">
                     <div class="text-sm font-medium text-gray-900 dark:text-white max-w-xs truncate">
@@ -357,7 +357,7 @@
     <!-- Modal de Preview -->
     <div v-if="previewNoticiaData" class="fixed inset-0 overflow-y-auto z-50">
       <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="previewNoticiaData = null"></div>
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="previewNoticiaData = null"/>
 
         <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
           <div class="absolute top-0 right-0 pt-4 pr-4">
@@ -377,7 +377,7 @@
               :alt="previewNoticiaData?.titulo || 'Notícia'"
               class="w-full h-64 object-cover rounded-lg mb-4"
               @error="handleImageError"
-            >
+            />
             <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ previewNoticiaData?.titulo || 'Título não disponível' }}</h3>
             <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
               <span class="mr-4">{{ formatDate(previewNoticiaData?.data_publicacao) }}</span>
@@ -411,7 +411,7 @@
     <!-- Modal de Confirmação de Exclusão -->
     <div v-if="noticiaParaExcluir" class="fixed inset-0 overflow-y-auto z-50">
       <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="noticiaParaExcluir = null"></div>
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="noticiaParaExcluir = null"/>
 
         <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -459,7 +459,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useNoticiasStore } from '@/stores/noticias'
+import { useNoticiasStore } from '@/modules/noticias/stores/noticias'
 
 // Estados
 const loading = ref(false)

@@ -1,6 +1,6 @@
 // src/admin/composables/useDatabaseReport.js
 import { ref } from 'vue'
-import { supabase } from '@/supabase'
+import { supabase } from '@/supabase/client.js' // ✅ Corrigido: Importação direta do client.js
 
 export function useDatabaseReport() {
   const loading = ref(false)
@@ -9,14 +9,14 @@ export function useDatabaseReport() {
   const obterRelatorioCompleto = async () => {
     loading.value = true
     error.value = null
-    
-    try {
-      console.log('🎯 Gerando relatório completo do banco...')
-      
+
+    try { // ✅ `try` agora tem `catch`
+      console.log('🎯 Gerando relatorio completo do banco...')
+
       // Buscar dados REAIS de todas as tabelas
       const tabelas = [
-        'noticias', 'eventos', 'mensagens_contato', 'colaboradores', 
-        'classificados', 'avaliacoes_classificados', 'configuracoes', 
+        'noticias', 'eventos', 'mensagens_contato', 'colaboradores',
+        'classificados', 'avaliacoes_classificados', 'configuracoes',
         'galeria', 'socios'
       ]
 
@@ -36,6 +36,8 @@ export function useDatabaseReport() {
       // Buscar dados de CADA tabela individualmente
       for (const tabela of tabelas) {
         try {
+          // Nota: Usar head: false aqui para buscar todos os dados, pois a contagem individual
+          // e o processamento de detalhes (filtros) dependem da coleta de 'data'.
           const { data, count, error: tableError } = await supabase
             .from(tabela)
             .select('*', { count: 'exact', head: false })
@@ -49,7 +51,7 @@ export function useDatabaseReport() {
             relatorio.estatisticas.detalhes[tabela] = {
               registros: data?.length || 0,
               ultima_atualizacao: new Date().toISOString(),
-              // Adicionar algumas informações específicas por tabela
+              // Adicionar algumas informacoes especificas por tabela
               ...(tabela === 'mensagens_contato' && {
                 nao_lidas: data?.filter(msg => !msg.lida)?.length || 0
               }),
@@ -63,7 +65,7 @@ export function useDatabaseReport() {
             }
           }
         } catch (err) {
-          console.error(`❌ Erro crítico em ${tabela}:`, err)
+          console.error(`❌ Erro critico em ${tabela}:`, err)
           relatorio.estatisticas.totais[tabela] = 0
           relatorio.estatisticas.detalhes[tabela] = { error: err.message }
         }
@@ -71,21 +73,21 @@ export function useDatabaseReport() {
 
       // Calcular totais REAIS
       const totalRegistros = Object.values(relatorio.estatisticas.totais).reduce((a, b) => a + b, 0)
-      
+
       relatorio.estatisticas.resumo = {
         total_registros: totalRegistros,
         tabela_maior: Object.entries(relatorio.estatisticas.totais)
-          .reduce((a, b) => a[1] > b[1] ? a : b)[0],
+          .reduce((a, b) => a[1] > b[1] ? a : b, ['', 0])[0],
         tabelas_vazias: Object.entries(relatorio.estatisticas.totais)
-          .filter(([_, total]) => total === 0).length,
+          .filter(([, total]) => total === 0).length,
         data_geracao: new Date().toISOString()
       }
 
-      console.log('✅ Relatório gerado com dados REAIS:', relatorio.estatisticas.resumo)
+      console.log('✅ Relatorio gerado com dados REAIS:', relatorio.estatisticas.resumo)
       return relatorio
 
-    } catch (err) {
-      console.error('❌ Erro ao gerar relatório:', err)
+    } catch (err) { // ✅ Adicionado `catch`
+      console.error('❌ Erro ao gerar relatorio:', err)
       error.value = err.message
       throw err
     } finally {
@@ -93,21 +95,23 @@ export function useDatabaseReport() {
     }
   }
 
-  // Função para obter estatísticas em tempo real
+  // Funcao para obter estatisticas em tempo real (contagens rápidas)
   const obterEstatisticasTempoReal = async () => {
-    try {
+    try { // ✅ `try` agora tem `catch`
       const [
         noticiasCount,
         eventosCount,
         mensagensCount,
         colaboradoresCount,
-        classificadosCount
+        classificadosCount,
+        sociosCount // Incluindo sócios para a contagem rápida
       ] = await Promise.all([
         supabase.from('noticias').select('*', { count: 'exact', head: true }),
         supabase.from('eventos').select('*', { count: 'exact', head: true }),
         supabase.from('mensagens_contato').select('*', { count: 'exact', head: true }),
         supabase.from('colaboradores').select('*', { count: 'exact', head: true }),
-        supabase.from('classificados').select('*', { count: 'exact', head: true })
+        supabase.from('classificados').select('*', { count: 'exact', head: true }),
+        supabase.from('socios').select('*', { count: 'exact', head: true }) // Adicionado
       ])
 
       return {
@@ -116,10 +120,11 @@ export function useDatabaseReport() {
         mensagens: mensagensCount.count || 0,
         colaboradores: colaboradoresCount.count || 0,
         classificados: classificadosCount.count || 0,
+        socios: sociosCount.count || 0, // Adicionado
         atualizado_em: new Date().toISOString()
       }
-    } catch (err) {
-      console.error('❌ Erro ao obter estatísticas em tempo real:', err)
+    } catch (err) { // ✅ Adicionado `catch`
+      console.error('❌ Erro ao obter estatisticas em tempo real:', err)
       throw err
     }
   }

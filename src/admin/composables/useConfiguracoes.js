@@ -1,18 +1,25 @@
-// useConfiguracoes.js
-import { createClient } from '@supabase/supabase-js'
-import { useAuthStore } from '@/stores/auth'
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+﻿// useConfiguracoes.js - VERSÃƒO CORRIGIDA (CodificaÃ§Ã£o UTF-8)
+import { ref } from 'vue' // Importe ref se for usar estado reativo
+import { supabase } from '@/supabase/client.js' // Importar o cliente Supabase centralizado
+// import { useAuthStore } from\ '@/modules/auth/stores/auth' // Descomente se realmente necessÃ¡rio e cuidado com dependÃªncias circulares
 
 export const useConfiguracoes = () => {
-  const authStore = useAuthStore()
+  // const authStore = useAuthStore(); // Descomente se realmente necessÃ¡rio
 
-  const carregarConfiguracoes = async () => {
+  // Estado reativo (opcional, dependendo da sua necessidade de cache/local)
+  const configuracoesCache = ref(null);
+  const cacheTimestamp = ref(null);
+  const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
+
+  const carregarConfiguracoes = async (forceRefresh = false) => {
+    // Verificar cache
+    if (!forceRefresh && configuracoesCache.value && cacheTimestamp.value && (Date.now() - cacheTimestamp.value < CACHE_DURATION)) {
+      console.log('ðŸ”„ ConfiguraÃ§Ãµes carregadas do CACHE')
+      return configuracoesCache.value; // Retorna do cache
+    }
+
     try {
-      console.log('🔄 Iniciando carregamento de configurações...')
+      console.log('ðŸ”„ Iniciando carregamento de configuraÃ§Ãµes...')
 
       const { data, error } = await supabase
         .from('configuracoes')
@@ -20,86 +27,92 @@ export const useConfiguracoes = () => {
         .order('chave')
 
       if (error) {
-        console.error('❌ Erro ao carregar configurações:', error)
+        console.error('âŒ Erro ao carregar configuraÃ§Ãµes:', error)
         throw error
       }
 
-      console.log(`✅ ${data?.length || 0} configurações carregadas do banco`)
+      console.log(`âœ… ${data?.length || 0} configuraÃ§Ãµes carregadas do banco`)
+      // Atualizar cache
+      configuracoesCache.value = data || [];
+      cacheTimestamp.value = Date.now();
       return data || []
     } catch (error) {
-      console.error('❌ Erro no carregamento de configurações:', error)
+      console.error('âŒ Erro no carregamento de configuraÃ§Ãµes:', error)
       throw error
     }
   }
 
-  // NOVA FUNÇÃO CORRIGIDA
+  // FUNÃ‡ÃƒO CORRIGIDA - Atualiza ou Insere
   const atualizarConfiguracao = async (chave, valor) => {
     try {
-      console.log('💾 Tentando atualizar configuração:', chave, '=', valor)
+      console.log('ðŸ’¾ Tentando atualizar configuraÃ§Ã£o:', chave, '=', valor)
 
-      // 1. Primeiro, tenta atualizar a linha existente
-      const { data: updateData, error: updateError, count } = await supabase
+      // Tenta atualizar primeiro
+      const { data: updateData, error: updateError } = await supabase
         .from('configuracoes')
         .update({ valor: valor, updated_at: new Date().toISOString() })
-        .eq('chave', chave) // Filtra pela chave única
-        .select() // Retorna os dados da linha atualizada
-        .single() // Espera um único resultado (ou null se não encontrado)
-
-      if (updateError) {
-        // Se o erro for "0 rows" (não encontrou para atualizar), tenta inserir
-        if (updateError.code === 'PGRST116') { // Código específico para "0 rows" no update do Supabase
-          console.log(`📝 Chave '${chave}' não encontrada, tentando inserir...`)
-        } else {
-          // Se for outro erro de update, lança
-          console.error('❌ Erro ao atualizar configuração:', updateError)
-          throw new Error(`Erro ao atualizar: ${updateError.message}`)
-        }
-      } else if (updateData) {
-        // Se a atualização funcionou (retornou dados), sucesso!
-        console.log('✅ Configuração atualizada com sucesso:', updateData)
-        return updateData
-      }
-
-      // 2. Se a atualização não encontrou a linha (count = 0), tenta inserir
-      const { data: insertData, error: insertError } = await supabase
-        .from('configuracoes')
-        .insert([{ chave: chave, valor: valor, updated_at: new Date().toISOString() }])
+        .eq('chave', chave)
         .select()
         .single()
 
-      if (insertError) {
-        // Se o insert falhar, provavelmente é por violação de constraint UNIQUE
-        // Ou por alguma condição na política RLS
-        console.error('❌ Erro ao inserir configuração (ou violação de UNIQUE):', insertError)
-        // Pode ser necessário verificar se a chave já existe de fato antes de lançar
-        const { data: checkData } = await supabase
+      // PGRST116 Ã© o cÃ³digo para "no rows updated" no PostgREST/Supabase
+      if (updateError && updateError.code === 'PGRST116') {
+        // Se nÃ£o encontrou para atualizar, tenta inserir
+        console.log(`ðŸ“ Chave '${chave}' nÃ£o encontrada, tentando inserir...`)
+        const { data: insertData, error: insertError } = await supabase
           .from('configuracoes')
-          .select('id')
-          .eq('chave', chave)
-          .limit(1)
+          .insert([{ chave: chave, valor: valor, updated_at: new Date().toISOString() }])
+          .select()
+          .single()
 
-        if (checkData && checkData.length > 0) {
-           console.error(`⚠️ A chave '${chave}' já existe com ID ${checkData[0].id}, mas o update falhou. Verifique RLS ou dados.`)
+        if (insertError) {
+          console.error('âŒ Erro ao inserir configuraÃ§Ã£o:', insertError)
+          throw insertError
         }
-        throw new Error(`Erro ao inserir: ${insertError.message}`)
+        // Atualizar cache apÃ³s inserÃ§Ã£o
+        if (configuracoesCache.value) {
+            const index = configuracoesCache.value.findIndex(c => c.chave === chave);
+            if (index !== -1) {
+                configuracoesCache.value[index] = insertData;
+            } else {
+                configuracoesCache.value.push(insertData);
+            }
+            cacheTimestamp.value = Date.now(); // Atualiza timestamp do cache
+        }
+        return insertData
+      } else if (updateError) {
+        // Trata outros erros de atualizaÃ§Ã£o que nÃ£o sejam 'nenhuma linha afetada'
+        console.error('âŒ Erro ao atualizar configuraÃ§Ã£o:', updateError)
+        throw updateError;
+      } else if (updateData) {
+        // AtualizaÃ§Ã£o bem-sucedida
+        // Atualizar cache apÃ³s atualizaÃ§Ã£o
+        if (configuracoesCache.value) {
+            const index = configuracoesCache.value.findIndex(c => c.chave === chave);
+            if (index !== -1) {
+                configuracoesCache.value[index] = updateData;
+            }
+            cacheTimestamp.value = Date.now(); // Atualiza timestamp do cache
+        }
+        console.log('âœ… ConfiguraÃ§Ã£o atualizada com sucesso:', updateData)
+        return updateData
+      } else {
+        // Este caso nÃ£o deveria ocorrer se o update funcionou, mas por garantia
+        console.error('âŒ Erro inesperado na atualizaÃ§Ã£o/consulta da configuraÃ§Ã£o.')
+        throw new Error('Erro inesperado na atualizaÃ§Ã£o da configuraÃ§Ã£o.')
       }
 
-      console.log('✅ Configuração inserida com sucesso:', insertData)
-      return insertData
-
     } catch (error) {
-      console.error('❌ Erro GERAL ao atualizar configuração:', error)
+      console.error('âŒ Erro GERAL ao atualizar configuraÃ§Ã£o:', error)
       throw error
     }
   }
 
-
-  // ... (restante das funções permanecem iguais)
-  const carregarConfiguracoesAgrupadas = async () => {
+  const carregarConfiguracoesAgrupadas = async (forceRefresh = false) => {
     try {
-      const configuracoes = await carregarConfiguracoes()
+      const configuracoes = await carregarConfiguracoes(forceRefresh) // Passar forceRefresh para a funÃ§Ã£o base
 
-      // Agrupar configurações por categoria
+      // Agrupar configuraÃ§Ãµes por categoria
       const agrupadas = {
         site: {},
         contato: {},
@@ -124,22 +137,22 @@ export const useConfiguracoes = () => {
         } else if (chave.startsWith('info_')) {
           agrupadas.sistema[chave] = valor
         } else {
-          // Configurações gerais vão para sistema
+          // ConfiguraÃ§Ãµes gerais vÃ£o para sistema
           agrupadas.sistema[chave] = valor
         }
       })
 
-      console.log('✅ Configurações mapeadas:', agrupadas)
+      console.log('âœ… ConfiguraÃ§Ãµes mapeadas:', agrupadas)
       return agrupadas
     } catch (error) {
-      console.error('❌ Erro ao agrupar configurações:', error)
+      console.error('âŒ Erro ao agrupar configuraÃ§Ãµes:', error)
       throw error
     }
   }
 
   const salvarMultiplasConfiguracoes = async (configuracoes) => {
     try {
-      console.log('📝 Salvando múltiplas configurações...')
+      console.log('ðŸ“ Salvando mÃºltiplas configuraÃ§Ãµes...')
 
       const resultados = []
 
@@ -148,37 +161,49 @@ export const useConfiguracoes = () => {
           const resultado = await atualizarConfiguracao(chave, valor)
           resultados.push({ chave, sucesso: true, data: resultado })
         } catch (error) {
-          console.error(`❌ Erro ao salvar ${chave}:`, error)
+          console.error(`âŒ Erro ao salvar ${chave}:`, error)
           resultados.push({ chave, sucesso: false, error: error.message })
           // Continua salvando as outras mesmo se uma falhar
         }
       }
 
-      console.log('✅ Processamento de configurações concluído')
+      console.log('âœ… Processamento de configuraÃ§Ãµes concluÃ­do')
+      
+      // âœ… CORREÃ‡ÃƒO: Teste de conexÃ£o com variÃ¡vel 'data' nÃ£o utilizada REMOVIDA
+      const { error: connectionError } = await supabase
+        .from('configuracoes')
+        .select('count')
+        .limit(1)
+
+      if (connectionError) {
+        console.error('âŒ Erro de conexÃ£o apÃ³s salvar configuraÃ§Ãµes:', connectionError)
+      }
+
       return resultados
     } catch (error) {
-      console.error('❌ Erro ao salvar múltiplas configurações:', error)
+      console.error('âŒ Erro ao salvar mÃºltiplas configuraÃ§Ãµes:', error)
       throw error
     }
   }
 
   const uploadImagem = async (file, pasta = 'geral') => {
     try {
-      console.log('📤 Iniciando upload de imagem...')
+      console.log('ðŸ“¤ Iniciando upload de imagem...')
 
       if (!file) {
         throw new Error('Nenhum arquivo selecionado')
       }
 
-      // Gerar nome único para o arquivo
+      // Gerar nome Ãºnico para o arquivo
       const timestamp = Date.now()
       const extensao = file.name.split('.').pop()
       const nomeArquivo = `${timestamp}-${Math.random().toString(36).substring(2, 8)}.${extensao}`
       const caminho = `${pasta}/${nomeArquivo}`
 
-      console.log('📁 Fazendo upload para:', caminho)
+      console.log('ðŸ“ Fazendo upload para:', caminho)
 
-      const { data, error } = await supabase.storage
+      // âœ… CORREÃ‡ÃƒO: Removida variÃ¡vel 'data' nÃ£o utilizada
+      const { error } = await supabase.storage
         .from('imagens')
         .upload(caminho, file, {
           cacheControl: '3600',
@@ -186,26 +211,26 @@ export const useConfiguracoes = () => {
         })
 
       if (error) {
-        console.error('❌ Erro no upload:', error)
+        console.error('âŒ Erro no upload:', error)
         throw error
       }
 
-      // Obter URL pública
+      // Obter URL pÃºblica
       const { data: urlData } = supabase.storage
         .from('imagens')
         .getPublicUrl(caminho)
 
-      console.log('✅ Upload concluído:', urlData.publicUrl)
+      console.log('âœ… Upload concluÃ­do:', urlData.publicUrl)
       return urlData.publicUrl
     } catch (error) {
-      console.error('❌ Erro no upload de imagem:', error)
+      console.error('âŒ Erro no upload de imagem:', error)
       throw error
     }
   }
 
   const deletarImagem = async (url) => {
     try {
-      console.log('🗑️ Tentando deletar imagem:', url)
+      console.log('ðŸ—‘ï¸ Tentando deletar imagem:', url)
 
       if (!url) return
 
@@ -213,7 +238,7 @@ export const useConfiguracoes = () => {
       const caminho = url.split('/imagens/').pop()
 
       if (!caminho) {
-        console.warn('⚠️ URL de imagem inválida')
+        console.warn('âš ï¸ URL de imagem invÃ¡lida')
         return
       }
 
@@ -222,41 +247,41 @@ export const useConfiguracoes = () => {
         .remove([caminho])
 
       if (error) {
-        console.error('❌ Erro ao deletar imagem:', error)
+        console.error('âŒ Erro ao deletar imagem:', error)
         throw error
       }
 
-      console.log('✅ Imagem deletada com sucesso')
+      console.log('âœ… Imagem deletada com sucesso')
     } catch (error) {
-      console.error('❌ Erro ao deletar imagem:', error)
+      console.error('âŒ Erro ao deletar imagem:', error)
       throw error
     }
   }
 
   const testarConexao = async () => {
     try {
-      console.log('🧪 Testando conexão com o banco...')
+      console.log('ðŸ§ª Testando conexÃ£o com o banco...')
 
-      const { data, error } = await supabase
+      const { error: connectionError } = await supabase // âœ… Corrigido: removido 'data' nÃ£o utilizado
         .from('configuracoes')
-        .select('count')
-        .limit(1)
+        .select('count', { head: true, count: 'exact' }) // Otimizado para contar
 
-      if (error) {
-        console.error('❌ Erro na conexão:', error)
-        throw error
+      if (connectionError) {
+        console.error('âŒ Erro na conexÃ£o:', connectionError)
+        throw connectionError
       }
 
-      console.log('✅ Conexão com o banco estabelecida com sucesso')
+      console.log('âœ… ConexÃ£o com o banco estabelecida com sucesso')
       return true
     } catch (error) {
-      console.error('❌ Falha no teste de conexão:', error)
+      console.error('âŒ Falha no teste de conexÃ£o:', error)
       throw error
     }
   }
 
   return {
-    // Operações básicas
+    // OperaÃ§Ãµes bÃ¡sicas
+    configuracoesCache,
     carregarConfiguracoes,
     atualizarConfiguracao,
     carregarConfiguracoesAgrupadas,
@@ -266,12 +291,13 @@ export const useConfiguracoes = () => {
     uploadImagem,
     deletarImagem,
 
-    // Utilitários
+    // UtilitÃ¡rios
     testarConexao,
 
-    // Instância do Supabase (para casos específicos)
-    supabase
+    // Instancia do Supabase (para casos especÃ­ficos, embora nÃ£o recomendado exportar diretamente)
+    // NÃƒO exporte 'supabase' aqui a menos que estritamente necessÃ¡rio. Use import em cada arquivo que precisa.
   }
 }
 
+// ExportaÃ§Ã£o padrÃ£o
 export default useConfiguracoes

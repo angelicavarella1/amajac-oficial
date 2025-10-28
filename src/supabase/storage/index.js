@@ -1,17 +1,17 @@
-﻿// C:\Users\angel\Documents\Projetos\amajac-oficial\src\supabase\storage\index.js
+// C:\Users\angel\Documents\Projetos\amajac-oficial\src\supabase\storage\index.js
 
 import { supabase } from '../client';
 
-// 🟢 MANTENHA SOMENTE ESTA EXPORTAÇÃO:
+// MANTENHA SOMENTE ESTA EXPORTACAO:
 export const storageApi = {
   uploadFile: async (bucketName, filePath, file, options = {}) => {
     const { data, error } = await supabase.storage
       .from(bucketName)
-      .upload(filePath, file, { ...options, upsert: true }); 
+      .upload(filePath, file, { ...options, upsert: true });
     if (error) throw error;
     return data;
   },
-  
+
   deleteFile: async (bucketName, filePath) => {
     const { error } = await supabase.storage
       .from(bucketName)
@@ -28,5 +28,5 @@ export const storageApi = {
   },
 };
 
-// ❌ NÃO TENHA NENHUM 'export { storageApi }' ADICIONAL AQUI!
-// ❌ NÃO TENHA NENHUM 'export default storageApi' AQUI se você quer a exportação nomeada!
+// NAO TENHA NENHUM 'export { storageApi }' ADICIONAL AQUI!
+// NAO TENHA NENHUM 'export default storageApi' AQUI se voce quer a exportacao nomeada!

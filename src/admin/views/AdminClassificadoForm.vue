@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="max-w-4xl mx-auto">
     <div class="mb-6">
       <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
@@ -22,7 +22,7 @@
             required
             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
             placeholder="Título do classificado"
-          >
+          />
         </div>
 
         <div>
@@ -36,7 +36,7 @@
             required
             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
             placeholder="Descrição detalhada do classificado..."
-          ></textarea>
+          />
         </div>
 
         <div class="grid md:grid-cols-2 gap-6">
@@ -70,7 +70,7 @@
               step="0.01"
               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
               placeholder="0,00"
-            >
+            />
           </div>
         </div>
 
@@ -86,7 +86,7 @@
               required
               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
               placeholder="Nome do anunciante"
-            >
+            />
           </div>
 
           <div>
@@ -100,7 +100,7 @@
               required
               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
               placeholder="(11) 99999-9999"
-            >
+            />
           </div>
         </div>
 
@@ -114,7 +114,7 @@
             type="email"
             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
             placeholder="email@exemplo.com"
-          >
+          />
         </div>
 
         <div v-if="isEdit" class="flex items-center">
@@ -123,7 +123,7 @@
             v-model="form.aprovado"
             type="checkbox"
             class="rounded border-gray-300 text-primary-600 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700"
-          >
+          />
           <label for="aprovado" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
             Classificado aprovado
           </label>
@@ -153,8 +153,8 @@
           >
             <span v-if="loading" class="flex items-center">
               <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
               </svg>
               Salvando...
             </span>

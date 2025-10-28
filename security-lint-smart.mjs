@@ -1,4 +1,4 @@
-﻿// security-lint-smart.mjs - LINTER INTELIGENTE
+// security-lint-smart.mjs - LINTER INTELIGENTE
 import fs from "fs";
 import path from "path";
 

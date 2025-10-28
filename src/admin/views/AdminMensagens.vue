@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="space-y-6">
     <!-- Cabeçalho -->
     <div class="flex justify-between items-center">
@@ -11,7 +11,7 @@
           @click="exportMessages"
           class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center"
         >
-          <i class="fas fa-download mr-2"></i>
+          <i class="fas fa-download mr-2"/>
           Exportar
         </button>
       </div>
@@ -58,8 +58,8 @@
             v-model="filters.search"
             placeholder="Buscar mensagens..."
             class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500"
-          >
-          <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          />
+          <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"/>
         </div>
       </div>
     </div>
@@ -70,7 +70,7 @@
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-              <i class="fas fa-envelope text-blue-600 dark:text-blue-400 text-xl"></i>
+              <i class="fas fa-envelope text-blue-600 dark:text-blue-400 text-xl"/>
             </div>
           </div>
           <div class="ml-4">
@@ -84,7 +84,7 @@
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-              <i class="fas fa-envelope-open text-green-600 dark:text-green-400 text-xl"></i>
+              <i class="fas fa-envelope-open text-green-600 dark:text-green-400 text-xl"/>
             </div>
           </div>
           <div class="ml-4">
@@ -98,7 +98,7 @@
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center">
-              <i class="fas fa-envelope text-yellow-600 dark:text-yellow-400 text-xl"></i>
+              <i class="fas fa-envelope text-yellow-600 dark:text-yellow-400 text-xl"/>
             </div>
           </div>
           <div class="ml-4">
@@ -112,7 +112,7 @@
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
-              <i class="fas fa-reply text-purple-600 dark:text-purple-400 text-xl"></i>
+              <i class="fas fa-reply text-purple-600 dark:text-purple-400 text-xl"/>
             </div>
           </div>
           <div class="ml-4">
@@ -127,20 +127,20 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
       <!-- Loading State -->
       <div v-if="loading && mensagens.length === 0" class="flex justify-center items-center py-12">
-        <i class="fas fa-spinner fa-spin text-3xl text-green-600 mb-4"></i>
+        <i class="fas fa-spinner fa-spin text-3xl text-green-600 mb-4"/>
         <p class="text-gray-600 dark:text-gray-400">Carregando mensagens...</p>
       </div>
 
       <!-- Error State -->
       <div v-else-if="error" class="text-center py-12 text-red-600 dark:text-red-400">
-        <i class="fas fa-exclamation-triangle text-2xl mb-4"></i>
+        <i class="fas fa-exclamation-triangle text-2xl mb-4"/>
         <p class="text-lg font-medium mb-2">Erro ao carregar mensagens</p>
         <p class="text-sm mb-4">{{ error }}</p>
         <button
           @click="carregarMensagens"
           class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
         >
-          <i class="fas fa-redo mr-2"></i>Tentar Novamente
+          <i class="fas fa-redo mr-2"/>Tentar Novamente
         </button>
       </div>
 
@@ -180,7 +180,7 @@
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-10 w-10">
                     <div class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                      <i class="fas fa-user text-green-600 dark:text-green-400"></i>
+                      <i class="fas fa-user text-green-600 dark:text-green-400"/>
                     </div>
                   </div>
                   <div class="ml-4">
@@ -208,7 +208,7 @@
                   :class="getStatusBadgeClass(mensagem?.status || (mensagem?.lida ? 'lida' : 'nao_lida'))"
                   class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                 >
-                  <i :class="getStatusIcon(mensagem?.status || (mensagem?.lida ? 'lida' : 'nao_lida'))" class="mr-1"></i>
+                  <i :class="getStatusIcon(mensagem?.status || (mensagem?.lida ? 'lida' : 'nao_lida'))" class="mr-1"/>
                   {{ getStatusText(mensagem?.status || (mensagem?.lida ? 'lida' : 'nao_lida')) }}
                 </span>
               </td>
@@ -228,7 +228,7 @@
                     class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-colors p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20"
                     title="Visualizar mensagem"
                   >
-                    <i class="fas fa-eye"></i>
+                    <i class="fas fa-eye"/>
                   </button>
 
                   <!-- Marcar como Lida -->
@@ -238,7 +238,7 @@
                     class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors p-2 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20"
                     title="Marcar como lida"
                   >
-                    <i class="fas fa-check"></i>
+                    <i class="fas fa-check"/>
                   </button>
 
                   <!-- Responder -->
@@ -247,7 +247,7 @@
                     class="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300 transition-colors p-2 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20"
                     title="Responder mensagem"
                   >
-                    <i class="fas fa-reply"></i>
+                    <i class="fas fa-reply"/>
                   </button>
 
                   <!-- Excluir -->
@@ -256,7 +256,7 @@
                     class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
                     title="Excluir mensagem"
                   >
-                    <i class="fas fa-trash"></i>
+                    <i class="fas fa-trash"/>
                   </button>
                 </div>
               </td>
@@ -267,7 +267,7 @@
 
       <!-- Empty State -->
       <div v-if="!loading && mensagensFiltradas.length === 0" class="text-center py-12">
-        <i class="fas fa-envelope-open text-4xl text-gray-400 mb-4"></i>
+        <i class="fas fa-envelope-open text-4xl text-gray-400 mb-4"/>
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhuma mensagem encontrada</h3>
         <p class="text-gray-500 dark:text-gray-400 mb-6">Todas as mensagens foram processadas ou não há mensagens recebidas.</p>
       </div>
@@ -303,7 +303,7 @@
     <!-- Modal de Visualização/Resposta -->
     <div v-if="selectedMessage" class="fixed inset-0 overflow-y-auto z-50">
       <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="selectedMessage = null"></div>
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="selectedMessage = null"/>
         
         <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
           <div class="absolute top-0 right-0 pt-4 pr-4">
@@ -311,7 +311,7 @@
               @click="selectedMessage = null"
               class="bg-white dark:bg-gray-800 rounded-md text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors p-2"
             >
-              <i class="fas fa-times"></i>
+              <i class="fas fa-times"/>
             </button>
           </div>
           
@@ -323,7 +323,7 @@
                   <p class="text-sm text-gray-500 dark:text-gray-400">{{ selectedMessage.email }}</p>
                   <div class="flex items-center space-x-2 mt-2">
                     <span :class="getStatusBadgeClass(selectedMessage.status || (selectedMessage.lida ? 'lida' : 'nao_lida'))" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
-                      <i :class="getStatusIcon(selectedMessage.status || (selectedMessage.lida ? 'lida' : 'nao_lida'))" class="mr-1"></i>
+                      <i :class="getStatusIcon(selectedMessage.status || (selectedMessage.lida ? 'lida' : 'nao_lida'))" class="mr-1"/>
                       {{ getStatusText(selectedMessage.status || (selectedMessage.lida ? 'lida' : 'nao_lida')) }}
                     </span>
                     <span class="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400 rounded">
@@ -357,7 +357,7 @@
                     v-model="response.assunto"
                     class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                     placeholder="Re: Sua mensagem sobre..."
-                  >
+                  />
                 </div>
 
                 <div>
@@ -369,7 +369,7 @@
                     rows="6"
                     class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
                     placeholder="Digite sua resposta aqui..."
-                  ></textarea>
+                  />
                 </div>
 
                 <div class="flex items-center">
@@ -378,7 +378,7 @@
                     id="markAsResponded"
                     v-model="response.marcar_como_respondida"
                     class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-                  >
+                  />
                   <label for="markAsResponded" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
                     Marcar como respondida após envio
                   </label>
@@ -394,11 +394,11 @@
               class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed sm:ml-3 sm:w-auto sm:text-sm transition-colors"
             >
               <span v-if="sending">
-                <i class="fas fa-spinner fa-spin mr-2"></i>
+                <i class="fas fa-spinner fa-spin mr-2"/>
                 Enviando...
               </span>
               <span v-else>
-                <i class="fas fa-paper-plane mr-2"></i>
+                <i class="fas fa-paper-plane mr-2"/>
                 Enviar Resposta
               </span>
             </button>
@@ -407,7 +407,7 @@
               v-if="selectedMessage?.status === 'nao_lida' || !selectedMessage?.lida"
               class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-600 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors"
             >
-              <i class="fas fa-check mr-2"></i>
+              <i class="fas fa-check mr-2"/>
               Marcar como Lida
             </button>
             <button 
@@ -424,13 +424,13 @@
     <!-- Modal de Confirmação de Exclusão -->
     <div v-if="mensagemParaExcluir" class="fixed inset-0 overflow-y-auto z-50">
       <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="mensagemParaExcluir = null"></div>
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="mensagemParaExcluir = null"/>
 
         <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div class="sm:flex sm:items-start">
               <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900 sm:mx-0 sm:h-10 sm:w-10">
-                <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400"></i>
+                <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400"/>
               </div>
               <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                 <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Confirmar Exclusão</h3>
@@ -448,7 +448,7 @@
               :disabled="loadingExclusao"
               class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              <i v-if="loadingExclusao" class="fas fa-spinner fa-spin mr-2"></i>
+              <i v-if="loadingExclusao" class="fas fa-spinner fa-spin mr-2"/>
               {{ loadingExclusao ? 'Excluindo...' : 'Excluir' }}
             </button>
             <button
@@ -467,9 +467,9 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useMensagensStore } from '@/stores/mensagens'
+import { useMensagensStore } from '@/modules/mensagens/stores/mensagens'
 import { storeToRefs } from 'pinia'
-import { useUIStore } from '@/stores/ui'
+import { useUIStore } from '@/shared/stores/ui'
 
 const mensagensStore = useMensagensStore()
 const uiStore = useUIStore()

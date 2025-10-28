@@ -1,4 +1,4 @@
-﻿<!-- src/views/NoticiasView.vue -->
+<!-- src/views/NoticiasView.vue -->
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
     <header class="fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-md z-40 transition-colors duration-200">
@@ -50,7 +50,7 @@
         </div>
 
         <div v-if="loading" class="text-center py-12">
-          <div class="loader mx-auto mb-4"></div>
+          <div class="loader mx-auto mb-4"/>
           <p class="text-gray-600 dark:text-gray-400">Carregando notícias...</p>
         </div>
 
@@ -70,42 +70,59 @@
           </button>
         </div>
 
-        <div v-else-if="noticiasComImagens.length > 0" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div v-else-if="noticias.length > 0" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <article
-            v-for="noticia in noticiasComImagens"
+            v-for="noticia in noticias"
             :key="noticia.id"
             class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700"
           >
-            <!-- Imagem com useSafeImage (CORRIGIDO) -->
+            <!-- Container da Imagem - ESTRUTURA CONDICIONAL CORRIGIDA -->
             <div class="h-48 bg-gray-100 dark:bg-gray-700 relative overflow-hidden">
-              <!-- Loading State -->
-              <div v-if="noticia._imageState.loading" class="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse flex items-center justify-center">
+              <!-- ✅ CORREÇÃO: Estrutura condicional linear e conectada -->
+              
+              <!-- 1. Estado de Loading -->
+              <div 
+                v-if="getImageState(noticia.id).loading" 
+                class="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse flex items-center justify-center"
+              >
                 <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
               </div>
               
-              <!-- Imagem Carregada -->
+              <!-- 2. Imagem Carregada com Sucesso -->
               <img
-                v-else-if="!noticia._imageState.error && noticia._imageState.imageUrl"
-                :src="noticia._imageState.imageUrl"
+                v-else-if="!getImageState(noticia.id).error && getImageState(noticia.id).imageUrl"
+                :src="getImageState(noticia.id).imageUrl"
                 :alt="safeString(noticia.titulo)"
                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                :class="{ 'opacity-0': noticia._imageState.loading, 'opacity-100': !noticia._imageState.loading }"
-                @load="noticia._imageState.lazyLoad"
+                @load="handleImageLoad(noticia.id)"
+                @error="handleImageError(noticia.id)"
                 loading="lazy"
               />
               
-              <!-- Error State -->
-              <div v-else-if="noticia._imageState.error" class="absolute inset-0 bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
+              <!-- 3. Estado de Erro -->
+              <div 
+                v-else-if="getImageState(noticia.id).error" 
+                class="absolute inset-0 bg-red-50 dark:bg-red-900/20 flex items-center justify-center"
+              >
                 <div class="text-center p-2">
-                  <i class="fas fa-exclamation-triangle text-red-500 text-lg mb-1"></i>
+                  <i class="fas fa-exclamation-triangle text-red-500 text-lg mb-1"/>
                   <p class="text-red-500 text-xs">Falha ao carregar imagem</p>
+                  <button 
+                    @click="reloadImage(noticia.id)" 
+                    class="mt-2 text-xs text-red-600 hover:text-red-700 underline"
+                  >
+                    Tentar novamente
+                  </button>
                 </div>
               </div>
               
-              <!-- Placeholder Padrão -->
-              <div v-else class="absolute inset-0 bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
+              <!-- 4. Placeholder Padrão (sem imagem ou URL inválida) -->
+              <div 
+                v-else 
+                class="absolute inset-0 bg-gray-200 dark:bg-gray-600 flex items-center justify-center"
+              >
                 <svg class="w-8 h-8 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
@@ -168,41 +185,73 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, reactive } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useNoticiasStore } from '@/stores/noticias'
-import { useUIStore } from '@/stores/ui'
-import { useSafeImage } from '@/composables/useSafeImage'
-import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import { useNoticiasStore } from '@/modules/noticias/stores/noticias'
+import { useUIStore } from '@/shared/stores/ui'
+// CORREÇÃO: Importação atualizada para o caminho correto
+import DarkModeToggle from '@/shared/components/DarkModeToggle.vue'
 
 const noticiasStore = useNoticiasStore()
 const uiStore = useUIStore()
 const { noticias, loading, error } = storeToRefs(noticiasStore)
 
-// ✅ CORREÇÃO: Computeds para processar notícias com useSafeImage reativamente
-const noticiasComImagens = computed(() => {
-  return noticias.value.map(noticia => {
-    // Cria um estado de imagem para cada notícia
-    const imageState = useSafeImage(noticia.imagem_url || '')
-    
-    return {
-      ...noticia,
-      // Estados da imagem
-      _imageState: {
-        loading: imageState.loading.value,
-        error: imageState.error.value,
-        imageUrl: imageState.imageUrl.value,
-        
-        // Handlers
-        lazyLoad: imageState.lazyLoad,
-        reload: imageState.reload,
-        reset: imageState.reset
+// ✅ CORREÇÃO: Gerenciamento de estado das imagens
+const imageStates = reactive({})
+
+// Inicializa o estado para cada notícia
+const initializeImageStates = () => {
+  noticias.value.forEach(noticia => {
+    if (!imageStates[noticia.id]) {
+      imageStates[noticia.id] = {
+        loading: !!noticia.imagem_url,
+        error: false,
+        imageUrl: noticia.imagem_url || null
       }
     }
   })
-})
+}
 
-// ✅ CORREÇÃO: Funções de segurança adicionadas
+// Getter para estado da imagem
+const getImageState = (noticiaId) => {
+  if (!imageStates[noticiaId]) {
+    imageStates[noticiaId] = {
+      loading: false,
+      error: false,
+      imageUrl: null
+    }
+  }
+  return imageStates[noticiaId]
+}
+
+// Handlers de imagem
+const handleImageLoad = (noticiaId) => {
+  if (imageStates[noticiaId]) {
+    imageStates[noticiaId].loading = false
+    imageStates[noticiaId].error = false
+  }
+}
+
+const handleImageError = (noticiaId) => {
+  if (imageStates[noticiaId]) {
+    imageStates[noticiaId].loading = false
+    imageStates[noticiaId].error = true
+    imageStates[noticiaId].imageUrl = null
+  }
+}
+
+const reloadImage = (noticiaId) => {
+  const noticia = noticias.value.find(n => n.id === noticiaId)
+  if (noticia && noticia.imagem_url) {
+    if (imageStates[noticiaId]) {
+      imageStates[noticiaId].loading = true
+      imageStates[noticiaId].error = false
+      imageStates[noticiaId].imageUrl = noticia.imagem_url
+    }
+  }
+}
+
+// ✅ CORREÇÃO: Funções de segurança
 const safeString = (str) => {
   if (typeof str !== 'string') return ''
   return str.replace(/[<>"']/g, '').trim()
@@ -221,6 +270,14 @@ const formatarData = (dataString) => {
     return 'Data inválida'
   }
 }
+
+// Watcher para inicializar estados quando noticias carregam
+import { watch } from 'vue'
+watch(noticias, (newNoticias) => {
+  if (newNoticias.length > 0) {
+    initializeImageStates()
+  }
+})
 
 onMounted(() => {
   uiStore.initializeDarkMode()

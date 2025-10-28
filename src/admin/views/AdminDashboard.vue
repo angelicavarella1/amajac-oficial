@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="space-y-6">
     <!-- Cabeçalho -->
     <div class="flex justify-between items-center">
@@ -7,7 +7,7 @@
         <p class="text-gray-600 dark:text-gray-400 mt-1">Visão geral do sistema</p>
       </div>
       <div class="text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
-        <i class="fas fa-calendar mr-2"></i>
+        <i class="fas fa-calendar mr-2"/>
         {{ dataAtual }}
       </div>
     </div>
@@ -15,7 +15,7 @@
     <!-- Loading State -->
     <div v-if="loading" class="flex justify-center items-center py-12">
       <div class="text-center">
-        <i class="fas fa-spinner fa-spin text-3xl text-green-600 mb-4"></i>
+        <i class="fas fa-spinner fa-spin text-3xl text-green-600 mb-4"/>
         <p class="text-gray-600 dark:text-gray-400">Carregando dashboard...</p>
       </div>
     </div>
@@ -23,14 +23,14 @@
     <!-- Error State -->
     <div v-else-if="error" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
       <div class="text-center">
-        <i class="fas fa-exclamation-triangle text-2xl text-red-500 mb-4"></i>
+        <i class="fas fa-exclamation-triangle text-2xl text-red-500 mb-4"/>
         <h3 class="text-lg font-medium text-red-800 dark:text-red-300 mb-2">Erro ao carregar dashboard</h3>
         <p class="text-red-700 dark:text-red-400 mb-4">{{ error }}</p>
         <button
           @click="carregarDashboard"
           class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
         >
-          <i class="fas fa-redo mr-2"></i>Tentar Novamente
+          <i class="fas fa-redo mr-2"/>Tentar Novamente
         </button>
       </div>
     </div>
@@ -43,13 +43,13 @@
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Notícias</h3>
             <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-900/20">
-              <i class="fas fa-newspaper text-blue-600 dark:text-blue-400 text-sm"></i>
+              <i class="fas fa-newspaper text-blue-600 dark:text-blue-400 text-sm"/>
             </div>
           </div>
           <div class="flex items-baseline justify-between">
             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ estatisticas.noticias }}</p>
             <div class="flex items-center text-xs text-green-600">
-              <i class="fas fa-arrow-up mr-1"></i>
+              <i class="fas fa-arrow-up mr-1"/>
               {{ estatisticas.noticiasTrendValue }}
             </div>
           </div>
@@ -60,13 +60,13 @@
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Eventos</h3>
             <div class="p-2 rounded-full bg-green-100 dark:bg-green-900/20">
-              <i class="fas fa-calendar-alt text-green-600 dark:text-green-400 text-sm"></i>
+              <i class="fas fa-calendar-alt text-green-600 dark:text-green-400 text-sm"/>
             </div>
           </div>
           <div class="flex items-baseline justify-between">
             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ estatisticas.eventos }}</p>
             <div class="flex items-center text-xs text-red-600">
-              <i class="fas fa-arrow-down mr-1"></i>
+              <i class="fas fa-arrow-down mr-1"/>
               {{ estatisticas.eventosTrendValue }}
             </div>
           </div>
@@ -77,13 +77,13 @@
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Mensagens</h3>
             <div class="p-2 rounded-full bg-purple-100 dark:bg-purple-900/20">
-              <i class="fas fa-envelope text-purple-600 dark:text-purple-400 text-sm"></i>
+              <i class="fas fa-envelope text-purple-600 dark:text-purple-400 text-sm"/>
             </div>
           </div>
           <div class="flex items-baseline justify-between">
             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ estatisticas.mensagens }}</p>
             <div class="flex items-center text-xs text-green-600">
-              <i class="fas fa-arrow-up mr-1"></i>
+              <i class="fas fa-arrow-up mr-1"/>
               {{ estatisticas.mensagensTrendValue }}
             </div>
           </div>
@@ -94,13 +94,13 @@
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Associados</h3>
             <div class="p-2 rounded-full bg-yellow-100 dark:bg-yellow-900/20">
-              <i class="fas fa-users text-yellow-600 dark:text-yellow-400 text-sm"></i>
+              <i class="fas fa-users text-yellow-600 dark:text-yellow-400 text-sm"/>
             </div>
           </div>
           <div class="flex items-baseline justify-between">
             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ estatisticas.associados }}</p>
             <div class="flex items-center text-xs text-green-600">
-              <i class="fas fa-arrow-up mr-1"></i>
+              <i class="fas fa-arrow-up mr-1"/>
               {{ estatisticas.associadosTrendValue }}
             </div>
           </div>
@@ -111,7 +111,7 @@
       <!-- Ações Rápidas -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-          <i class="fas fa-bolt text-yellow-500 mr-2"></i>
+          <i class="fas fa-bolt text-yellow-500 mr-2"/>
           Ações Rápidas
         </h3>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -120,7 +120,7 @@
             class="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-white dark:hover:bg-gray-600 hover:shadow-md transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/20 group-hover:bg-green-200 dark:group-hover:bg-green-800/30 transition-colors mb-2">
-              <i class="fas fa-plus text-green-600 dark:text-green-400 text-lg"></i>
+              <i class="fas fa-plus text-green-600 dark:text-green-400 text-lg"/>
             </div>
             <span class="text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
               Nova Notícia
@@ -132,7 +132,7 @@
             class="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-white dark:hover:bg-gray-600 hover:shadow-md transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/20 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/30 transition-colors mb-2">
-              <i class="fas fa-calendar-plus text-blue-600 dark:text-blue-400 text-lg"></i>
+              <i class="fas fa-calendar-plus text-blue-600 dark:text-blue-400 text-lg"/>
             </div>
             <span class="text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
               Novo Evento
@@ -144,7 +144,7 @@
             class="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-white dark:hover:bg-gray-600 hover:shadow-md transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             <div class="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900/20 group-hover:bg-indigo-200 dark:group-hover:bg-indigo-800/30 transition-colors mb-2">
-              <i class="fas fa-user-friends text-indigo-600 dark:text-indigo-400 text-lg"></i>
+              <i class="fas fa-user-friends text-indigo-600 dark:text-indigo-400 text-lg"/>
             </div>
             <span class="text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
               Gerenciar Associados
@@ -156,7 +156,7 @@
             class="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-white dark:hover:bg-gray-600 hover:shadow-md transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900/20 group-hover:bg-purple-200 dark:group-hover:bg-purple-800/30 transition-colors mb-2">
-              <i class="fas fa-envelope text-purple-600 dark:text-purple-400 text-lg"></i>
+              <i class="fas fa-envelope text-purple-600 dark:text-purple-400 text-lg"/>
             </div>
             <span class="text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
               Ver Mensagens
@@ -168,7 +168,7 @@
             class="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-white dark:hover:bg-gray-600 hover:shadow-md transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             <div class="p-3 rounded-full bg-pink-100 dark:bg-pink-900/20 group-hover:bg-pink-200 dark:group-hover:bg-pink-800/30 transition-colors mb-2">
-              <i class="fas fa-image text-pink-600 dark:text-pink-400 text-lg"></i>
+              <i class="fas fa-image text-pink-600 dark:text-pink-400 text-lg"/>
             </div>
             <span class="text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
               Nova Imagem
@@ -180,7 +180,7 @@
             class="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-white dark:hover:bg-gray-600 hover:shadow-md transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             <div class="p-3 rounded-full bg-teal-100 dark:bg-teal-900/20 group-hover:bg-teal-200 dark:group-hover:bg-teal-800/30 transition-colors mb-2">
-              <i class="fas fa-handshake text-teal-600 dark:text-teal-400 text-lg"></i>
+              <i class="fas fa-handshake text-teal-600 dark:text-teal-400 text-lg"/>
             </div>
             <span class="text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
               Novo Parceiro
@@ -195,14 +195,14 @@
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-              <i class="fas fa-chart-bar text-blue-500 mr-2"></i>
+              <i class="fas fa-chart-bar text-blue-500 mr-2"/>
               Monitor Supabase
             </h3>
             <router-link 
               to="/admin/monitor"
               class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 flex items-center"
             >
-              Ver completo <i class="fas fa-arrow-right ml-1 text-xs"></i>
+              Ver completo <i class="fas fa-arrow-right ml-1 text-xs"/>
             </router-link>
           </div>
           
@@ -231,14 +231,14 @@
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-              <i class="fas fa-database text-green-500 mr-2"></i>
+              <i class="fas fa-database text-green-500 mr-2"/>
               Backup & Limpeza
             </h3>
             <router-link 
               to="/admin/backup"
               class="text-sm text-green-600 dark:text-green-400 hover:text-green-700 flex items-center"
             >
-              Gerenciar <i class="fas fa-arrow-right ml-1 text-xs"></i>
+              Gerenciar <i class="fas fa-arrow-right ml-1 text-xs"/>
             </router-link>
           </div>
           
@@ -250,7 +250,7 @@
                 <p class="text-xs text-gray-500">15 Nov 2024, 02:00</p>
               </div>
               <span class="text-green-600 text-sm">
-                <i class="fas fa-check-circle"></i>
+                <i class="fas fa-check-circle"/>
               </span>
             </div>
             
@@ -271,7 +271,7 @@
         <!-- Atividade Recente -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-            <i class="fas fa-history text-blue-500 mr-2"></i>
+            <i class="fas fa-history text-blue-500 mr-2"/>
             Atividade Recente
           </h3>
           <div class="space-y-4">
@@ -282,19 +282,19 @@
             >
               <div class="flex-shrink-0">
                 <div :class="`w-10 h-10 rounded-full flex items-center justify-center ${atividade.cor} shadow-sm`">
-                  <i :class="`${atividade.icone} text-sm text-white`"></i>
+                  <i :class="`${atividade.icone} text-sm text-white`"/>
                 </div>
               </div>
               <div class="ml-3 flex-1">
                 <p class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ atividade.descricao }}</p>
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  <i class="fas fa-clock mr-1"></i>{{ atividade.tempo }}
+                  <i class="fas fa-clock mr-1"/>{{ atividade.tempo }}
                 </p>
               </div>
             </div>
             
             <div v-if="atividadesRecentes.length === 0" class="text-center py-4 text-gray-500 dark:text-gray-400">
-              <i class="fas fa-inbox text-2xl mb-2 opacity-50"></i>
+              <i class="fas fa-inbox text-2xl mb-2 opacity-50"/>
               <p class="text-sm">Nenhuma atividade recente</p>
             </div>
           </div>
@@ -304,25 +304,25 @@
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-              <i class="fas fa-newspaper text-green-500 mr-2"></i>
+              <i class="fas fa-newspaper text-green-500 mr-2"/>
               Notícias Recentes
             </h3>
             <router-link
               to="/admin/noticias"
               class="text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded"
             >
-              Ver todas <i class="fas fa-arrow-right ml-1 text-xs"></i>
+              Ver todas <i class="fas fa-arrow-right ml-1 text-xs"/>
             </router-link>
           </div>
           
           <div v-if="noticiasRecentes.length === 0" class="text-center py-8 text-gray-500 dark:text-gray-400">
-            <i class="fas fa-newspaper text-4xl mb-4 opacity-50"></i>
+            <i class="fas fa-newspaper text-4xl mb-4 opacity-50"/>
             <p class="mb-2">Nenhuma notícia encontrada</p>
             <router-link
               to="/admin/noticias/nova"
               class="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 text-sm inline-flex items-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded"
             >
-              <i class="fas fa-plus mr-1"></i> Criar primeira notícia
+              <i class="fas fa-plus mr-1"/> Criar primeira notícia
             </router-link>
           </div>
           
@@ -331,7 +331,7 @@
                  class="flex items-start p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
               <div class="flex-shrink-0">
                 <div :class="`w-8 h-8 rounded-full flex items-center justify-center ${noticia.ativo ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`">
-                  <i :class="noticia.ativo ? 'fas fa-check text-xs' : 'fas fa-times text-xs'"></i>
+                  <i :class="noticia.ativo ? 'fas fa-check text-xs' : 'fas fa-times text-xs'"/>
                 </div>
               </div>
               <div class="ml-3 flex-1 min-w-0">
@@ -342,7 +342,7 @@
                   {{ noticia.resumo || 'Sem resumo' }}
                 </p>
                 <div class="flex items-center mt-1 text-xs text-gray-500 dark:text-gray-400">
-                  <i class="fas fa-calendar mr-1"></i>
+                  <i class="fas fa-calendar mr-1"/>
                   {{ formatDate(noticia.data_publicacao) }}
                 </div>
               </div>
@@ -352,14 +352,14 @@
                   class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 p-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   title="Editar notícia"
                 >
-                  <i class="fas fa-edit text-xs"></i>
+                  <i class="fas fa-edit text-xs"/>
                 </router-link>
                 <button
                   @click="visualizarNoticia(noticia)"
                   class="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 p-1 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                   title="Visualizar notícia"
                 >
-                  <i class="fas fa-eye text-xs"></i>
+                  <i class="fas fa-eye text-xs"/>
                 </button>
               </div>
             </div>
@@ -371,19 +371,19 @@
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mt-6">
         <div class="flex justify-between items-center mb-4">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-            <i class="fas fa-user-clock text-indigo-500 mr-2"></i>
+            <i class="fas fa-user-clock text-indigo-500 mr-2"/>
             Solicitações de Associados Pendentes
           </h3>
           <router-link
             to="/admin/solicitacoes-socio"
             class="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rounded"
           >
-            Gerenciar todos <i class="fas fa-arrow-right ml-1 text-xs"></i>
+            Gerenciar todos <i class="fas fa-arrow-right ml-1 text-xs"/>
           </router-link>
         </div>
         
         <div v-if="solicitacoesPendentes.length === 0" class="text-center py-8 text-gray-500 dark:text-gray-400">
-          <i class="fas fa-users text-4xl mb-4 opacity-50"></i>
+          <i class="fas fa-users text-4xl mb-4 opacity-50"/>
           <p class="mb-2">Nenhuma solicitação pendente</p>
           <p class="text-sm">Todas as solicitações foram processadas</p>
         </div>
@@ -428,7 +428,7 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                   <div class="flex items-center">
-                    <i class="fas fa-calendar mr-2 text-xs opacity-70"></i>
+                    <i class="fas fa-calendar mr-2 text-xs opacity-70"/>
                     {{ formatDate(solicitacao.data_solicitacao) }}
                   </div>
                 </td>
@@ -438,21 +438,21 @@
                     class="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 mr-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded"
                     title="Aprovar solicitação"
                   >
-                    <i class="fas fa-check"></i>
+                    <i class="fas fa-check"/>
                   </button>
                   <button
                     @click="rejeitarSolicitacao(solicitacao)"
                     class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 mr-3 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded"
                     title="Rejeitar solicitação"
                   >
-                    <i class="fas fa-times"></i>
+                    <i class="fas fa-times"/>
                   </button>
                   <router-link
                     :to="`/admin/solicitacoes-socio`"
                     class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
                     title="Ver detalhes"
                   >
-                    <i class="fas fa-eye"></i>
+                    <i class="fas fa-eye"/>
                   </router-link>
                 </td>
               </tr>
@@ -466,7 +466,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useUIStore } from '@/stores/ui'
+import { useUIStore } from '@/shared/stores/ui'
 
 // Stores
 const uiStore = useUIStore()

@@ -11,9 +11,9 @@
             @click="openExportMenu = !openExportMenu"
             class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200 flex items-center"
           >
-            <i class="fas fa-download mr-2"></i>
+            <i class="fas fa-download mr-2"/>
             Exportar
-            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+            <i class="fas fa-chevron-down ml-2 text-xs"/>
           </button>
           
           <div 
@@ -25,21 +25,21 @@
                 @click="exportarCSV"
                 class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150"
               >
-                <i class="fas fa-file-csv text-green-600 mr-3"></i>
+                <i class="fas fa-file-csv text-green-600 mr-3"/>
                 Exportar como CSV
               </button>
               <button 
                 @click="exportarExcel"
                 class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150"
               >
-                <i class="fas fa-file-excel text-green-600 mr-3"></i>
+                <i class="fas fa-file-excel text-green-600 mr-3"/>
                 Exportar como Excel
               </button>
               <button 
                 @click="exportarPDF"
                 class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150"
               >
-                <i class="fas fa-file-pdf text-red-600 mr-3"></i>
+                <i class="fas fa-file-pdf text-red-600 mr-3"/>
                 Exportar como PDF
               </button>
             </div>
@@ -48,12 +48,12 @@
       </div>
     </div>
 
-    <!-- Resto do template permanece igual -->
+    <!-- Cards de Estatísticas -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
       <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow border border-gray-200 dark:border-gray-700">
         <div class="flex items-center">
           <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-900 mr-3">
-            <i class="fas fa-clock text-blue-600 dark:text-blue-300"></i>
+            <i class="fas fa-clock text-blue-600 dark:text-blue-300"/>
           </div>
           <div>
             <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Pendentes</p>
@@ -65,7 +65,7 @@
       <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow border border-gray-200 dark:border-gray-700">
         <div class="flex items-center">
           <div class="p-2 rounded-full bg-green-100 dark:bg-green-900 mr-3">
-            <i class="fas fa-check text-green-600 dark:text-green-300"></i>
+            <i class="fas fa-check text-green-600 dark:text-green-300"/>
           </div>
           <div>
             <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Aprovadas</p>
@@ -77,7 +77,7 @@
       <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow border border-gray-200 dark:border-gray-700">
         <div class="flex items-center">
           <div class="p-2 rounded-full bg-red-100 dark:bg-red-900 mr-3">
-            <i class="fas fa-times text-red-600 dark:text-red-300"></i>
+            <i class="fas fa-times text-red-600 dark:text-red-300"/>
           </div>
           <div>
             <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Rejeitadas</p>
@@ -89,7 +89,7 @@
       <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow border border-gray-200 dark:border-gray-700">
         <div class="flex items-center">
           <div class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 mr-3">
-            <i class="fas fa-users text-gray-600 dark:text-gray-300"></i>
+            <i class="fas fa-users text-gray-600 dark:text-gray-300"/>
           </div>
           <div>
             <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total</p>
@@ -99,12 +99,306 @@
       </div>
     </div>
 
-    <!-- Resto do template permanece igual -->
-    <!-- ... (filtros, tabela, paginação, modais) ... -->
+    <!-- Filtros -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow border border-gray-200 dark:border-gray-700">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Buscar</label>
+          <input 
+            v-model="filtros.busca"
+            type="text" 
+            placeholder="Nome, CPF ou email..."
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+          >
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+          <select 
+            v-model="filtros.status"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+          >
+            <option value="">Todos</option>
+            <option value="pendente">Pendentes</option>
+            <option value="aprovado">Aprovados</option>
+            <option value="rejeitado">Rejeitados</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ordenação</label>
+          <select 
+            v-model="filtros.ordenacao"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+          >
+            <option value="recente">Mais recentes</option>
+            <option value="antigo">Mais antigos</option>
+          </select>
+        </div>
+        
+        <div class="flex items-end">
+          <button 
+            @click="limparFiltros"
+            class="w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+          >
+            Limpar Filtros
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-700">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Nome
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                CPF
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Email
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Status
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Data Solicitação
+              </th>
+              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Ações
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tr v-for="solicitacao in solicitacoesFiltradas" :key="solicitacao.id" class="hover:bg-gray-50 dark:hover:bg-gray-700">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                {{ solicitacao.nome }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                {{ solicitacao.cpf }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                {{ solicitacao.email }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span :class="[STATUS_BASE_CLASSES, getClasseStatus(solicitacao.status)]">
+                  {{ formatarStatus(solicitacao.status) }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                {{ formatarDataCompleta(solicitacao.data_solicitacao) }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <button 
+                  @click="visualizarDetalhes(solicitacao)"
+                  class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-3"
+                >
+                  <i class="fas fa-eye"/>
+                </button>
+                <button 
+                  v-if="solicitacao.status === 'pendente'"
+                  @click="aprovarSolicitacao(solicitacao)"
+                  class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 mr-3"
+                >
+                  <i class="fas fa-check"/>
+                </button>
+                <button 
+                  v-if="solicitacao.status === 'pendente'"
+                  @click="rejeitarSolicitacao(solicitacao)"
+                  class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                >
+                  <i class="fas fa-times"/>
+                </button>
+              </td>
+            </tr>
+            
+            <tr v-if="solicitacoesFiltradas.length === 0">
+              <td colspan="6" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                <i class="fas fa-inbox text-3xl mb-2 text-gray-300 dark:text-gray-600"/>
+                <p>Nenhuma solicitação encontrada</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Paginação -->
+      <div v-if="paginacao.totalPaginas > 1" class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+        <div class="flex items-center justify-between">
+          <div class="text-sm text-gray-700 dark:text-gray-300">
+            Mostrando {{ Math.min(solicitacoesFiltradas.length, paginacao.itensPorPagina) }} de {{ solicitacoesFiltradas.length }} registros
+          </div>
+          <div class="flex space-x-1">
+            <button 
+              @click="paginaAnterior"
+              :disabled="paginacao.paginaAtual === 1"
+              class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Anterior
+            </button>
+            
+            <button 
+              v-for="pagina in paginacao.paginasVisiveis"
+              :key="pagina"
+              @click="irParaPagina(pagina)"
+              :class="[
+                'px-3 py-1 text-sm border rounded',
+                pagina === paginacao.paginaAtual 
+                  ? 'bg-blue-600 text-white border-blue-600' 
+                  : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'
+              ]"
+            >
+              {{ pagina }}
+            </button>
+            
+            <button 
+              @click="paginaProxima"
+              :disabled="paginacao.paginaAtual === paginacao.totalPaginas"
+              class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Próxima
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Modais permanecem iguais -->
-  <!-- ... -->
+  <!-- Modal de Detalhes -->
+  <div v-if="solicitacaoSelecionada" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-start mb-4">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+            Detalhes da Solicitação
+          </h3>
+          <button 
+            @click="fecharModal"
+            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+          >
+            <i class="fas fa-times text-xl"/>
+          </button>
+        </div>
+        
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Nome Completo</label>
+              <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ solicitacaoSelecionada.nome }}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">CPF</label>
+              <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ solicitacaoSelecionada.cpf }}</p>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Email</label>
+              <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ solicitacaoSelecionada.email }}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Telefone</label>
+              <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ solicitacaoSelecionada.telefone }}</p>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Data de Nascimento</label>
+              <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ formatarData(solicitacaoSelecionada.data_nascimento) }}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Profissão</label>
+              <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ solicitacaoSelecionada.profissao || 'Não informado' }}</p>
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Empresa</label>
+            <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ solicitacaoSelecionada.empresa || 'Não informado' }}</p>
+          </div>
+          
+          <div v-if="solicitacaoSelecionada.observacoes">
+            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Observações</label>
+            <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ solicitacaoSelecionada.observacoes }}</p>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Status</label>
+              <p class="mt-1">
+                <span :class="[STATUS_BASE_CLASSES, getClasseStatus(solicitacaoSelecionada.status)]">
+                  {{ formatarStatus(solicitacaoSelecionada.status) }}
+                </span>
+              </p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Data da Solicitação</label>
+              <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ formatarDataCompleta(solicitacaoSelecionada.data_solicitacao) }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-6 flex justify-end space-x-3">
+          <button 
+            v-if="solicitacaoSelecionada.status === 'pendente'"
+            @click="aprovarSolicitacao(solicitacaoSelecionada)"
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200"
+          >
+            <i class="fas fa-check mr-2"/>
+            Aprovar
+          </button>
+          <button 
+            v-if="solicitacaoSelecionada.status === 'pendente'"
+            @click="rejeitarSolicitacao(solicitacaoSelecionada)"
+            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200"
+          >
+            <i class="fas fa-times mr-2"/>
+            Rejeitar
+          </button>
+          <button 
+            @click="fecharModal"
+            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200"
+          >
+            Fechar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmação -->
+  <div v-if="mostrarModalConfirmacao" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full">
+      <div class="p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          {{ modalConfirmacao.titulo }}
+        </h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">
+          {{ modalConfirmacao.mensagem }}
+        </p>
+        <div class="flex justify-end space-x-3">
+          <button 
+            @click="cancelarAcao"
+            class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+          >
+            Cancelar
+          </button>
+          <button 
+            @click="confirmarAcao"
+            class="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+          >
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -124,7 +418,7 @@ const acaoPendente = ref(null)
 const openExportMenu = ref(false)
 const exportando = ref(false)
 
-// Dados de exemplo (permanecem iguais)
+// Dados de exemplo
 const solicitacoes = ref([
   {
     id: 1,
@@ -154,14 +448,14 @@ const solicitacoes = ref([
   }
 ])
 
-// Filtros (permanecem iguais)
+// Filtros
 const filtros = reactive({
   busca: '',
   status: '',
   ordenacao: 'recente'
 })
 
-// Paginação (permanece igual)
+// Paginação
 const paginacao = reactive({
   paginaAtual: 1,
   itensPorPagina: 10,
@@ -179,13 +473,13 @@ const paginacao = reactive({
   })
 })
 
-// Modal de confirmação (permanece igual)
+// Modal de confirmação
 const modalConfirmacao = reactive({
   titulo: '',
   mensagem: ''
 })
 
-// Estatísticas (permanece igual)
+// Estatísticas
 const estatisticas = computed(() => {
   const pendentes = solicitacoes.value.filter(s => s.status === 'pendente').length
   const aprovadas = solicitacoes.value.filter(s => s.status === 'aprovado').length
@@ -199,7 +493,7 @@ const estatisticas = computed(() => {
   }
 })
 
-// Solicitações filtradas (permanece igual)
+// Solicitações filtradas
 const solicitacoesFiltradas = computed(() => {
   let filtradas = solicitacoes.value.filter(solicitacao => {
     const correspondeBusca = 
@@ -225,7 +519,7 @@ const solicitacoesFiltradas = computed(() => {
   return filtradas.slice(inicio, fim)
 })
 
-// MÉTODOS DE EXPORTAÇÃO - ATUALIZADOS
+// MÉTODOS DE EXPORTAÇÃO
 const exportarCSV = async () => {
   try {
     exportando.value = true
@@ -296,7 +590,7 @@ const exportarExcel = async () => {
       'Observações': solicitacao.observacoes || 'Nenhuma'
     }))
 
-    // CÓDIGO NOVO USANDO EXCELJS
+    // CÓDIGO USANDO EXCELJS
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Solicitações');
 
@@ -429,7 +723,7 @@ const exportarPDF = async () => {
   }
 }
 
-// Métodos auxiliares (permanecem iguais)
+// Métodos auxiliares
 function formatarData(dataString) {
   if (!dataString) return 'Não informado'
   return new Date(dataString).toLocaleDateString('pt-BR')
@@ -458,7 +752,13 @@ function getClasseStatus(status) {
   return classes[status] || 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
 }
 
-// Resto dos métodos permanecem iguais
+function limparFiltros() {
+  filtros.busca = ''
+  filtros.status = ''
+  filtros.ordenacao = 'recente'
+  paginacao.paginaAtual = 1
+}
+
 function visualizarDetalhes(solicitacao) {
   solicitacaoSelecionada.value = solicitacao
 }

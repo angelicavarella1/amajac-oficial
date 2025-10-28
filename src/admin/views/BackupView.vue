@@ -46,7 +46,7 @@
                 class="h-2 rounded-full transition-all duration-300"
                 :class="getCorBarraEspaco(percentualEspaco)"
                 :style="{ width: percentualEspaco + '%' }"
-              ></div>
+              />
             </div>
             <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ percentualEspaco }}% utilizado</div>
           </div>
@@ -106,7 +106,7 @@
                 :disabled="backupEmAndamento"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               >
-                <i class="fas fa-database mr-2" :class="{ 'animate-pulse': backupEmAndamento }"></i>
+                <i class="fas fa-database mr-2" :class="{ 'animate-pulse': backupEmAndamento }"/>
                 {{ backupEmAndamento ? 'Criando...' : 'Criar Backup' }}
               </button>
             </div>
@@ -121,7 +121,7 @@
                 :disabled="backupEmAndamento"
                 class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               >
-                <i class="fas fa-save mr-2"></i>
+                <i class="fas fa-save mr-2"/>
                 Backup Rápido
               </button>
             </div>
@@ -149,7 +149,7 @@
                 @click="limparCache"
                 class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded text-sm transition-colors duration-200"
               >
-                <i class="fas fa-broom mr-2"></i>
+                <i class="fas fa-broom mr-2"/>
                 Limpar
               </button>
             </div>
@@ -163,7 +163,7 @@
                 @click="limparLogsAntigos"
                 class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded text-sm transition-colors duration-200"
               >
-                <i class="fas fa-trash-alt mr-2"></i>
+                <i class="fas fa-trash-alt mr-2"/>
                 Limpar
               </button>
             </div>
@@ -177,7 +177,7 @@
                 @click="otimizarBanco"
                 class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded text-sm transition-colors duration-200"
               >
-                <i class="fas fa-magic mr-2"></i>
+                <i class="fas fa-magic mr-2"/>
                 Otimizar
               </button>
             </div>
@@ -191,7 +191,7 @@
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">📋 Histórico de Backups</h3>
         <button class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm transition-colors duration-200">
-          <i class="fas fa-download mr-1"></i>
+          <i class="fas fa-download mr-1"/>
           Exportar Lista
         </button>
       </div>
@@ -234,16 +234,16 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm">
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" 
                       :class="getClasseStatus(backup.status)">
-                  <i class="fas fa-circle mr-1 text-xs"></i>
+                  <i class="fas fa-circle mr-1 text-xs"/>
                   {{ backup.status }}
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <button class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-3 transition-colors duration-200">
-                  <i class="fas fa-download"></i>
+                  <i class="fas fa-download"/>
                 </button>
                 <button class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300 transition-colors duration-200">
-                  <i class="fas fa-trash"></i>
+                  <i class="fas fa-trash"/>
                 </button>
               </td>
             </tr>
@@ -287,7 +287,7 @@
               <span 
                 class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                 :class="configuracoes.backupAuto ? 'translate-x-5' : 'translate-x-0'"
-              ></span>
+              />
             </button>
           </div>
 
@@ -304,7 +304,7 @@
               <span 
                 class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                 :class="configuracoes.notificacoesEmail ? 'translate-x-5' : 'translate-x-0'"
-              ></span>
+              />
             </button>
           </div>
         </div>
@@ -323,7 +323,7 @@
               <span 
                 class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                 :class="configuracoes.limpezaAuto ? 'translate-x-5' : 'translate-x-0'"
-              ></span>
+              />
             </button>
           </div>
 
@@ -340,7 +340,7 @@
               <span 
                 class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                 :class="configuracoes.compactacao ? 'translate-x-5' : 'translate-x-0'"
-              ></span>
+              />
             </button>
           </div>
         </div>
@@ -353,7 +353,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
       <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{{ modalTitulo }}</h3>
       <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mb-4">
-        <div class="h-2 rounded-full bg-blue-500 transition-all duration-500" :style="{ width: progresso + '%' }"></div>
+        <div class="h-2 rounded-full bg-blue-500 transition-all duration-500" :style="{ width: progresso + '%' }"/>
       </div>
       <p class="text-sm text-gray-600 dark:text-gray-300 text-center">{{ modalMensagem }}</p>
     </div>

@@ -1,30 +1,31 @@
-// src/admin/composables/useAdminAuth.js - VERS√O CORRIGIDA
+// src/admin/composables/useAdminAuth.js - VERS√ÉO CORRIGIDA
 import { ref } from 'vue'
-import { supabase } from '../../supabase/client.js'
-import { useUIStore } from '../../stores/ui.js'
+import { supabase } from '../../supabase/client.js' // Importa√ß√£o via caminho relativo (comum em estruturas Vue)
+import { useUIStore } from '@/shared/stores/ui'
 
 export function useAdminAuth() {
   const loading = ref(false)
   const error = ref(null)
   const uiStore = useUIStore()
 
-  // FunÁ„o auxiliar para logging seguro
+  // Fun√ß√£o auxiliar para logging seguro
   const safeLogError = (operation, err) => {
-    console.error(`Erro na operaÁ„o ${operation}:`, {
+    console.error(`‚ùå Erro na opera√ß√£o ${operation}:`, {
       code: err?.code || 'unknown',
       message: err?.message ? err.message.substring(0, 100) : 'Erro desconhecido',
       name: err?.name || 'Error'
     })
   }
 
+  // üîê LOGIN DE ADMIN
   const adminLogin = async (email, password) => {
     loading.value = true
     error.value = null
-    
+
     try {
-      // Verificar se o Supabase est· disponÌvel
+      // Verificar se o Supabase est√° dispon√≠vel
       if (!supabase) {
-        throw new Error('Cliente Supabase n„o inicializado')
+        throw new Error('Cliente Supabase n√£o inicializado')
       }
 
       const { data, error: authError } = await supabase.auth.signInWithPassword({
@@ -34,23 +35,24 @@ export function useAdminAuth() {
 
       if (authError) {
         safeLogError('login', authError)
-        
-        // Mensagens de erro mais especÌficas
+
+        // Mensagens de erro mais espec√≠ficas
         if (authError.message.includes('Invalid login credentials')) {
-          error.value = 'Credenciais inv·lidas'
+          error.value = 'Credenciais inv√°lidas'
           uiStore.showToast('Email ou senha incorretos.', 'error')
         } else if (authError.message.includes('Email not confirmed')) {
-          error.value = 'Email n„o confirmado'
+          error.value = 'Email n√£o confirmado'
           uiStore.showToast('Confirme seu email antes de fazer login.', 'warning')
         } else {
-          error.value = 'Credenciais inv·lidas ou usu·rio n„o encontrado'
+          error.value = 'Credenciais inv√°lidas ou usu√°rio n√£o encontrado'
           uiStore.showToast('Falha no login. Verifique suas credenciais.', 'error')
         }
         return null
       }
 
-      // Verificar se o usu·rio tem permiss„o de admin
+      // Verificar se o usu√°rio tem permiss√£o de admin (checa a tabela profiles)
       if (data?.user) {
+        // A desestrutura√ß√£o aqui deve usar um alias para evitar conflito de nome com 'data' principal
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
           .select('role')
@@ -58,13 +60,13 @@ export function useAdminAuth() {
           .single()
 
         if (profileError) {
-          console.warn('Erro ao buscar perfil do usu·rio:', profileError)
+          console.warn('‚ö†Ô∏è Erro ao buscar perfil do usu√°rio:', profileError)
         }
 
         if (!profile || profile.role !== 'admin') {
-          error.value = 'Sem permiss„o de administrador'
+          error.value = 'Sem permiss√£o de administrador'
           uiStore.showToast('Acesso restrito a administradores.', 'error')
-          await supabase.auth.signOut()
+          await supabase.auth.signOut() // Desloga o usu√°rio n√£o-admin imediatamente
           return null
         }
       }
@@ -75,20 +77,23 @@ export function useAdminAuth() {
     } catch (err) {
       safeLogError('login', err)
       error.value = err.message || 'Erro inesperado no sistema'
-      uiStore.showToast('Erro tempor·rio no sistema. Tente novamente.', 'error')
+      uiStore.showToast('Erro tempor√°rio no sistema. Tente novamente.', 'error')
       return null
     } finally {
       loading.value = false
     }
   }
 
+  // üìù CADASTRO DE ADMIN
+  // Nota: Em um ambiente de produ√ß√£o, o cadastro de admin n√£o deveria ser exposto publicamente,
+  // mas √© mantido aqui para fins de demonstra√ß√£o da funcionalidade.
   const adminSignUp = async (email, password, userData) => {
     loading.value = true
     error.value = null
 
     try {
       if (!supabase) {
-        throw new Error('Cliente Supabase n„o inicializado')
+        throw new Error('Cliente Supabase n√£o inicializado')
       }
 
       const { data, error: authError } = await supabase.auth.signUp({
@@ -97,17 +102,17 @@ export function useAdminAuth() {
         options: {
           data: {
             ...userData,
-            role: 'admin'
+            role: 'admin' // Define a role como admin no metadado do usu√°rio
           }
         }
       })
 
       if (authError) {
         safeLogError('cadastro', authError)
-        
+
         if (authError.message.includes('User already registered')) {
-          error.value = 'Usu·rio j· cadastrado'
-          uiStore.showToast('Este email j· est· em uso.', 'error')
+          error.value = 'Usu√°rio j√° cadastrado'
+          uiStore.showToast('Este email j√° est√° em uso.', 'error')
         } else {
           error.value = 'Erro ao criar conta'
           uiStore.showToast('Falha no cadastro. Tente novamente.', 'error')
@@ -115,61 +120,65 @@ export function useAdminAuth() {
         return null
       }
 
-      uiStore.showToast('Conta criada com sucesso! Verifique seu email para confirmaÁ„o.', 'success')
+      uiStore.showToast('Conta criada com sucesso! Verifique seu email para confirma√ß√£o.', 'success')
       return data
 
     } catch (err) {
       safeLogError('cadastro', err)
       error.value = err.message || 'Erro inesperado no sistema'
-      uiStore.showToast('Erro tempor·rio no sistema. Tente novamente.', 'error')
+      uiStore.showToast('Erro tempor√°rio no sistema. Tente novamente.', 'error')
       return null
     } finally {
       loading.value = false
     }
   }
 
+  // üîë SOLICITAR RECUPERA√á√ÉO DE SENHA
   const adminResetPassword = async (email) => {
     loading.value = true
     error.value = null
 
     try {
       if (!supabase) {
-        throw new Error('Cliente Supabase n„o inicializado')
+        throw new Error('Cliente Supabase n√£o inicializado')
       }
 
+      // Supabase envia um e-mail com um link para a rota 'redirectTo'
       const { error: authError } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/admin/reset-password`,
       })
 
       if (authError) {
         safeLogError('solicitacao_reset', authError)
-        error.value = 'Erro ao solicitar recuperaÁ„o'
-        uiStore.showToast('Falha na solicitaÁ„o. Verifique o email.', 'error')
+        error.value = 'Erro ao solicitar recupera√ß√£o'
+        uiStore.showToast('Falha na solicita√ß√£o. Verifique o email.', 'error')
         return false
       }
 
-      uiStore.showToast('Email de recuperaÁ„o enviado com sucesso!', 'success')
+      uiStore.showToast('Email de recupera√ß√£o enviado com sucesso!', 'success')
       return true
 
     } catch (err) {
       safeLogError('solicitacao_reset', err)
       error.value = err.message || 'Erro inesperado no sistema'
-      uiStore.showToast('Erro tempor·rio no sistema. Tente novamente.', 'error')
+      uiStore.showToast('Erro tempor√°rio no sistema. Tente novamente.', 'error')
       return false
     } finally {
       loading.value = false
     }
   }
 
+  // üîÑ ATUALIZAR SENHA (usado ap√≥s reset ou em configura√ß√µes de perfil)
   const updatePassword = async (newPassword) => {
     loading.value = true
     error.value = null
 
     try {
       if (!supabase) {
-        throw new Error('Cliente Supabase n„o inicializado')
+        throw new Error('Cliente Supabase n√£o inicializado')
       }
 
+      // updatePassword usa updateUser com a nova senha
       const { error: authError } = await supabase.auth.updateUser({
         password: newPassword
       })
@@ -177,7 +186,7 @@ export function useAdminAuth() {
       if (authError) {
         safeLogError('atualizacao_credenciais', authError)
         error.value = 'Erro ao atualizar credenciais'
-        uiStore.showToast('Falha na atualizaÁ„o. Tente novamente.', 'error')
+        uiStore.showToast('Falha na atualiza√ß√£o. Tente novamente.', 'error')
         return false
       }
 
@@ -187,23 +196,27 @@ export function useAdminAuth() {
     } catch (err) {
       safeLogError('atualizacao_credenciais', err)
       error.value = err.message || 'Erro inesperado no sistema'
-      uiStore.showToast('Erro tempor·rio no sistema. Tente novamente.', 'error')
+      uiStore.showToast('Erro tempor√°rio no sistema. Tente novamente.', 'error')
       return false
     } finally {
       loading.value = false
     }
   }
 
+  // üö™ LOGOUT
   const logout = async () => {
     try {
       if (!supabase) {
-        console.error('Supabase n„o disponÌvel para logout')
+        console.error('Supabase n√£o dispon√≠vel para logout')
         return
       }
-      
+
       const { error } = await supabase.auth.signOut()
       if (error) {
         safeLogError('logout', error)
+        uiStore.showToast('Erro ao fazer logout.', 'error')
+      } else {
+        uiStore.showToast('Logout realizado.', 'info')
       }
     } catch (err) {
       safeLogError('logout', err)

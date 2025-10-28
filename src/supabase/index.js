@@ -1,4 +1,4 @@
-﻿// CORREÇÃO DEFINITIVA: Exportação unificada sem duplicações
+// CORREÇÃO DEFINITIVA: Exportação unificada sem duplicações
 
 // Re-exportar todas as exportações nomeadas dos módulos
 export { supabase } from './client.js';

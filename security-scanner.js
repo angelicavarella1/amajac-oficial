@@ -35,7 +35,7 @@ class SecurityScanner {
           });
         }
       });
-    } catch (error) {
+    } catch {
       console.warn(`⚠️ Não foi possível ler o arquivo: ${filePath}`);
     }
   }
@@ -99,7 +99,7 @@ class SecurityScanner {
           this.scanForSuspiciousPatterns(fullPath);
         }
       });
-    } catch (error) {
+    } catch {
       console.warn(`⚠️ Não foi possível escanear diretório: ${dirPath}`);
     }
   }

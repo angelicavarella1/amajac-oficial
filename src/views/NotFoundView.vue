@@ -43,7 +43,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useThemeStore } from '@/stores/themeStore'
+import { useThemeStore } from '@/shared/stores/themeStore'
 
 // usa o Pinia store de tema (modo escuro)
 const theme = useThemeStore()

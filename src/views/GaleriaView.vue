@@ -1,4 +1,4 @@
-﻿<!-- src/views/GaleriaView.vue -->
+<!-- src/views/GaleriaView.vue -->
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 transition-colors duration-200">
     <div class="container mx-auto px-4">
@@ -12,23 +12,23 @@
         <h3 class="font-bold text-blue-800 dark:text-blue-300 mb-2">DEBUG INFO:</h3>
         <p class="text-sm text-blue-700 dark:text-blue-300">Status: {{ debugStatus }}</p>
         <p class="text-sm text-blue-700 dark:text-blue-300">Total de imagens: {{ imagens.length }}</p>
-        <p class="text-sm text-blue-700 dark:text-blue-300">Página: {{ paginaAtual }} de {{ totalPaginas }}</p>
+        <p class="text-sm text-blue-700 dark:text-blue-300">Pagina: {{ paginaAtual }} de {{ totalPaginas }}</p>
         <p class="text-sm text-blue-700 dark:text-blue-300">Mostrando: {{ imagensPaginadas.length }} de {{ imagens.length }} imagens</p>
         <div v-if="imagens.length > 0" class="mt-2">
           <p class="text-sm font-semibold">Primeiras 3 URLs:</p>
           <div v-for="(imagem, index) in imagens.slice(0, 3)" :key="imagem.id" class="text-xs mt-1">
-            {{ index + 1 }}. {{ imagem.imagem_url || 'URL NÃO ENCONTRADA' }}
+            {{ index + 1 }}. {{ imagem.imagem_url || 'URL NAO ENCONTRADA' }}
           </div>
         </div>
       </div>
 
       <!-- Loading -->
       <div v-if="loading" class="text-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 dark:border-green-500 mx-auto mb-4"></div>
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 dark:border-green-500 mx-auto mb-4"/>
         <p class="text-gray-600 dark:text-gray-400 transition-colors duration-200">Carregando galeria...</p>
       </div>
 
-      <!-- Galeria com Paginação -->
+      <!-- Galeria com Paginacao -->
       <div v-else-if="imagens.length > 0">
         <!-- Grid de Imagens -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
@@ -61,7 +61,7 @@
               <!-- Error State -->
               <div v-else class="absolute inset-0 bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
                 <div class="text-center p-2">
-                  <i class="fas fa-exclamation-triangle text-red-500 text-lg mb-1"></i>
+                  <i class="fas fa-exclamation-triangle text-red-500 text-lg mb-1"/>
                   <p class="text-red-500 text-xs">Falha ao carregar</p>
                 </div>
               </div>
@@ -69,7 +69,7 @@
             
             <div class="p-4">
               <h3 class="font-semibold text-gray-800 dark:text-white text-sm mb-1 transition-colors duration-200">
-                {{ safeString(imagem.titulo || 'Sem título') }}
+                {{ safeString(imagem.titulo || 'Sem titulo') }}
               </h3>
               <p v-if="imagem.descricao" class="text-gray-600 dark:text-gray-300 text-xs mb-2 transition-colors duration-200">
                 {{ safeString(imagem.descricao) }}
@@ -84,19 +84,19 @@
           </div>
         </div>
 
-        <!-- Paginação -->
+        <!-- Paginacao -->
         <div v-if="totalPaginas > 1" class="flex justify-center items-center gap-4 mt-8">
           <button 
             @click="paginaAnterior"
             :disabled="paginaAtual === 1"
             class="px-4 py-2 bg-green-600 text-white rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-green-700 transition-colors flex items-center gap-2"
           >
-            <i class="fas fa-chevron-left"></i>
+            <i class="fas fa-chevron-left"/>
             Anterior
           </button>
           
           <span class="text-gray-700 dark:text-gray-300 font-medium">
-            Página {{ paginaAtual }} de {{ totalPaginas }}
+            Pagina {{ paginaAtual }} de {{ totalPaginas }}
           </span>
           
           <button 
@@ -104,12 +104,12 @@
             :disabled="paginaAtual === totalPaginas"
             class="px-4 py-2 bg-green-600 text-white rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-green-700 transition-colors flex items-center gap-2"
           >
-            Próxima
-            <i class="fas fa-chevron-right"></i>
+            Proxima
+            <i class="fas fa-chevron-right"/>
           </button>
         </div>
 
-        <!-- Informações de Paginação -->
+        <!-- Informacoes de Paginacao -->
         <div class="text-center mt-4">
           <p class="text-sm text-gray-600 dark:text-gray-400">
             Mostrando {{ inicioPagina }}-{{ fimPagina }} de {{ imagens.length }} imagens
@@ -120,30 +120,30 @@
       <!-- Vazio -->
       <div v-else class="text-center py-12">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 max-w-md mx-auto border border-gray-200 dark:border-gray-700 transition-colors duration-200">
-          <i class="fas fa-images text-4xl text-gray-400 mb-4"></i>
+          <i class="fas fa-images text-4xl text-gray-400 mb-4"/>
           <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Galeria vazia</h3>
           <p class="text-gray-500 dark:text-gray-400 transition-colors duration-200">Nenhuma imagem encontrada na galeria.</p>
         </div>
       </div>
 
-      <!-- Modal para visualização de imagem -->
+      <!-- Modal para visualizacao de imagem -->
       <div v-if="modalAberto" class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
         <div class="relative max-w-4xl max-h-full w-full">
-          <!-- Botão Fechar -->
+          <!-- Botao Fechar -->
           <button 
             @click="fecharModal"
             class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10 bg-black bg-opacity-50 rounded-full p-3"
           >
-            <i class="fas fa-times text-xl"></i>
+            <i class="fas fa-times text-xl"/>
           </button>
           
-          <!-- Botões Navegação -->
+          <!-- Botoes Navegacao -->
           <button 
             v-if="temImagemAnterior"
             @click="imagemAnterior"
             class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10 bg-black bg-opacity-50 rounded-full p-3"
           >
-            <i class="fas fa-chevron-left text-xl"></i>
+            <i class="fas fa-chevron-left text-xl"/>
           </button>
           
           <button 
@@ -151,16 +151,16 @@
             @click="proximaImagem"
             class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10 bg-black bg-opacity-50 rounded-full p-3"
           >
-            <i class="fas fa-chevron-right text-xl"></i>
+            <i class="fas fa-chevron-right text-xl"/>
           </button>
           
-          <!-- Conteúdo do Modal -->
+          <!-- Conteudo do Modal -->
           <div class="bg-gray-900 rounded-lg overflow-hidden">
             <!-- Imagem do Modal -->
             <div class="flex items-center justify-center min-h-[400px] max-h-[70vh] p-4">
               <!-- Loading -->
               <div v-if="imagemModalLoading" class="text-center">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"/>
                 <p class="text-white text-sm">Carregando imagem...</p>
               </div>
               
@@ -176,15 +176,15 @@
               
               <!-- Error -->
               <div v-else class="text-center text-white">
-                <i class="fas fa-exclamation-triangle text-3xl text-red-400 mb-2"></i>
+                <i class="fas fa-exclamation-triangle text-3xl text-red-400 mb-2"/>
                 <p class="text-red-400">Falha ao carregar imagem</p>
                 <p class="text-gray-400 text-sm mt-2">URL: {{ imagemSelecionada?.imagem_url }}</p>
               </div>
             </div>
             
-            <!-- Informações da Imagem -->
+            <!-- Informacoes da Imagem -->
             <div v-if="imagemSelecionada && !imagemModalError" class="p-6 bg-gray-800">
-              <h3 class="text-xl font-semibold text-white mb-2">{{ safeString(imagemSelecionada.titulo || 'Sem título') }}</h3>
+              <h3 class="text-xl font-semibold text-white mb-2">{{ safeString(imagemSelecionada.titulo || 'Sem titulo') }}</h3>
               <p v-if="imagemSelecionada.descricao" class="text-gray-300 text-sm mb-3">
                 {{ safeString(imagemSelecionada.descricao) }}
               </p>
@@ -207,9 +207,9 @@
 
 <script>
 import { ref, computed, onMounted, watch } from 'vue'
-import { useGaleriaStore } from '@/stores/galeria'
-import { useUIStore } from '@/stores/ui'
-import { useSafeImage } from '@/composables/useSafeImage'
+import { useGaleriaStore } from '@/modules/galeria/stores/galeria'
+import { useUIStore } from '@/shared/stores/ui'
+import { useSafeImage } from '@/shared/composables/useSafeImage'
 
 export default {
   name: 'GaleriaView',
@@ -229,14 +229,14 @@ export default {
     const imagemModalError = ref(false)
     const imagemModalUrl = ref('')
 
-    // Estados de paginação
+    // Estados de paginacao
     const paginaAtual = ref(1)
     const itensPorPagina = ref(12)
 
     // Computed
     const isDevelopment = computed(() => import.meta.env.DEV)
 
-    // ✅ COMPUTED CORRIGIDA: Processa as imagens com useSafeImage reativamente
+    // COMPUTED CORRIGIDA: Processa as imagens com useSafeImage reativamente
     const imagens = computed(() => {
       return galeriaStore.imagens.map(imagem => {
         // Cria um estado de imagem para cada item
@@ -256,7 +256,7 @@ export default {
       })
     })
 
-    // Paginação
+    // Paginacao
     const totalPaginas = computed(() => {
       return Math.ceil(imagens.value.length / itensPorPagina.value)
     })
@@ -285,14 +285,14 @@ export default {
       return indiceSelecionado.value < imagens.value.length - 1
     })
 
-    // Funções auxiliares
+    // Funcoes auxiliares
     const safeString = (str) => {
       if (typeof str !== 'string') return ''
       return str.replace(/[<>"']/g, '').trim()
     }
 
     const formatDate = (dateString) => {
-      if (!dateString) return 'Data não informada'
+      if (!dateString) return 'Data nao informada'
       try {
         return new Date(dateString).toLocaleDateString('pt-BR')
       } catch {
@@ -300,7 +300,7 @@ export default {
       }
     }
 
-    // Métodos de paginação
+    // Metodos de paginacao
     const proximaPagina = () => {
       if (paginaAtual.value < totalPaginas.value) {
         paginaAtual.value++
@@ -313,7 +313,7 @@ export default {
       }
     }
 
-    // Métodos do modal
+    // Metodos do modal
     const abrirModalImagem = (imagem) => {
       const index = imagens.value.findIndex(i => i.id === imagem.id)
       if (index !== -1) {
@@ -375,7 +375,7 @@ export default {
         await galeriaStore.fetchImagens()
         debugStatus.value = `Carregadas ${galeriaStore.imagens.length} imagens`
       } catch (err) {
-        console.error('❌ Erro ao carregar galeria:', err)
+        console.error('Erro ao carregar galeria:', err)
         debugStatus.value = `Erro: ${err.message}`
         uiStore.showToast('Erro ao carregar galeria', 'error')
       } finally {
@@ -417,11 +417,11 @@ export default {
       temImagemAnterior,
       temProximaImagem,
       
-      // Funções auxiliares
+      // Funcoes auxiliares
       safeString,
       formatDate,
       
-      // Métodos
+      // Metodos
       carregarGaleria,
       proximaPagina,
       paginaAnterior,
@@ -437,7 +437,7 @@ export default {
 </script>
 
 <style scoped>
-/* Transições suaves */
+/* Transicoes suaves */
 * {
   transition-property: color, background-color, border-color, box-shadow, transform, opacity;
   transition-duration: 200ms;

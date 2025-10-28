@@ -1,11 +1,10 @@
-﻿// src/composables/useEventos.js
+// src/composables/useEventos.js - VERSAO CORRIGIDA
 import { ref } from 'vue'
-import { adminApi } from '@/supabase/admin' // Importação correta: adminApi
+import { supabase } from '@/supabase/client.js' // Importar o cliente Supabase diretamente
 
 /**
  * Custom hook para gerenciar o estado e as operações CRUD de eventos.
- * Este composable é ideal para o painel de administração, onde as chamadas
- * de API (via adminApi) são necessárias.
+ * Este composable usa chamadas diretas ao Supabase Client.
  */
 export function useEventos() {
     const eventos = ref([]) // Lista de eventos (cache local)
@@ -17,12 +16,18 @@ export function useEventos() {
     const fetchEventos = async () => {
         loading.value = true
         error.value = null
-        
+
         try {
-            // Chamada à API para obter todos os eventos
-            const dados = await adminApi.eventos.getAll()
-            eventos.value = dados
-            return dados 
+            // Chamada direta ao Supabase Client para obter todos os eventos
+            const { data, error: supabaseError } = await supabase
+                .from('eventos')
+                .select('*')
+                .order('data_inicio', { ascending: true }) // ou data_hora_evento, como preferir
+
+            if (supabaseError) throw supabaseError
+
+            eventos.value = data || []
+            return data
         } catch (err) {
             error.value = err.message
             console.error('❌ Erro ao carregar eventos:', err)
@@ -36,19 +41,24 @@ export function useEventos() {
     const carregarEvento = async (id) => {
         loading.value = true
         error.value = null
-        
+
         try {
-            // 🔥 CORREÇÃO/MELHORIA: Tenta buscar o evento diretamente por ID.
-            // Isso é mais eficiente do que carregar todos os eventos primeiro.
-            const eventoEncontrado = await adminApi.eventos.getById(id) 
-            
-            if (!eventoEncontrado) {
-                 throw new Error(`Evento com ID ${id} não encontrado.`)
+            // Chamada direta ao Supabase Client para obter um evento por ID
+            const { data, error: supabaseError } = await supabase
+                .from('eventos')
+                .select('*')
+                .eq('id', id)
+                .single() // Espera um único resultado
+
+            if (supabaseError) throw supabaseError
+
+            if (!data) {
+                throw new Error(`Evento com ID ${id} não encontrado.`)
             }
 
-            evento.value = eventoEncontrado
-            return eventoEncontrado
-            
+            evento.value = data
+            return data
+
         } catch (err) {
             error.value = err.message
             console.error('❌ Erro ao carregar evento:', err)
@@ -62,18 +72,25 @@ export function useEventos() {
     const criarEvento = async (dados) => {
         loading.value = true
         error.value = null
-        
+
         try {
-            const novoEvento = await adminApi.eventos.create(dados)
+            const { data, error: supabaseError } = await supabase
+                .from('eventos')
+                .insert([dados])
+                .select()
+                .single()
+
+            if (supabaseError) throw supabaseError
+
             // Adiciona ao cache local e limpa o cache de erro
-            eventos.value.push(novoEvento)
-            error.value = null 
-            return { success: true, data: novoEvento }
+            eventos.value.push(data)
+            error.value = null
+            return { success: true, data }
         } catch (err) {
             error.value = err.message
             console.error('❌ Erro ao criar evento:', err)
             // Garante que o erro do composable também seja atualizado
-            throw err 
+            throw err
         } finally {
             loading.value = false
         }
@@ -83,20 +100,28 @@ export function useEventos() {
     const atualizarEvento = async (id, dados) => {
         loading.value = true
         error.value = null
-        
+
         try {
-            const eventoAtualizado = await adminApi.eventos.update(id, dados)
+            const { data, error: supabaseError } = await supabase
+                .from('eventos')
+                .update(dados)
+                .eq('id', id)
+                .select()
+                .single()
+
+            if (supabaseError) throw supabaseError
+
             // Atualiza o cache local
             const index = eventos.value.findIndex(e => e.id === id)
             if (index !== -1) {
-                eventos.value[index] = eventoAtualizado
+                eventos.value[index] = data
             }
             // Atualiza o evento selecionado, se for o que estamos editando
             if (evento.value && evento.value.id === id) {
-                evento.value = eventoAtualizado
+                evento.value = data
             }
             error.value = null
-            return { success: true, data: eventoAtualizado }
+            return { success: true, data }
         } catch (err) {
             error.value = err.message
             console.error('❌ Erro ao atualizar evento:', err)
@@ -110,9 +135,15 @@ export function useEventos() {
     const excluirEvento = async (id) => {
         loading.value = true
         error.value = null
-        
+
         try {
-            await adminApi.eventos.delete(id)
+            const { error: supabaseError } = await supabase
+                .from('eventos')
+                .delete()
+                .eq('id', id)
+
+            if (supabaseError) throw supabaseError
+
             // Remove do cache local
             eventos.value = eventos.value.filter(e => e.id !== id)
             // Limpa o evento selecionado, se for o que excluímos
@@ -129,7 +160,7 @@ export function useEventos() {
             loading.value = false
         }
     }
-    
+
     // Função utilitária para limpar o estado de erro
     const limparErro = () => {
         error.value = null

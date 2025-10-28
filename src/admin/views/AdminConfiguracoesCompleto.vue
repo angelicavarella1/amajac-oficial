@@ -1,11 +1,11 @@
-﻿<template>
+<template>
   <div class="space-y-6">
     <!-- Estados -->
     <div v-if="loading && !saving" class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
       <div class="flex items-center justify-center">
         <svg class="animate-spin h-5 w-5 text-blue-600 mr-3" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
         </svg>
         <span class="text-blue-800 dark:text-blue-200">Carregando configurações do banco...</span>
       </div>
@@ -13,7 +13,7 @@
 
     <div v-if="error" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
       <div class="flex items-center">
-        <i class="fas fa-exclamation-triangle text-red-600 mr-3"></i>
+        <i class="fas fa-exclamation-triangle text-red-600 mr-3"/>
         <span class="text-red-800 dark:text-red-200">{{ error }}</span>
       </div>
     </div>
@@ -21,7 +21,7 @@
     <!-- Debug Info -->
     <div v-if="debugInfo" class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
       <div class="flex items-center">
-        <i class="fas fa-bug text-yellow-600 mr-3"></i>
+        <i class="fas fa-bug text-yellow-600 mr-3"/>
         <div>
           <p class="text-yellow-800 dark:text-yellow-200 font-medium">Debug Info</p>
           <p class="text-yellow-700 dark:text-yellow-300 text-sm">{{ debugInfo }}</p>
@@ -45,7 +45,7 @@
           :disabled="loading || saving"
           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <i class="fas fa-bug mr-2"></i>
+          <i class="fas fa-bug mr-2"/>
           Testar Conexão
         </button>
         <button 
@@ -53,7 +53,7 @@
           :disabled="loading || saving || !hasChanges"
           class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white px-4 py-2 rounded-lg transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <i class="fas fa-undo mr-2"></i>
+          <i class="fas fa-undo mr-2"/>
           Descartar
         </button>
         <button 
@@ -62,11 +62,11 @@
           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span v-if="saving">
-            <i class="fas fa-spinner fa-spin mr-2"></i>
+            <i class="fas fa-spinner fa-spin mr-2"/>
             Salvando...
           </span>
           <span v-else>
-            <i class="fas fa-save mr-2"></i>
+            <i class="fas fa-save mr-2"/>
             Salvar Alterações
           </span>
         </button>
@@ -89,7 +89,7 @@
                 : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
             ]"
           >
-            <i :class="[tab.icon, 'mr-3 flex-shrink-0 h-5 w-5']"></i>
+            <i :class="[tab.icon, 'mr-3 flex-shrink-0 h-5 w-5']"/>
             {{ tab.name }}
           </button>
         </nav>
@@ -111,7 +111,7 @@
                   v-model="settings.site.nome"
                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                   placeholder="PORTAL DO MORADOR"
-                >
+                />
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave no banco: site_nome</p>
               </div>
 
@@ -124,7 +124,7 @@
                   rows="3"
                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
                   placeholder="Associação de Moradores e Amigos do Jardim Atlântico Central"
-                ></textarea>
+                />
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave no banco: site_descricao</p>
               </div>
 
@@ -137,7 +137,7 @@
                   v-model="settings.site.keywords"
                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                   placeholder="AMAJAC, associação de moradores, Jardim Atlântico Central"
-                >
+                />
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave no banco: site_keywords</p>
               </div>
             </div>
@@ -158,7 +158,7 @@
                     type="email"
                     v-model="settings.contato.email"
                     class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-                  >
+                  />
                   <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave: email_contato</p>
                 </div>
 
@@ -170,7 +170,7 @@
                     type="tel"
                     v-model="settings.contato.telefone"
                     class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-                  >
+                  />
                   <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave: telefone_contato</p>
                 </div>
               </div>
@@ -183,7 +183,7 @@
                   v-model="settings.contato.endereco"
                   rows="2"
                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
-                ></textarea>
+                />
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave: endereco</p>
               </div>
 
@@ -196,7 +196,7 @@
                     type="text"
                     v-model="settings.contato.whatsapp"
                     class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-                  >
+                  />
                   <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave: contato_whatsapp</p>
                 </div>
 
@@ -208,7 +208,7 @@
                     type="text"
                     v-model="settings.contato.instagram"
                     class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-                  >
+                  />
                   <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave: contato_instagram</p>
                 </div>
               </div>
@@ -221,7 +221,7 @@
                   type="text"
                   v-model="settings.contato.horario_funcionamento"
                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-                >
+                />
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave: contato_horario_funcionamento</p>
               </div>
             </div>
@@ -241,7 +241,7 @@
                   type="text"
                   v-model="settings.hero.titulo"
                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-                >
+                />
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave: hero_titulo</p>
               </div>
 
@@ -253,7 +253,7 @@
                   type="text"
                   v-model="settings.hero.subtitulo"
                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-                >
+                />
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave: hero_subtitulo</p>
               </div>
 
@@ -265,7 +265,7 @@
                   type="text"
                   v-model="settings.hero.local"
                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-                >
+                />
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave: hero_local</p>
               </div>
 
@@ -277,7 +277,7 @@
                   v-model="settings.hero.descricao"
                   rows="3"
                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
-                ></textarea>
+                />
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave: hero_descricao</p>
               </div>
             </div>
@@ -297,7 +297,7 @@
                   type="text"
                   v-model="settings.about.titulo"
                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-                >
+                />
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave: quem_somos_titulo</p>
               </div>
 
@@ -309,7 +309,7 @@
                   v-model="settings.about.historia"
                   rows="4"
                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
-                ></textarea>
+                />
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave: quem_somos_historia</p>
               </div>
 
@@ -321,7 +321,7 @@
                   v-model="settings.about.missao"
                   rows="3"
                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
-                ></textarea>
+                />
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chave: quem_somos_missao</p>
               </div>
             </div>
@@ -397,7 +397,7 @@
     <!-- Estado vazio -->
     <div v-if="!loading && configuracoesDb.length === 0" class="text-center py-12">
       <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-8 max-w-md mx-auto">
-        <i class="fas fa-exclamation-triangle text-yellow-500 text-4xl mb-4"></i>
+        <i class="fas fa-exclamation-triangle text-yellow-500 text-4xl mb-4"/>
         <h3 class="text-lg font-semibold text-yellow-800 dark:text-yellow-200 mb-2">Nenhuma configuração carregada</h3>
         <p class="text-yellow-700 dark:text-yellow-300 mb-4">As configurações não foram carregadas do banco de dados.</p>
         <button 
@@ -413,7 +413,7 @@
 
 <script setup>
 import { ref, reactive, onMounted, watch } from 'vue'
-import { useConfiguracoes } from '@/composables/useConfiguracoes'
+import { useConfiguracoes } from '@/shared/composables/useConfiguracoes'
 
 // Use o composable em modo admin
 const { 

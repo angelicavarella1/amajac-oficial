@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="space-y-6">
     <!-- CABEÇALHO -->
     <div class="flex justify-between items-center">
@@ -10,14 +10,14 @@
         @click="$router.push('/admin/galeria')"
         class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white px-4 py-2 rounded-lg transition-colors flex items-center"
       >
-        <i class="fas fa-arrow-left mr-2"></i>
+        <i class="fas fa-arrow-left mr-2"/>
         Voltar
       </button>
     </div>
 
     <!-- ALERTAS -->
     <div v-if="statusMessage" :class="statusClass" class="p-4 rounded-lg flex items-center">
-      <i :class="statusIcon" class="mr-3"></i>
+      <i :class="statusIcon" class="mr-3"/>
       {{ statusMessage }}
     </div>
 
@@ -44,7 +44,7 @@
                   : 'border-gray-300 dark:border-gray-600 hover:border-green-500 hover:bg-gray-50 dark:hover:bg-gray-700'
             ]"
           >
-            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"/>
             
             <template v-if="!form.file">
               <p class="text-lg font-medium text-gray-900 dark:text-white mb-2">
@@ -52,7 +52,7 @@
               </p>
               <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">ou</p>
               <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-colors font-medium">
-                <i class="fas fa-search mr-2"></i>
+                <i class="fas fa-search mr-2"/>
                 Clique para selecionar
               </button>
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-4">
@@ -62,7 +62,7 @@
 
             <template v-else>
               <p class="text-green-600 dark:text-green-400 font-medium mb-2">
-                <i class="fas fa-check-circle mr-2"></i>
+                <i class="fas fa-check-circle mr-2"/>
                 Imagem selecionada!
               </p>
               <p class="text-sm text-gray-600 dark:text-gray-400">
@@ -76,7 +76,7 @@
               accept="image/*"
               class="hidden"
               @change="handleFileSelect"
-            >
+            />
           </div>
 
           <!-- PREVIEW -->
@@ -87,13 +87,13 @@
                 :src="form.url" 
                 :alt="form.titulo || 'Preview'" 
                 class="max-w-full max-h-96 object-contain mx-auto rounded"
-              >
+              />
               <button
                 @click="clearImage"
                 class="absolute top-3 right-3 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition-colors"
                 title="Remover imagem"
               >
-                <i class="fas fa-times"></i>
+                <i class="fas fa-times"/>
               </button>
             </div>
           </div>
@@ -117,9 +117,9 @@
                 placeholder="Ex: Evento de Inauguração 2024"
                 class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                 :class="{ 'border-red-500': !form.titulo && formSubmitted }"
-              >
+              />
               <div v-if="!form.titulo && formSubmitted" class="text-red-600 dark:text-red-400 text-sm mt-1">
-                <i class="fas fa-exclamation-circle mr-1"></i>
+                <i class="fas fa-exclamation-circle mr-1"/>
                 O título é obrigatório
               </div>
             </div>
@@ -134,7 +134,7 @@
                 rows="4"
                 placeholder="Descreva a imagem, contexto do evento, pessoas presentes..."
                 class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
-              ></textarea>
+              />
             </div>
 
             <!-- CATEGORIA -->
@@ -203,7 +203,7 @@
                 <div 
                   class="bg-blue-600 h-2 rounded-full transition-all duration-300"
                   :style="{ width: progress + '%' }"
-                ></div>
+                />
               </div>
             </div>
 
@@ -214,15 +214,15 @@
               class="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white py-4 px-6 rounded-lg transition-all duration-200 flex items-center justify-center font-semibold text-lg disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
             >
               <template v-if="salvando">
-                <i class="fas fa-spinner fa-spin mr-3"></i>
+                <i class="fas fa-spinner fa-spin mr-3"/>
                 Salvando no Banco...
               </template>
               <template v-else-if="uploading">
-                <i class="fas fa-cloud-upload-alt mr-3"></i>
+                <i class="fas fa-cloud-upload-alt mr-3"/>
                 Fazendo Upload ({{ progress }}%)
               </template>
               <template v-else>
-                <i class="fas fa-save mr-3"></i>
+                <i class="fas fa-save mr-3"/>
                 SALVAR IMAGEM
               </template>
             </button>
@@ -233,7 +233,7 @@
               disabled
               class="w-full bg-gray-400 text-gray-200 py-3 px-4 rounded-lg cursor-not-allowed flex items-center justify-center font-medium"
             >
-              <i class="fas fa-lock mr-2"></i>
+              <i class="fas fa-lock mr-2"/>
               Preencha os campos obrigatórios
             </button>
             
@@ -241,7 +241,7 @@
               @click="$router.push('/admin/galeria')"
               class="w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
             >
-              <i class="fas fa-times mr-2"></i>
+              <i class="fas fa-times mr-2"/>
               Cancelar
             </button>
 
@@ -264,7 +264,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUIStore } from '@/stores/ui'
+import { useUIStore } from '@/shared/stores/ui' // ← CORRIGIDO: removida a barra invertida
 import { useGaleria } from '@/admin/composables/useGaleria'
 import { useImageUpload } from '@/admin/composables/useImageUpload'
 import { supabase } from '@/supabase' // ✅ IMPORT CRÍTICA ADICIONADA

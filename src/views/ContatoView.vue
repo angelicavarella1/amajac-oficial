@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="min-h-screen bg-gray-50 py-12">
     <div class="container mx-auto px-4">
       <div class="max-w-6xl mx-auto">
@@ -119,7 +119,7 @@
                       required
                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       placeholder="Seu nome completo"
-                    >
+                    />
                   </div>
 
                   <!-- Email -->
@@ -134,7 +134,7 @@
                       required
                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       placeholder="seu@email.com"
-                    >
+                    />
                   </div>
                 </div>
 
@@ -150,7 +150,7 @@
                       type="tel"
                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       placeholder="(11) 99999-9999"
-                    >
+                    />
                   </div>
 
                   <!-- Assunto -->
@@ -186,7 +186,7 @@
                     rows="6"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder="Escreva sua mensagem aqui..."
-                  ></textarea>
+                  />
                 </div>
 
                 <!-- Botão Submit -->
@@ -197,8 +197,8 @@
                 >
                   <span v-if="loading" class="flex items-center justify-center">
                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
                     </svg>
                     Enviando...
                   </span>
@@ -315,6 +315,5 @@ export default {
 <style scoped>
 input:focus, textarea:focus, select:focus {
   outline: none;
-  ring: 2px;
 }
 </style>

@@ -1,4 +1,3 @@
-﻿=== C:\Users\angel\Documents\Projetos\amajac-oficial\src\views\EventosView.vue ===
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 transition-colors duration-300">
     <div class="container mx-auto px-4">
@@ -13,7 +12,7 @@
 
       <div v-if="loading" class="flex justify-center items-center py-12">
         <div class="text-center">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 dark:border-green-500 mx-auto mb-4"></div>
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 dark:border-green-500 mx-auto mb-4"/>
           <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">Carregando eventos...</p>
         </div>
       </div>
@@ -183,9 +182,9 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
-import { useEventosStore } from '@/stores/eventos';
+import { useEventosStore } from '@/modules/eventos/stores/eventos';
 import { storeToRefs } from 'pinia';
-import { useSafeImage } from '@/composables/useSafeImage';
+import { useSafeImage } from '@/shared/composables/useSafeImage';
 
 const eventosStore = useEventosStore();
 // Desestruturação das referências do Pinia
@@ -214,7 +213,6 @@ watch(eventos, (newEvents) => {
     eventosProcessados.value = [];
   }
 }, { immediate: true });
-
 
 const eventosFiltrados = computed(() => {
   // Usa a lista processada como fonte

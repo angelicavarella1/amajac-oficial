@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="space-y-6">
     <!-- Header -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -15,7 +15,7 @@
           to="/admin/parceiros"
           class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
-          <i class="fas fa-arrow-left mr-2"></i>
+          <i class="fas fa-arrow-left mr-2"/>
           Voltar
         </RouterLink>
       </div>
@@ -39,9 +39,9 @@
                   v-model="form.nome"
                   type="text"
                   required
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-primary-500 focus:border-primary-500"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                   placeholder="Ex: Padaria Sabor Local"
-                >
+                />
               </div>
 
               <div class="grid grid-cols-2 gap-4">
@@ -51,7 +51,7 @@
                   </label>
                   <select
                     v-model="form.tipo"
-                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                   >
                     <option value="">Selecione o tipo</option>
                     <option value="restaurante">Restaurante</option>
@@ -69,9 +69,9 @@
                   <input
                     v-model="form.ramo"
                     type="text"
-                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                     placeholder="Ex: Alimentação"
-                  >
+                  />
                 </div>
               </div>
 
@@ -80,12 +80,12 @@
                   Descrição Curta *
                 </label>
                 <textarea
-                  v-model="form.descrição_curta"
+                  v-model="form.descricao_curta"
                   required
                   rows="3"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-primary-500 focus:border-primary-500"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                   placeholder="Descreva brevemente o estabelecimento, promoções, serviços..."
-                ></textarea>
+                />
               </div>
             </div>
           </div>
@@ -102,9 +102,9 @@
                 <input
                   v-model="form.logo_url"
                   type="url"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                   placeholder="https://exemplo.com/logo.jpg"
-                >
+                />
               </div>
 
               <div>
@@ -114,9 +114,9 @@
                 <input
                   v-model="form.imagem_alt"
                   type="text"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                   placeholder="Descrição da imagem para acessibilidade"
-                >
+                />
               </div>
 
               <!-- Preview do Logo -->
@@ -129,7 +129,8 @@
                     :src="form.logo_url" 
                     :alt="form.imagem_alt || 'Preview do logo'"
                     class="max-w-full max-h-full object-contain"
-                  >
+                    @error="handleImageError"
+                  />
                 </div>
               </div>
             </div>
@@ -144,8 +145,8 @@
                 <input
                   v-model="form.ativo"
                   type="checkbox"
-                  class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                >
+                  class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 dark:border-gray-600 rounded dark:bg-gray-700"
+                />
                 <label class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
                   Parceiro ativo
                 </label>
@@ -157,7 +158,7 @@
                 </label>
                 <select
                   v-model="form.status"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                 >
                   <option value="ativo">Ativo</option>
                   <option value="inativo">Inativo</option>
@@ -173,8 +174,8 @@
                 <input
                   v-model="form.data_inicio"
                   type="date"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                >
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
+                />
               </div>
             </div>
           </div>
@@ -194,9 +195,9 @@
                 <textarea
                   v-model="form.endereco"
                   rows="3"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                   placeholder="Endereço completo do estabelecimento"
-                ></textarea>
+                />
               </div>
 
               <div class="grid grid-cols-2 gap-4">
@@ -207,9 +208,9 @@
                   <input
                     v-model="form.telefone"
                     type="tel"
-                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                     placeholder="(11) 99999-9999"
-                  >
+                  />
                 </div>
 
                 <div>
@@ -219,9 +220,9 @@
                   <input
                     v-model="form.cnpj"
                     type="text"
-                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                     placeholder="00.000.000/0000-00"
-                  >
+                  />
                 </div>
               </div>
 
@@ -232,9 +233,9 @@
                 <input
                   v-model="form.email_contato"
                   type="email"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                   placeholder="contato@empresa.com"
-                >
+                />
               </div>
             </div>
           </div>
@@ -251,9 +252,9 @@
                 <input
                   v-model="form.link_site"
                   type="url"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                   placeholder="https://empresa.com"
-                >
+                />
               </div>
 
               <div>
@@ -261,11 +262,11 @@
                   Facebook
                 </label>
                 <input
-                  v-model="form.Facebook"
+                  v-model="form.facebook"
                   type="url"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                   placeholder="https://facebook.com/empresa"
-                >
+                />
               </div>
 
               <div>
@@ -273,11 +274,11 @@
                   Instagram
                 </label>
                 <input
-                  v-model="form.Instagram"
+                  v-model="form.instagram"
                   type="url"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                   placeholder="https://instagram.com/empresa"
-                >
+                />
               </div>
             </div>
           </div>
@@ -294,10 +295,10 @@
                 <input
                   v-model="etiquetasInput"
                   type="text"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-green-500 focus:border-green-500"
                   placeholder="delivery, promoção, local, qualidade"
                   @blur="processarEtiquetas"
-                >
+                />
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                   Ex: delivery, promoção, local, qualidade
                 </p>
@@ -308,15 +309,15 @@
                 <span
                   v-for="(etiqueta, index) in form.etiquetas"
                   :key="index"
-                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200"
+                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                 >
                   {{ etiqueta }}
                   <button
                     type="button"
                     @click="removerEtiqueta(index)"
-                    class="ml-1 text-primary-600 hover:text-primary-800"
+                    class="ml-1 text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-200"
                   >
-                    <i class="fas fa-times"></i>
+                    <i class="fas fa-times text-xs"/>
                   </button>
                 </span>
               </div>
@@ -329,21 +330,21 @@
       <div class="flex justify-end space-x-4 pt-6 mt-6 border-t border-gray-200 dark:border-gray-700">
         <RouterLink
           to="/admin/parceiros"
-          class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          class="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
         >
           Cancelar
         </RouterLink>
         <button
           type="submit"
           :disabled="salvando"
-          class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
         >
           <span v-if="salvando">
-            <i class="fas fa-spinner fa-spin mr-2"></i>
+            <i class="fas fa-spinner fa-spin mr-2"/>
             Salvando...
           </span>
           <span v-else>
-            <i class="fas fa-save mr-2"></i>
+            <i class="fas fa-save mr-2"/>
             {{ editando ? 'Atualizar' : 'Salvar' }} Parceiro
           </span>
         </button>
@@ -355,13 +356,22 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useColaboradoresStore } from '@/stores/colaboradores'
-import { useUIStore } from '@/stores/ui'
+import { useColaboradores } from '@/admin/composables/useColaboradores'
+import { useUIStore } from '@/shared/stores/ui'
 
 const route = useRoute()
 const router = useRouter()
-const colaboradoresStore = useColaboradoresStore()
 const uiStore = useUIStore()
+
+// ✅ CORREÇÃO: Usar o composable useColaboradores (admin = true)
+const { 
+  colaborador, 
+  loading, 
+  error, 
+  criarColaborador, 
+  atualizarColaborador, 
+  carregarColaboradorPorId 
+} = useColaboradores(true)
 
 const salvando = ref(false)
 const etiquetasInput = ref('')
@@ -379,10 +389,10 @@ const form = ref({
   ramo: '',
   data_inicio: '',
   status: 'ativo',
-  descrição_curta: '',
+  descricao_curta: '',
   link_site: '',
-  Facebook: '',
-  Instagram: '',
+  facebook: '',
+  instagram: '',
   etiquetas: []
 })
 
@@ -404,6 +414,12 @@ const removerEtiqueta = (index) => {
   etiquetasInput.value = form.value.etiquetas.join(', ')
 }
 
+// Handle image error
+const handleImageError = (event) => {
+  event.target.src = '/images/logo-amajac.png'
+  event.target.onerror = null
+}
+
 // Carregar dados se for edição
 onMounted(async () => {
   if (editando.value) {
@@ -413,14 +429,15 @@ onMounted(async () => {
 
 async function carregarParceiro() {
   try {
-    const parceiro = await colaboradoresStore.carregarColaboradorPorId(route.params.id)
-    if (parceiro) {
-      form.value = { ...parceiro }
-      if (parceiro.etiquetas) {
-        etiquetasInput.value = parceiro.etiquetas.join(', ')
+    await carregarColaboradorPorId(route.params.id)
+    if (colaborador.value) {
+      form.value = { ...colaborador.value }
+      if (colaborador.value.etiquetas) {
+        etiquetasInput.value = colaborador.value.etiquetas.join(', ')
       }
     }
   } catch (error) {
+    console.error('❌ Erro ao carregar parceiro:', error)
     uiStore.showToast('Erro ao carregar parceiro', 'error')
     router.push('/admin/parceiros')
   }
@@ -433,15 +450,18 @@ async function salvarParceiro() {
     processarEtiquetas() // Garante que as etiquetas são processadas
     
     if (editando.value) {
-      await colaboradoresStore.salvarColaborador(form.value, route.params.id)
+      // ✅ CORREÇÃO: Usar atualizarColaborador do composable
+      await atualizarColaborador(route.params.id, form.value)
       uiStore.showToast('Parceiro atualizado com sucesso!', 'success')
     } else {
-      await colaboradoresStore.salvarColaborador(form.value)
+      // ✅ CORREÇÃO: Usar criarColaborador do composable
+      await criarColaborador(form.value)
       uiStore.showToast('Parceiro criado com sucesso!', 'success')
     }
     
     router.push('/admin/parceiros')
   } catch (error) {
+    console.error('❌ Erro ao salvar parceiro:', error)
     uiStore.showToast('Erro ao salvar parceiro: ' + error.message, 'error')
   } finally {
     salvando.value = false

@@ -1,6 +1,17 @@
-﻿import { supabase } from '../client'
+import { supabase } from '../client'
 
-// 📰 NOTÍCIAS
+// CONFIGURACOES
+export const fetchConfiguracoesPublicas = async () => {
+  const { data, error } = await supabase
+    .from('configuracoes')
+    .select('*')
+    .eq('publico', true) // Certifique-se de que a coluna 'publico' existe ou remova este filtro se não for necessário
+
+  if (error) throw error
+  return data || []
+}
+
+// NOTICIAS
 export const fetchNoticiasPublicas = async (limit = 10, page = 1) => {
   const from = (page - 1) * limit
   const to = from + limit - 1
@@ -28,14 +39,14 @@ export const fetchNoticiaPublicaPorId = async (id) => {
   return data
 }
 
-// 📅 EVENTOS
+// EVENTOS
 export const fetchEventosPublicos = async (limit = 10) => {
   const { data, error } = await supabase
     .from('eventos')
     .select('*')
     .eq('ativo', true)
     // Se 'data_fim' não existe na sua tabela, mude para 'data_hora_evento'
-    .gte('data_fim', new Date().toISOString().split('T')[0]) 
+    .gte('data_fim', new Date().toISOString().split('T')[0])
     .order('data_inicio', { ascending: true })
     .limit(limit)
 
@@ -67,7 +78,7 @@ export const fetchEventosFuturos = async () => {
   return data || []
 }
 
-// 👥 COLABORADORES
+// COLABORADORES
 export const fetchColaboradoresPublicos = async () => {
   const { data, error } = await supabase
     .from('colaboradores')
@@ -91,12 +102,12 @@ export const fetchColaboradorPublicoPorId = async (id) => {
   return data
 }
 
-// 🖼️ GALERIA
+// GALERIA
 export const fetchGaleriaPublica = async () => {
   const { data, error } = await supabase
     .from('galeria')
     .select('*')
-    .eq('ativo', true)
+    .eq('ativo', true) // Certifique-se de que a coluna 'ativo' existe na tabela galeria
     .order('created_at', { ascending: false })
 
   if (error) throw error
@@ -115,7 +126,7 @@ export const fetchImagemPublicaPorId = async (id) => {
   return data
 }
 
-// 🏷️ CLASSIFICADOS
+// CLASSIFICADOS
 export const fetchClassificadosPublicos = async (limit = 20) => {
   const { data, error } = await supabase
     .from('classificados')
@@ -142,21 +153,7 @@ export const fetchClassificadoPublicoPorId = async (id) => {
   return data
 }
 
-// ⚠️ Linha removida para evitar redundância e conflito com publicApi.classificados
-// export const publicClassificados = fetchClassificadosPublicos 
-
-// ⚙️ CONFIGURAÇÕES
-export const fetchConfiguracoesPublicas = async () => {
-  const { data, error } = await supabase
-    .from('configuracoes')
-    .select('*')
-    .eq('publico', true)
-
-  if (error) throw error
-  return data || []
-}
-
-// ✉️ MENSAGENS DE CONTATO (INSERT apenas)
+// MENSAGENS DE CONTATO (INSERT apenas)
 export const enviarMensagemContato = async (mensagem) => {
   const { data, error } = await supabase
     .from('mensagens_contato')
@@ -166,7 +163,7 @@ export const enviarMensagemContato = async (mensagem) => {
       assunto: mensagem.assunto,
       mensagem: mensagem.mensagem,
       telefone: mensagem.telefone,
-      status: 'pendente',
+      status: 'pendente', // Certifique-se de que a coluna 'status' existe na tabela mensagens_contato
       lida: false
     }])
     .select()
@@ -176,7 +173,7 @@ export const enviarMensagemContato = async (mensagem) => {
   return data
 }
 
-// 👥 SOCIOS (INSERT apenas)
+// SOCIOS (INSERT apenas)
 export const enviarInscricaoSocio = async (dadosSocio) => {
   const { data, error } = await supabase
     .from('socios')
@@ -196,53 +193,36 @@ export const enviarInscricaoSocio = async (dadosSocio) => {
   return data
 }
 
-// -------------------------------------------------------------
-// 🔥 CORREÇÃO PRINCIPAL: DEFINIR E EXPORTAR publicApi
-// -------------------------------------------------------------
+// CORRECAO PRINCIPAL: DEFINIR E EXPORTAR publicApi
 export const publicApi = {
-  // 📰 Notícias
   noticias: {
     getAll: fetchNoticiasPublicas,
     getById: fetchNoticiaPublicaPorId,
   },
-
-  // 📅 Eventos
   eventos: {
     getAll: fetchEventosPublicos,
     getById: fetchEventoPublicoPorId,
     getFuturos: fetchEventosFuturos,
   },
-
-  // 👥 Colaboradores
   colaboradores: {
     getAll: fetchColaboradoresPublicos,
     getById: fetchColaboradorPublicoPorId,
   },
-
-  // 🖼️ Galeria
   galeria: {
     getAll: fetchGaleriaPublica,
     getById: fetchImagemPublicaPorId,
   },
-
-  // 🏷️ Classificados
   classificados: {
     getAll: fetchClassificadosPublicos,
     getById: fetchClassificadoPublicoPorId,
   },
-
-  // ⚙️ Configurações
   configuracoes: {
     getAll: fetchConfiguracoesPublicas,
   },
-
-  // ✉️ Mensagens de Contato
   mensagens: {
-    send: enviarMensagemContato, // Mapeado para 'send' ou 'enviarMensagemContato' (melhor usar 'send' para manter o padrão CRUD)
+    send: enviarMensagemContato,
   },
-
-  // 👥 Sócios
   socios: {
-    register: enviarInscricaoSocio, // Mapeado para 'register'
+    register: enviarInscricaoSocio,
   },
 }

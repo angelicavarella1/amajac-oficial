@@ -12,7 +12,7 @@
       <!-- Loading State -->
       <div v-if="loading" class="flex justify-center items-center py-12">
         <div class="text-center">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"/>
           <p class="text-gray-600">Carregando classificados...</p>
         </div>
       </div>
@@ -142,7 +142,7 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue';
-import { useClassificadosStore } from '@/stores/classificados';
+import { useClassificadosStore } from '@/modules/classificados/stores/classificados';
 import { storeToRefs } from 'pinia';
 
 export default {

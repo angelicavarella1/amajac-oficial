@@ -1,6 +1,7 @@
-﻿import { ref, computed } from 'vue'
-import { publicApi, adminApi } from '@/supabase'
-import { useUIStore } from '@/stores/ui'
+// src/admin/composables/useClassificados.js - VERSÃO CORRIGIDA E OTIMIZADA (Codificação e Sintaxe)
+import { ref, computed } from 'vue'
+import { supabase } from '@/supabase/client.js' // Importar o cliente Supabase diretamente
+import { useUIStore } from '@/shared/stores/ui'
 
 export function useClassificados(admin = false) {
   const classificados = ref([])
@@ -13,30 +14,37 @@ export function useClassificados(admin = false) {
   const cacheTimestamp = ref(null)
   const CACHE_DURATION = admin ? 1 * 60 * 1000 : 3 * 60 * 1000 // Classificados mudam rápido
 
-  // 🏷️ CARREGAR CLASSIFICADOS (Renomeado para fetchClassificados)
+  // 🏠 CARREGAR CLASSIFICADOS (Renomeado para fetchClassificados)
   const fetchClassificados = async (forceRefresh = false) => {
+    // Retorna o cache se não for forçado e ainda estiver dentro da validade
     if (!forceRefresh && cacheTimestamp.value && (Date.now() - cacheTimestamp.value < CACHE_DURATION)) {
-      return classificados.value // Retorna o array em cache
+      return classificados.value
     }
 
     loading.value = true
     error.value = null
 
     try {
-      let data
-      
-      if (admin) {
-        // CORREÇÃO 1: adminApi.classificados.getAll()
-        data = await adminApi.classificados.getAll()
-      } else {
-        // CORREÇÃO 2: publicApi.classificados.getAll()
-        data = await publicApi.classificados.getAll()
-      }
+      console.log(`🚀 Carregando classificados (${admin ? 'admin' : 'público'})...`)
 
-      classificados.value = data
+      let query = supabase.from('classificados').select('*')
+
+      if (!admin) {
+        // Se não for admin, filtra por ativos e aprovados
+        query = query.eq('ativo', true).eq('aprovado', true)
+      }
+      // Se for admin, busca todos (ativos/inativos, aprovados/pendentes)
+
+      query = query.order('created_at', { ascending: false }) // Ordena por data
+
+      const { data, error: supabaseError } = await query
+
+      if (supabaseError) throw supabaseError
+
+      classificados.value = data || []
       cacheTimestamp.value = Date.now()
-      
-      console.log(`✅ ${data.length} classificados carregados (${admin ? 'admin' : 'público'})`)
+
+      console.log(`✅ ${data?.length || 0} classificados carregados (${admin ? 'admin' : 'público'})`)
       return data // 🎯 Retorna os dados para quem chamou
     } catch (err) {
       console.error('❌ Erro ao carregar classificados:', err)
@@ -48,20 +56,24 @@ export function useClassificados(admin = false) {
     }
   }
 
-  // 🏷️ CARREGAR CLASSIFICADO POR ID
+  // 🏠 CARREGAR CLASSIFICADO POR ID
   const carregarClassificadoPorId = async (id) => {
     loading.value = true
     error.value = null
 
     try {
-      if (admin) {
-        // Usa a nova função de busca: fetchClassificados
-        await fetchClassificados() 
-        classificado.value = classificados.value.find(c => c.id === id)
-      } else {
-        // CORREÇÃO 3: publicApi.classificados.getById(id)
-        classificado.value = await publicApi.classificados.getById(id)
+      let query = supabase.from('classificados').select('*').eq('id', id).single()
+
+      if (!admin) {
+        // Se não for admin, verifica se está ativo e aprovado
+        query = query.eq('ativo', true).eq('aprovado', true)
       }
+
+      const { data, error: supabaseError } = await query
+
+      if (supabaseError) throw supabaseError
+
+      classificado.value = data
 
       if (!classificado.value) {
         throw new Error('Classificado não encontrado')
@@ -75,21 +87,29 @@ export function useClassificados(admin = false) {
     }
   }
 
-  // 🏷️ CRIAR CLASSIFICADO (Público pode criar) - Refatorado para usar publicApi
+  // 🏠 CRIAR CLASSIFICADO (Público pode criar)
   const criarClassificado = async (dadosClassificado) => {
     loading.value = true
     error.value = null
 
     try {
-      // CORREÇÃO 4: publicApi.classificados.create(dadosClassificado)
-      // Assumindo que você mapeou publicApi.classificados.create para a função de insert.
-      const data = await publicApi.classificados.create(dadosClassificado);
-      
-      // Se estiver no admin, adiciona à lista para reatividade
-      if (admin) {
-        classificados.value.unshift(data)
+      console.log('💾 Salvando novo classificado...', dadosClassificado)
+
+      // O novo classificado deve começar com aprovado = false
+      const dadosParaInserir = {
+        ...dadosClassificado,
+        aprovado: false, // Novos classificados pendem aprovação
+        data_aprovacao: null // Será preenchido quando aprovado
       }
-      
+
+      const { data, error: supabaseError } = await supabase
+        .from('classificados')
+        .insert([dadosParaInserir])
+        .select()
+        .single()
+
+      if (supabaseError) throw supabaseError
+
       uiStore.showToast('Classificado enviado para aprovação!')
       return data
     } catch (err) {
@@ -102,24 +122,38 @@ export function useClassificados(admin = false) {
     }
   }
 
-  // 🏷️ APROVAR CLASSIFICADO (Admin)
+  // 🏠 APROVAR CLASSIFICADO (Admin)
   const aprovarClassificado = async (id) => {
+    if (!admin) {
+      error.value = 'Acesso não autorizado'
+      uiStore.showToast('Acesso não autorizado', 'error')
+      throw new Error('Acesso não autorizado')
+    }
+
     loading.value = true
     error.value = null
 
     try {
-      if (!admin) throw new Error('Acesso não autorizado')
+      console.log(`🔍 Aprovando classificado ID: ${id}`)
 
-      // CORREÇÃO 5: adminApi.classificados.approve(id)
-      const classificadoAprovado = await adminApi.classificados.approve(id)
-      
+      const { data, error: supabaseError } = await supabase
+        .from('classificados')
+        .update({ aprovado: true, data_aprovacao: new Date().toISOString() }) // Define como aprovado e registra a data
+        .eq('id', id)
+        .select() // Retorna o registro atualizado
+        .single()
+
+      if (supabaseError) throw supabaseError
+
+      // Atualiza a lista local
       const index = classificados.value.findIndex(c => c.id === id)
       if (index !== -1) {
-        classificados.value[index] = { ...classificados.value[index], ...classificadoAprovado }
+        // Usar spread operator para garantir reatividade total (embora o Vue 3 seja inteligente)
+        classificados.value[index] = { ...classificados.value[index], ...data }
       }
 
       uiStore.showToast('Classificado aprovado com sucesso!')
-      return classificadoAprovado
+      return data
     } catch (err) {
       console.error('❌ Erro ao aprovar classificado:', err)
       error.value = err.message
@@ -130,24 +164,38 @@ export function useClassificados(admin = false) {
     }
   }
 
-  // 🏷️ REJEITAR CLASSIFICADO (Admin)
+  // 🏠 REJEITAR CLASSIFICADO (Admin)
   const rejeitarClassificado = async (id) => {
+    if (!admin) {
+      error.value = 'Acesso não autorizado'
+      uiStore.showToast('Acesso não autorizado', 'error')
+      throw new Error('Acesso não autorizado')
+    }
+
     loading.value = true
     error.value = null
 
     try {
-      if (!admin) throw new Error('Acesso não autorizado')
+      console.log(`🔍 Rejeitando classificado ID: ${id}`)
 
-      // CORREÇÃO 6: adminApi.classificados.reject(id)
-      const classificadoRejeitado = await adminApi.classificados.reject(id)
-      
+      // Opção: Marcar como inativo e não aprovado, mantendo o histórico.
+      const { data, error: supabaseError } = await supabase
+        .from('classificados')
+        .update({ ativo: false, aprovado: false }) // Marca como inativo e rejeitado
+        .eq('id', id)
+        .select() // Retorna o registro atualizado
+        .single()
+
+      if (supabaseError) throw supabaseError
+
+      // Atualiza a lista local
       const index = classificados.value.findIndex(c => c.id === id)
       if (index !== -1) {
-        classificados.value[index] = { ...classificados.value[index], ...classificadoRejeitado }
+        classificados.value[index] = { ...classificados.value[index], ...data }
       }
 
       uiStore.showToast('Classificado rejeitado')
-      return classificadoRejeitado
+      return data
     } catch (err) {
       console.error('❌ Erro ao rejeitar classificado:', err)
       error.value = err.message
@@ -158,18 +206,30 @@ export function useClassificados(admin = false) {
     }
   }
 
-  // 🏷️ DELETAR CLASSIFICADO (Admin)
+  // 🏠 DELETAR CLASSIFICADO (Admin)
   const deletarClassificado = async (id) => {
+    if (!admin) {
+      error.value = 'Acesso não autorizado'
+      uiStore.showToast('Acesso não autorizado', 'error')
+      throw new Error('Acesso não autorizado')
+    }
+
     loading.value = true
     error.value = null
 
     try {
-      if (!admin) throw new Error('Acesso não autorizado')
+      console.log(`🗑️ Deletando classificado ID: ${id}`)
 
-      // CORREÇÃO 7: adminApi.classificados.delete(id)
-      await adminApi.classificados.delete(id)
+      const { error: supabaseError } = await supabase
+        .from('classificados')
+        .delete()
+        .eq('id', id)
+
+      if (supabaseError) throw supabaseError
+
+      // Remove da lista local
       classificados.value = classificados.value.filter(c => c.id !== id)
-      
+
       uiStore.showToast('Classificado excluído com sucesso!')
     } catch (err) {
       console.error('❌ Erro ao excluir classificado:', err)
@@ -181,7 +241,7 @@ export function useClassificados(admin = false) {
     }
   }
 
-  // 🏷️ FORMATAR DATA
+  // 🏠 FORMATAR DATA
   const formatarData = (dataString) => {
     if (!dataString) return 'Data não informada'
     try {
@@ -198,29 +258,31 @@ export function useClassificados(admin = false) {
     }
   }
 
-  // 🏷️ FORMATAR PREÇO
+  // 🏠 FORMATAR PREÇO
   const formatarPreco = (preco) => {
-    if (!preco) return 'Grátis'
+    if (preco === undefined || preco === null) return 'Grátis'
+    // Garantir que é um número, assumindo 0 se a conversão falhar
+    const valorNumerico = parseFloat(preco) || 0
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL'
-    }).format(preco)
+    }).format(valorNumerico)
   }
 
-  // 🏷️ COMPUTED - Classificados aprovados e ativos
+  // 🏠 COMPUTED - Classificados aprovados e ativos
   const classificadosAtivos = computed(() => {
     return classificados.value.filter(classificado => classificado.ativo && classificado.aprovado)
   })
 
-  // 🏷️ COMPUTED - Classificados pendentes (Admin)
+  // 🏠 COMPUTED - Classificados pendentes (Admin)
   const classificadosPendentes = computed(() => {
     return classificados.value.filter(classificado => classificado.ativo && !classificado.aprovado)
   })
 
-  // 🏷️ COMPUTED - Classificados por categoria
+  // 🏠 COMPUTED - Classificados por categoria
   const classificadosPorCategoria = computed(() => {
     const categorias = {}
-    
+
     classificadosAtivos.value.forEach(classificado => {
       const categoria = classificado.categoria || 'Geral'
       if (!categorias[categoria]) {
@@ -228,11 +290,11 @@ export function useClassificados(admin = false) {
       }
       categorias[categoria].push(classificado)
     })
-    
+
     return categorias
   })
 
-  // 🏷️ COMPUTED - Categorias disponíveis
+  // 🏠 COMPUTED - Categorias disponíveis
   const categoriasDisponiveis = computed(() => {
     const categorias = [...new Set(classificadosAtivos.value.map(c => c.categoria).filter(Boolean))]
     return categorias.sort()
@@ -244,15 +306,15 @@ export function useClassificados(admin = false) {
     classificado,
     loading,
     error,
-    
+
     // Computed
     classificadosAtivos,
     classificadosPendentes,
     classificadosPorCategoria,
     categoriasDisponiveis,
-    
+
     // Métodos
-    fetchClassificados, // 💡 RENOMEADO AQUI
+    fetchClassificados,
     carregarClassificadoPorId,
     criarClassificado,
     aprovarClassificado,

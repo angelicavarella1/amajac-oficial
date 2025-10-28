@@ -1,4 +1,4 @@
-﻿// update-vscode-settings.mjs
+// update-vscode-settings.mjs
 import fs from "fs";
 import path from "path";
 

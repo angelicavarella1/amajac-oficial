@@ -10,5 +10,6 @@
 </template>
 
 <script setup>
-import MonitorSupabase from '@/admin/components/MonitorSupabase.vue'
+// CORREÇÃO: Importação atualizada para o caminho correto
+import MonitorSupabase from '@/admin/modules/auth/MonitorSupabase.vue'
 </script>

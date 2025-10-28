@@ -1,6 +1,7 @@
-﻿import { ref, computed } from 'vue'
-import { publicApi, adminApi } from '@/supabase'
-import { useUIStore } from '@/stores/ui'
+﻿// src/admin/composables/useMensagens.js - VERSÃO CORRIGIDA
+import { ref, computed } from 'vue'
+import { supabase } from '@/supabase/client.js'
+import { useUIStore } from '@/shared/stores/ui'
 
 export function useMensagens(admin = false) {
   const mensagens = ref([])
@@ -9,39 +10,63 @@ export function useMensagens(admin = false) {
   const error = ref(null)
   const uiStore = useUIStore()
 
-  // ✉️ FETCH MENSAGENS (Admin apenas) - RENOMEADO PARA A CHAMADA NO DASHBOARD
+  // 📥 FETCH MENSAGENS (Admin apenas)
   const fetchMensagens = async () => {
+    if (!admin) {
+      error.value = 'Acesso não autorizado'
+      uiStore.showToast('Acesso não autorizado', 'error')
+      throw new Error('Acesso não autorizado')
+    }
+
     loading.value = true
     error.value = null
 
     try {
-      // CORREÇÃO: Usar adminApi.mensagens.getAll()
-      const data = await adminApi.mensagens.getAll()
-      mensagens.value = data
-      
-      console.log(`✅ ${data.length} mensagens carregadas`)
-      return data 
+      console.log('🔄 Carregando mensagens...')
+
+      const { data, error: supabaseError } = await supabase
+        .from('mensagens_contato')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (supabaseError) throw supabaseError
+
+      mensagens.value = data || []
+      console.log(`✅ ${data?.length || 0} mensagens carregadas`)
+      return data
     } catch (err) {
       console.error('❌ Erro ao carregar mensagens:', err)
       error.value = err.message
       uiStore.showToast('Erro ao carregar mensagens', 'error')
-      return [] 
+      return []
     } finally {
       loading.value = false
     }
   }
 
-  // ✉️ ENVIAR MENSAGEM (Público)
+  // 📤 ENVIAR MENSAGEM (Público)
   const enviarMensagem = async (dadosMensagem) => {
     loading.value = true
     error.value = null
 
     try {
-      // ✅ Esta chamada está correta se publicApi for um módulo separado
-      const mensagemEnviada = await publicApi.enviarMensagemContato(dadosMensagem)
-      
-      uiStore.showToast('Mensagem enviada com sucesso! Entraremos em contato em breve.')
-      return mensagemEnviada
+      console.log('📤 Enviando mensagem...', dadosMensagem)
+
+      const { data, error: supabaseError } = await supabase
+        .from('mensagens_contato')
+        .insert([{
+          ...dadosMensagem,
+          lida: false,
+          created_at: new Date().toISOString()
+        }])
+        .select()
+        .single()
+
+      if (supabaseError) throw supabaseError
+
+      uiStore.showToast('Mensagem enviada com sucesso! Entraremos em contato em breve.', 'success')
+      console.log('✅ Mensagem enviada com sucesso')
+      return data
     } catch (err) {
       console.error('❌ Erro ao enviar mensagem:', err)
       error.value = err.message
@@ -52,28 +77,41 @@ export function useMensagens(admin = false) {
     }
   }
 
-  // ✉️ MARCAR COMO LIDA (Admin)
+  // ✅ MARCAR COMO LIDA (Admin)
   const marcarComoLida = async (id) => {
     if (!admin) {
       error.value = 'Acesso não autorizado'
-      return
+      uiStore.showToast('Acesso não autorizado', 'error')
+      throw new Error('Acesso não autorizado')
     }
 
     loading.value = true
     error.value = null
 
     try {
-      // CORREÇÃO: Usar adminApi.mensagens.markAsRead(id)
-      const mensagemAtualizada = await adminApi.mensagens.markAsRead(id)
-      
+      console.log(`✅ Marcando mensagem ${id} como lida...`)
+
+      const { data, error: supabaseError } = await supabase
+        .from('mensagens_contato')
+        .update({ 
+          lida: true,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select()
+        .single()
+
+      if (supabaseError) throw supabaseError
+
+      // Atualiza a lista local
       const index = mensagens.value.findIndex(m => m.id === id)
       if (index !== -1) {
-        // Assume que a API retorna o objeto atualizado
-        mensagens.value[index] = mensagemAtualizada
+        mensagens.value[index] = data
       }
 
-      uiStore.showToast('Mensagem marcada como lida')
-      return mensagemAtualizada
+      uiStore.showToast('Mensagem marcada como lida', 'success')
+      console.log('✅ Mensagem marcada como lida')
+      return data
     } catch (err) {
       console.error('❌ Erro ao marcar mensagem como lida:', err)
       error.value = err.message
@@ -84,22 +122,33 @@ export function useMensagens(admin = false) {
     }
   }
 
-  // ✉️ DELETAR MENSAGEM (Admin)
+  // 🗑️ DELETAR MENSAGEM (Admin)
   const deletarMensagem = async (id) => {
     if (!admin) {
       error.value = 'Acesso não autorizado'
-      return
+      uiStore.showToast('Acesso não autorizado', 'error')
+      throw new Error('Acesso não autorizado')
     }
 
     loading.value = true
     error.value = null
 
     try {
-      // CORREÇÃO: Usar adminApi.mensagens.delete(id)
-      await adminApi.mensagens.delete(id)
+      console.log(`🗑️ Deletando mensagem ${id}...`)
+
+      const { error: supabaseError } = await supabase
+        .from('mensagens_contato')
+        .delete()
+        .eq('id', id)
+
+      if (supabaseError) throw supabaseError
+
+      // Remove da lista local
       mensagens.value = mensagens.value.filter(m => m.id !== id)
-      
-      uiStore.showToast('Mensagem excluída com sucesso!')
+
+      uiStore.showToast('Mensagem excluída com sucesso!', 'success')
+      console.log('✅ Mensagem excluída com sucesso')
+      return true
     } catch (err) {
       console.error('❌ Erro ao excluir mensagem:', err)
       error.value = err.message
@@ -110,14 +159,89 @@ export function useMensagens(admin = false) {
     }
   }
 
-  // ✉️ FORMATAR DATA
+  // 🔍 BUSCAR MENSAGEM POR ID
+  const buscarMensagemPorId = async (id) => {
+    if (!admin) {
+      error.value = 'Acesso não autorizado'
+      throw new Error('Acesso não autorizado')
+    }
+
+    loading.value = true
+    error.value = null
+
+    try {
+      console.log(`🔍 Buscando mensagem ${id}...`)
+
+      const { data, error: supabaseError } = await supabase
+        .from('mensagens_contato')
+        .select('*')
+        .eq('id', id)
+        .single()
+
+      if (supabaseError) throw supabaseError
+
+      mensagem.value = data
+      console.log('✅ Mensagem encontrada')
+      return data
+    } catch (err) {
+      console.error('❌ Erro ao buscar mensagem:', err)
+      error.value = err.message
+      uiStore.showToast('Mensagem não encontrada', 'error')
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // 📊 MARCAR TODAS COMO LIDAS
+  const marcarTodasComoLidas = async () => {
+    if (!admin) {
+      error.value = 'Acesso não autorizado'
+      uiStore.showToast('Acesso não autorizado', 'error')
+      throw new Error('Acesso não autorizado')
+    }
+
+    loading.value = true
+    error.value = null
+
+    try {
+      console.log('✅ Marcando todas as mensagens como lidas...')
+
+      const { error: supabaseError } = await supabase
+        .from('mensagens_contato')
+        .update({ 
+          lida: true,
+          updated_at: new Date().toISOString()
+        })
+        .eq('lida', false)
+
+      if (supabaseError) throw supabaseError
+
+      // Atualiza todas localmente
+      mensagens.value.forEach(msg => {
+        msg.lida = true
+      })
+
+      uiStore.showToast('Todas as mensagens foram marcadas como lidas', 'success')
+      console.log('✅ Todas as mensagens marcadas como lidas')
+      return true
+    } catch (err) {
+      console.error('❌ Erro ao marcar mensagens como lidas:', err)
+      error.value = err.message
+      uiStore.showToast('Erro ao processar mensagens', 'error')
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // 📅 FORMATAR DATA
   const formatarData = (dataString) => {
     if (!dataString) return 'Data não informada'
     try {
       const data = new Date(dataString)
       if (isNaN(data.getTime())) return 'Data inválida'
       return data.toLocaleDateString('pt-BR', {
-        timeZone: 'America/Sao_Paulo',
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
@@ -129,15 +253,15 @@ export function useMensagens(admin = false) {
     }
   }
 
-  // ✉️ COMPUTED - Mensagens não lidas
+  // 📊 COMPUTED - Mensagens não lidas
   const mensagensNaoLidas = computed(() => {
     return mensagens.value.filter(mensagem => !mensagem.lida)
   })
 
-  // ✉️ COMPUTED - Mensagens por status
+  // 📊 COMPUTED - Mensagens por status
   const mensagensPorStatus = computed(() => {
     const status = {}
-    
+
     mensagens.value.forEach(mensagem => {
       const statusMsg = mensagem.status || 'pendente'
       if (!status[statusMsg]) {
@@ -145,26 +269,42 @@ export function useMensagens(admin = false) {
       }
       status[statusMsg].push(mensagem)
     })
-    
+
     return status
+  })
+
+  // 📊 COMPUTED - Estatísticas
+  const estatisticas = computed(() => {
+    const total = mensagens.value.length
+    const lidas = mensagens.value.filter(m => m.lida).length
+    const naoLidas = total - lidas
+
+    return {
+      total,
+      lidas,
+      naoLidas
+    }
   })
 
   return {
     // Estado
     mensagens,
     mensagem,
-    loading,
-    error,
-    
+    loading: computed(() => loading.value),
+    error: computed(() => error.value),
+
     // Computed
     mensagensNaoLidas,
     mensagensPorStatus,
-    
+    estatisticas,
+
     // Métodos
-    fetchMensagens, 
+    fetchMensagens,
     enviarMensagem,
     marcarComoLida,
     deletarMensagem,
+    buscarMensagemPorId,
+    marcarTodasComoLidas,
     formatarData
   }
 }

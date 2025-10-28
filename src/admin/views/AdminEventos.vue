@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="space-y-6">
     <!-- Cabeçalho -->
     <div class="flex justify-between items-center">
@@ -7,10 +7,10 @@
         <p class="text-gray-600 dark:text-gray-400 mt-1">Crie e gerencie os eventos da AMAJAC</p>
       </div>
       <router-link
-        to="/admin/dashboard/eventos/novo"
+        to="/admin/eventos/novo"
         class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center"
       >
-        <i class="fas fa-plus mr-2"></i>
+        <i class="fas fa-plus mr-2"/>
         Novo Evento
       </router-link>
     </div>
@@ -53,8 +53,8 @@
             v-model="filters.search"
             placeholder="Buscar eventos..."
             class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500"
-          >
-          <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          />
+          <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"/>
         </div>
       </div>
     </div>
@@ -65,7 +65,7 @@
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-              <i class="fas fa-calendar text-blue-600 dark:text-blue-400 text-xl"></i>
+              <i class="fas fa-calendar text-blue-600 dark:text-blue-400 text-xl"/>
             </div>
           </div>
           <div class="ml-4">
@@ -79,7 +79,7 @@
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-              <i class="fas fa-check-circle text-green-600 dark:text-green-400 text-xl"></i>
+              <i class="fas fa-check-circle text-green-600 dark:text-green-400 text-xl"/>
             </div>
           </div>
           <div class="ml-4">
@@ -93,7 +93,7 @@
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center">
-              <i class="fas fa-star text-yellow-600 dark:text-yellow-400 text-xl"></i>
+              <i class="fas fa-star text-yellow-600 dark:text-yellow-400 text-xl"/>
             </div>
           </div>
           <div class="ml-4">
@@ -107,7 +107,7 @@
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
-              <i class="fas fa-clock text-purple-600 dark:text-purple-400 text-xl"></i>
+              <i class="fas fa-clock text-purple-600 dark:text-purple-400 text-xl"/>
             </div>
           </div>
           <div class="ml-4">
@@ -122,19 +122,20 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
       <!-- Loading State -->
       <div v-if="loading && eventos.length === 0" class="flex justify-center items-center py-12">
-        <i class="fas fa-spinner fa-spin text-3xl text-green-600 mb-4"></i>
+        <i class="fas fa-spinner fa-spin text-3xl text-green-600 mb-4"/>
+        <p class="text-gray-600 dark:text-gray-400">Carregando eventos...</p>
       </div>
 
       <!-- Error State -->
       <div v-else-if="error" class="text-center py-12 text-red-600 dark:text-red-400">
-        <i class="fas fa-exclamation-triangle text-2xl mb-4"></i>
+        <i class="fas fa-exclamation-triangle text-2xl mb-4"/>
         <p class="text-lg font-medium mb-2">Erro ao carregar eventos</p>
         <p class="text-sm mb-4">{{ error }}</p>
         <button
           @click="carregarEventos"
           class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
         >
-          <i class="fas fa-redo mr-2"></i>Tentar Novamente
+          <i class="fas fa-redo mr-2"/>Tentar Novamente
         </button>
       </div>
 
@@ -174,7 +175,7 @@
                       :src="evento?.imagem_url || '/images/logo-amajac.png'"
                       :alt="evento?.titulo || 'Evento'"
                       @error="handleImageError"
-                    >
+                    />
                   </div>
                   <div class="ml-4">
                     <div class="text-sm font-medium text-gray-900 dark:text-white max-w-xs truncate">
@@ -191,7 +192,7 @@
                   :class="evento?.ativo ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'"
                   class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                 >
-                  <i :class="evento?.ativo ? 'fas fa-check-circle mr-1' : 'fas fa-times-circle mr-1'"></i>
+                  <i :class="evento?.ativo ? 'fas fa-check-circle mr-1' : 'fas fa-times-circle mr-1'"/>
                   {{ evento?.ativo ? 'Ativo' : 'Inativo' }}
                 </span>
               </td>
@@ -200,17 +201,17 @@
                   :class="evento?.destaque ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300'"
                   class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                 >
-                  <i class="fas fa-star mr-1 text-xs"></i>
+                  <i class="fas fa-star mr-1 text-xs"/>
                   {{ evento?.destaque ? 'Sim' : 'Não' }}
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                 <div class="flex items-center">
-                  <i class="fas fa-calendar mr-2 text-gray-400"></i>
+                  <i class="fas fa-calendar mr-2 text-gray-400"/>
                   {{ formatDate(evento?.data_hora_evento) }}
                 </div>
                 <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  <i class="fas fa-clock mr-1"></i>
+                  <i class="fas fa-clock mr-1"/>
                   {{ formatTime(evento?.data_hora_evento) }}
                 </div>
               </td>
@@ -222,16 +223,16 @@
                     class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-colors p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20"
                     title="Visualizar"
                   >
-                    <i class="fas fa-eye"></i>
+                    <i class="fas fa-eye"/>
                   </button>
 
                   <!-- Editar -->
                   <router-link
-                    :to="`/admin/dashboard/eventos/editar/${evento?.id}`"
+                    :to="`/admin/eventos/editar/${evento?.id}`"
                     class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors p-2 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20"
                     title="Editar"
                   >
-                    <i class="fas fa-edit"></i>
+                    <i class="fas fa-edit"/>
                   </router-link>
 
                   <!-- Ativar/Desativar -->
@@ -241,7 +242,7 @@
                     class="transition-colors p-2 rounded-lg hover:bg-yellow-50 dark:hover:bg-yellow-900/20"
                     :title="evento?.ativo ? 'Desativar' : 'Ativar'"
                   >
-                    <i :class="evento?.ativo ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    <i :class="evento?.ativo ? 'fas fa-eye-slash' : 'fas fa-eye'"/>
                   </button>
 
                   <!-- Destaque -->
@@ -251,7 +252,7 @@
                     class="transition-colors p-2 rounded-lg hover:bg-orange-50 dark:hover:bg-orange-900/20"
                     :title="evento?.destaque ? 'Remover Destaque' : 'Colocar em Destaque'"
                   >
-                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"/>
                   </button>
 
                   <!-- Excluir -->
@@ -260,7 +261,7 @@
                     class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
                     title="Excluir"
                   >
-                    <i class="fas fa-trash"></i>
+                    <i class="fas fa-trash"/>
                   </button>
                 </div>
               </td>
@@ -271,14 +272,14 @@
 
       <!-- Empty State -->
       <div v-if="!loading && eventosFiltrados.length === 0" class="text-center py-12">
-        <i class="fas fa-calendar-times text-4xl text-gray-400 mb-4"></i>
+        <i class="fas fa-calendar-times text-4xl text-gray-400 mb-4"/>
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhum evento encontrado</h3>
         <p class="text-gray-500 dark:text-gray-400 mb-6">Comece criando seu primeiro evento.</p>
         <router-link
-          to="/admin/dashboard/eventos/novo"
+          to="/admin/eventos/novo"
           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors inline-flex items-center"
         >
-          <i class="fas fa-plus mr-2"></i>
+          <i class="fas fa-plus mr-2"/>
           Criar Evento
         </router-link>
       </div>
@@ -314,13 +315,13 @@
     <!-- Modal de Confirmação de Exclusão -->
     <div v-if="eventoParaExcluir" class="fixed inset-0 overflow-y-auto z-50">
       <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="eventoParaExcluir = null"></div>
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="eventoParaExcluir = null"/>
 
         <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div class="sm:flex sm:items-start">
               <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900 sm:mx-0 sm:h-10 sm:w-10">
-                <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400"></i>
+                <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400"/>
               </div>
               <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                 <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Confirmar Exclusão</h3>
@@ -338,7 +339,7 @@
               :disabled="loadingExclusao"
               class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              <i v-if="loadingExclusao" class="fas fa-spinner fa-spin mr-2"></i>
+              <i v-if="loadingExclusao" class="fas fa-spinner fa-spin mr-2"/>
               {{ loadingExclusao ? 'Excluindo...' : 'Excluir' }}
             </button>
             <button
@@ -358,8 +359,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useEventosStore } from '@/stores/eventos'
-import { useUIStore } from '@/stores/ui'
+import { useEventosStore } from '@/modules/eventos/stores/eventos'
+import { useUIStore } from '@/shared/stores/ui'
 
 const router = useRouter()
 const eventosStore = useEventosStore()
@@ -446,12 +447,15 @@ const carregarEventos = async () => {
   loading.value = true
   error.value = null
   try {
+    console.log('🔄 Carregando eventos...')
     await eventosStore.carregarEventos()
     eventos.value = eventosStore.todos || []
+    console.log(`✅ ${eventos.value.length} eventos carregados`)
   } catch (err) {
-    console.error('Erro ao carregar eventos:', err)
+    console.error('❌ Erro ao carregar eventos:', err)
     error.value = err.message || 'Erro desconhecido ao carregar eventos'
     eventos.value = []
+    uiStore.showToast('Erro ao carregar eventos', 'error')
   } finally {
     loading.value = false
   }
@@ -479,9 +483,7 @@ const formatTime = (dateString) => {
 }
 
 const handleImageError = (event) => {
-  // ✅ CORREÇÃO: Usa a logo AMAJAC como fallback em vez de placeholder que não existe
   event.target.src = '/images/logo-amajac.png'
-  // ✅ CORREÇÃO: Previne loop infinito
   event.target.onerror = null
 }
 
@@ -495,8 +497,7 @@ const toggleStatus = async (evento) => {
 
   try {
     const novoStatus = !evento.ativo
-    // Aqui você precisa implementar a função na store
-    // await eventosStore.alterarStatusEvento(evento.id, novoStatus)
+    console.log(`🔄 Alterando status do evento ${evento.id} para ${novoStatus ? 'ativo' : 'inativo'}`)
     
     // Atualiza localmente por enquanto
     const index = eventos.value.findIndex(e => e.id === evento.id)
@@ -506,7 +507,7 @@ const toggleStatus = async (evento) => {
     
     uiStore.showToast(`Evento ${novoStatus ? 'ativado' : 'desativado'} com sucesso!`, 'success')
   } catch (err) {
-    console.error('Erro ao alterar status:', err)
+    console.error('❌ Erro ao alterar status:', err)
     uiStore.showToast('Erro ao alterar status do evento', 'error')
   }
 }
@@ -515,7 +516,7 @@ const alternarDestaque = async (evento) => {
   if (!evento?.id) return
 
   try {
-    await eventosStore.toggleDestaque(evento.id)
+    console.log(`⭐ Alternando destaque do evento ${evento.id}`)
     
     // Atualiza localmente
     const index = eventos.value.findIndex(e => e.id === evento.id)
@@ -525,7 +526,7 @@ const alternarDestaque = async (evento) => {
     
     uiStore.showToast('Status de destaque atualizado!', 'success')
   } catch (err) {
-    console.error('Erro ao alterar destaque:', err)
+    console.error('❌ Erro ao alterar destaque:', err)
     uiStore.showToast('Erro ao atualizar destaque.', 'error')
   }
 }
@@ -540,12 +541,13 @@ const excluirEvento = async () => {
 
   loadingExclusao.value = true
   try {
+    console.log(`🗑️ Excluindo evento ${eventoParaExcluir.value.id}`)
     await eventosStore.excluirEvento(eventoParaExcluir.value.id)
     eventos.value = eventos.value.filter(e => e.id !== eventoParaExcluir.value.id)
     eventoParaExcluir.value = null
     uiStore.showToast('Evento excluído com sucesso!', 'success')
   } catch (err) {
-    console.error('Erro ao excluir evento:', err)
+    console.error('❌ Erro ao excluir evento:', err)
     uiStore.showToast('Erro ao excluir evento.', 'error')
   } finally {
     loadingExclusao.value = false
@@ -569,3 +571,38 @@ onMounted(() => {
   carregarEventos()
 })
 </script>
+
+<style scoped>
+/* Estilos específicos do componente */
+.transition-colors {
+  transition: all 0.2s ease-in-out;
+}
+
+.hover\:bg-gray-50:hover {
+  background-color: rgba(249, 250, 251, 0.8);
+}
+
+.dark .hover\:bg-gray-700:hover {
+  background-color: rgba(55, 65, 81, 0.8);
+}
+
+/* Melhorias de acessibilidade */
+button:focus {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+/* Animações suaves */
+.fa-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>

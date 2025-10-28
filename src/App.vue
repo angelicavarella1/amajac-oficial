@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div id="app">
     <RouterView />
   </div>
@@ -6,8 +6,8 @@
 
 <script setup>
 import { onMounted } from 'vue'
-import { useUIStore } from '@/stores/ui'
-import { useAuthStore } from '@/stores/auth'
+import { useUIStore } from '@/shared/stores/ui' // <-- Corrigido
+import { useAuthStore } from '@/modules/auth/stores/auth' // <-- Corrigido
 
 const uiStore = useUIStore()
 const authStore = useAuthStore()

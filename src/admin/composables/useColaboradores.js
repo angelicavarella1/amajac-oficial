@@ -1,219 +1,311 @@
-﻿import { ref, computed } from 'vue'
-import { publicApi, adminApi } from '@/supabase'
-import { useUIStore } from '@/stores/ui'
+import { ref, readonly } from 'vue'
+import { supabase } from '@/supabase/client.js'
+import { useUIStore } from '@/shared/stores/ui'
 
-export function useColaboradores(admin = false) {
+export function useColaboradores() {
   const colaboradores = ref([])
   const colaborador = ref(null)
   const loading = ref(false)
   const error = ref(null)
   const uiStore = useUIStore()
 
-  // Cache
-  const cacheTimestamp = ref(null)
-  const CACHE_DURATION = admin ? 3 * 60 * 1000 : 10 * 60 * 1000 // Colaboradores mudam menos
-
-  // 👥 CARREGAR COLABORADORES (Renomeado para fetchColaboradores)
-  const fetchColaboradores = async (forceRefresh = false) => {
-    if (!forceRefresh && cacheTimestamp.value && (Date.now() - cacheTimestamp.value < CACHE_DURATION)) {
-      return colaboradores.value // Retorna o array em cache para o Dashboard contar
-    }
-
-    loading.value = true
-    error.value = null
-
-    try {
-      let data
-      
-      if (admin) {
-        // CORREÇÃO 1: adminApi.colaboradores.getAll()
-        data = await adminApi.colaboradores.getAll()
-      } else {
-        // CORREÇÃO 2: publicApi.colaboradores.getAll()
-        data = await publicApi.colaboradores.getAll()
-      }
-
-      colaboradores.value = data
-      cacheTimestamp.value = Date.now()
-      
-      console.log(`✅ ${data.length} colaboradores carregados (${admin ? 'admin' : 'público'})`)
-      // 🎯 IMPORTANTE: Retorna os dados para serem usados no Promise.all do Dashboard.
-      return data 
-    } catch (err) {
-      console.error('❌ Erro ao carregar colaboradores:', err)
-      error.value = err.message
-      uiStore.showToast('Erro ao carregar colaboradores', 'error')
-      return [] // Retorna array vazio em caso de falha
-    } finally {
-      loading.value = false
+  // 🔧 FUNÇÃO AUXILIAR PARA MAPEAR DADOS - CORRIGIDA
+  const mapearDadosParaBanco = (dados) => {
+    return {
+      nome: dados.nome || '',
+      tipo: dados.tipo || 'parceiro',
+      logo_url: dados.logo_url || '',
+      ativo: dados.ativo !== undefined ? dados.ativo : true,
+      imagem_alt: dados.imagem_alt || '',
+      telefone: dados.telefone || '',
+      endereco: dados.endereco || '',
+      cnpj: dados.cnpj || '',
+      email_contato: dados.email_contato || '',
+      ramo: dados.ramo || '',
+      data_inicio: dados.data_inicio || null,
+      status: dados.status || 'ativo',
+      descricao_curta: dados.descricao_curta || '',
+      link_site: dados.link_site || '',
+      facebook: dados.facebook || '',
+      instagram: dados.instagram || '',
+      tags: dados.tags || dados.etiquetas || [] // Mapeia etiquetas para tags
     }
   }
 
-  // 👥 CARREGAR COLABORADOR POR ID
-  const carregarColaboradorPorId = async (id) => {
-    loading.value = true
-    error.value = null
-
-    try {
-      if (admin) {
-        // Usa a nova função de busca: fetchColaboradores
-        await fetchColaboradores() 
-        colaborador.value = colaboradores.value.find(c => c.id === id)
-      } else {
-        // CORREÇÃO 3: publicApi.colaboradores.getById(id)
-        colaborador.value = await publicApi.colaboradores.getById(id)
-      }
-
-      if (!colaborador.value) {
-        throw new Error('Colaborador não encontrado')
-      }
-    } catch (err) {
-      console.error('❌ Erro ao carregar colaborador:', err)
-      error.value = err.message
-      uiStore.showToast('Colaborador não encontrado', 'error')
-    } finally {
-      loading.value = false
-    }
-  }
-
-  // 👥 CRIAR COLABORADOR (Admin)
+  // 📝 CRIAR COLABORADOR - CORRIGIDO
   const criarColaborador = async (dadosColaborador) => {
     loading.value = true
     error.value = null
 
     try {
-      if (!admin) throw new Error('Acesso não autorizado')
+      console.log('💾 Salvando parceiro...', dadosColaborador)
 
-      // CORREÇÃO 4: adminApi.colaboradores.create(dadosColaborador)
-      const novoColaborador = await adminApi.colaboradores.create(dadosColaborador)
-      colaboradores.value.push(novoColaborador)
-      
-      uiStore.showToast('Colaborador criado com sucesso!')
-      return novoColaborador
+      const dadosMapeados = mapearDadosParaBanco(dadosColaborador)
+
+      const { data, error: supabaseError } = await supabase
+        .from('colaboradores')
+        .insert([{
+          ...dadosMapeados,
+          created_at: new Date().toISOString()
+          // REMOVIDO: updated_at não existe na tabela
+        }])
+        .select()
+        .single()
+
+      if (supabaseError) {
+        console.error('❌ Erro do Supabase:', supabaseError)
+        throw supabaseError
+      }
+
+      colaboradores.value.push(data)
+      uiStore.showToast('Parceiro criado com sucesso!', 'success')
+      console.log('✅ Parceiro criado:', data)
+      return data
     } catch (err) {
-      console.error('❌ Erro ao criar colaborador:', err)
+      console.error('❌ Erro ao salvar parceiro:', err)
       error.value = err.message
-      uiStore.showToast('Erro ao criar colaborador', 'error')
+      uiStore.showToast('Erro ao salvar parceiro: ' + err.message, 'error')
       throw err
     } finally {
       loading.value = false
     }
   }
 
-  // 👥 ATUALIZAR COLABORADOR (Admin)
+  // ✏️ ATUALIZAR COLABORADOR - CORRIGIDO
   const atualizarColaborador = async (id, dadosAtualizados) => {
     loading.value = true
     error.value = null
 
     try {
-      if (!admin) throw new Error('Acesso não autorizado')
+      console.log('🔄 Atualizando parceiro:', id, dadosAtualizados)
 
-      // CORREÇÃO 5: adminApi.colaboradores.update(id, dadosAtualizados)
-      const colaboradorAtualizado = await adminApi.colaboradores.update(id, dadosAtualizados)
-      
+      const dadosMapeados = mapearDadosParaBanco(dadosAtualizados)
+
+      const { data, error: supabaseError } = await supabase
+        .from('colaboradores')
+        .update({
+          ...dadosMapeados
+          // REMOVIDO: updated_at não existe na tabela
+        })
+        .eq('id', id)
+        .select()
+        .single()
+
+      if (supabaseError) throw supabaseError
+
+      // Atualiza a lista local
       const index = colaboradores.value.findIndex(c => c.id === id)
       if (index !== -1) {
-        // Uso de spread para garantir que o objeto seja reativo e completo
-        colaboradores.value[index] = { ...colaboradores.value[index], ...colaboradorAtualizado } 
-      }
-      
-      if (colaborador.value && colaborador.value.id === id) {
-        colaborador.value = colaboradorAtualizado
+        colaboradores.value[index] = data
       }
 
-      uiStore.showToast('Colaborador atualizado com sucesso!')
-      return colaboradorAtualizado
+      // Atualiza o colaborador atual se for o mesmo
+      if (colaborador.value?.id === id) {
+        colaborador.value = data
+      }
+
+      uiStore.showToast('Parceiro atualizado com sucesso!', 'success')
+      return data
     } catch (err) {
-      console.error('❌ Erro ao atualizar colaborador:', err)
+      console.error('❌ Erro ao atualizar parceiro:', err)
       error.value = err.message
-      uiStore.showToast('Erro ao atualizar colaborador', 'error')
+      uiStore.showToast('Erro ao atualizar parceiro', 'error')
       throw err
     } finally {
       loading.value = false
     }
   }
 
-  // 👥 DELETAR COLABORADOR (Admin)
-  const deletarColaborador = async (id) => {
+  // 📥 CARREGAR COLABORADORES
+  const fetchColaboradores = async () => {
     loading.value = true
     error.value = null
 
     try {
-      if (!admin) throw new Error('Acesso não autorizado')
+      console.log('🔄 Carregando parceiros...')
 
-      // CORREÇÃO 6: adminApi.colaboradores.delete(id)
-      await adminApi.colaboradores.delete(id)
-      colaboradores.value = colaboradores.value.filter(c => c.id !== id)
-      
-      uiStore.showToast('Colaborador excluído com sucesso!')
+      const { data, error: supabaseError } = await supabase
+        .from('colaboradores')
+        .select('*')
+        .order('nome', { ascending: true })
+
+      if (supabaseError) throw supabaseError
+
+      colaboradores.value = data || []
+      console.log(`✅ ${data?.length || 0} parceiros carregados`)
+      return data
     } catch (err) {
-      console.error('❌ Erro ao excluir colaborador:', err)
+      console.error('❌ Erro ao carregar parceiros:', err)
       error.value = err.message
-      uiStore.showToast('Erro ao excluir colaborador', 'error')
+      uiStore.showToast('Erro ao carregar parceiros', 'error')
+      return []
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // 🔍 CARREGAR COLABORADOR POR ID
+  const carregarColaboradorPorId = async (id) => {
+    loading.value = true
+    error.value = null
+
+    try {
+      console.log(`🔍 Carregando parceiro ID: ${id}`)
+
+      const { data, error: supabaseError } = await supabase
+        .from('colaboradores')
+        .select('*')
+        .eq('id', id)
+        .single()
+
+      if (supabaseError) throw supabaseError
+
+      colaborador.value = data
+      console.log('✅ Parceiro carregado:', data)
+      return data
+    } catch (err) {
+      console.error('❌ Erro ao carregar parceiro:', err)
+      error.value = err.message
+      uiStore.showToast('Parceiro não encontrado', 'error')
       throw err
     } finally {
       loading.value = false
     }
   }
 
-  // 👥 FORMATAR TELEFONE
-  const formatarTelefone = (telefone) => {
-    if (!telefone) return ''
-    const numeros = telefone.replace(/\D/g, '')
-    
-    if (numeros.length === 11) {
-      return numeros.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
-    } else if (numeros.length === 10) {
-      return numeros.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3')
+  // 🗑️ EXCLUIR COLABORADOR
+  const excluirColaborador = async (id) => {
+    loading.value = true
+    error.value = null
+
+    try {
+      console.log(`🗑️ Excluindo parceiro ID: ${id}`)
+
+      const { error: supabaseError } = await supabase
+        .from('colaboradores')
+        .delete()
+        .eq('id', id)
+
+      if (supabaseError) throw supabaseError
+
+      // Remove da lista local
+      colaboradores.value = colaboradores.value.filter(c => c.id !== id)
+      
+      // Limpa o colaborador atual se for o mesmo
+      if (colaborador.value?.id === id) {
+        colaborador.value = null
+      }
+
+      uiStore.showToast('Parceiro excluído com sucesso!', 'success')
+      console.log('✅ Parceiro excluído')
+      return true
+    } catch (err) {
+      console.error('❌ Erro ao excluir parceiro:', err)
+      error.value = err.message
+      uiStore.showToast('Erro ao excluir parceiro', 'error')
+      throw err
+    } finally {
+      loading.value = false
     }
-    
-    return telefone
   }
 
-  // 👥 COMPUTED - Colaboradores ativos
-  const colaboradoresAtivos = computed(() => {
-    return colaboradores.value.filter(colaborador => colaborador.ativo)
-  })
+  // 🔄 TOGGLE STATUS - CORRIGIDO
+  const toggleStatusColaborador = async (id, statusAtual) => {
+    try {
+      console.log(`🔄 Alterando status do parceiro ${id} para: ${!statusAtual}`)
 
-  // 👥 COMPUTED - Colaboradores por categoria
-  const colaboradoresPorCategoria = computed(() => {
-    const categorias = {}
-    
-    colaboradoresAtivos.value.forEach(colaborador => {
-      const categoria = colaborador.categoria || 'Geral'
-      if (!categorias[categoria]) {
-        categorias[categoria] = []
+      const { error: supabaseError } = await supabase
+        .from('colaboradores')
+        .update({
+          ativo: !statusAtual
+          // REMOVIDO: updated_at não existe na tabela
+        })
+        .eq('id', id)
+
+      if (supabaseError) throw supabaseError
+
+      // Atualiza localmente
+      const index = colaboradores.value.findIndex(c => c.id === id)
+      if (index !== -1) {
+        colaboradores.value[index].ativo = !statusAtual
       }
-      categorias[categoria].push(colaborador)
-    })
-    
-    return categorias
-  })
 
-  // 👥 COMPUTED - Categorias disponíveis
-  const categoriasDisponiveis = computed(() => {
-    const categorias = [...new Set(colaboradoresAtivos.value.map(c => c.categoria).filter(Boolean))]
-    return categorias.sort()
-  })
+      if (colaborador.value?.id === id) {
+        colaborador.value.ativo = !statusAtual
+      }
+
+      uiStore.showToast(`Parceiro ${!statusAtual ? 'ativado' : 'desativado'} com sucesso!`, 'success')
+      return !statusAtual
+    } catch (err) {
+      console.error('❌ Erro ao alterar status:', err)
+      uiStore.showToast('Erro ao alterar status do parceiro', 'error')
+      throw err
+    }
+  }
+
+  // 🖼️ UPLOAD DE LOGO
+  const uploadLogo = async (file, idColaborador) => {
+    try {
+      console.log('🖼️ Iniciando upload de logo...')
+
+      if (!file || !idColaborador) {
+        throw new Error('Arquivo ou ID do colaborador não informado')
+      }
+
+      // Validar tipo de arquivo
+      const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp']
+      if (!tiposPermitidos.includes(file.type)) {
+        throw new Error('Tipo de arquivo não permitido. Use JPEG, PNG ou WebP.')
+      }
+
+      // Validar tamanho (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        throw new Error('Arquivo muito grande. Tamanho máximo: 5MB.')
+      }
+
+      const timestamp = Date.now()
+      const extensao = file.name.split('.').pop()
+      const nomeArquivo = `colaborador-${idColaborador}-${timestamp}.${extensao}`
+      const caminho = `colaboradores/${nomeArquivo}`
+
+      console.log('📤 Fazendo upload para:', caminho)
+
+      const { error: uploadError } = await supabase.storage
+        .from('imagens')
+        .upload(caminho, file, {
+          cacheControl: '3600',
+          upsert: true
+        })
+
+      if (uploadError) throw uploadError
+
+      // Obter URL pública
+      const { data: urlData } = supabase.storage
+        .from('imagens')
+        .getPublicUrl(caminho)
+
+      console.log('✅ Upload concluído:', urlData.publicUrl)
+      return urlData.publicUrl
+    } catch (err) {
+      console.error('❌ Erro no upload de logo:', err)
+      throw err
+    }
+  }
 
   return {
     // Estado
     colaboradores,
     colaborador,
-    loading,
-    error,
-    
-    // Computed
-    colaboradoresAtivos,
-    colaboradoresPorCategoria,
-    categoriasDisponiveis,
-    
+    loading: readonly(loading),
+    error: readonly(error),
+
     // Métodos
-    fetchColaboradores, 
+    fetchColaboradores,
     carregarColaboradorPorId,
     criarColaborador,
     atualizarColaborador,
-    deletarColaborador,
-    formatarTelefone
+    excluirColaborador,
+    toggleStatusColaborador,
+    uploadLogo
   }
 }

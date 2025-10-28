@@ -1,9 +1,9 @@
-﻿<template>
+<template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
     <div class="container mx-auto px-4">
       <div v-if="loading" class="flex justify-center items-center py-12">
         <div class="text-center">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"/>
           <p class="text-gray-600 dark:text-gray-400">Carregando evento...</p>
         </div>
       </div>
@@ -33,7 +33,7 @@
           <span class="text-gray-800 dark:text-gray-200 font-medium">{{ safeString(evento.titulo) }}</span>
         </nav>
 
-        <!-- ✅ ATUALIZADO: Banner do Evento com useSafeImage() -->
+        <!-- Banner do Evento -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-8">
           <div v-if="evento.imagem_url" class="relative h-64 md:h-80 overflow-hidden">
             <!-- Loading State -->
@@ -49,12 +49,14 @@
               :src="eventoImageUrl" 
               :alt="safeString(evento.titulo)"
               class="w-full h-full object-cover"
+              @load="handleImageLoad"
+              @error="handleImageError"
             />
             
             <!-- Error State -->
             <div v-if="eventoImageError" class="absolute inset-0 bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
               <div class="text-center p-4">
-                <i class="fas fa-exclamation-triangle text-red-500 text-2xl mb-2"></i>
+                <i class="fas fa-exclamation-triangle text-red-500 text-2xl mb-2"/>
                 <p class="text-red-500 text-sm">Falha ao carregar imagem do evento</p>
               </div>
             </div>
@@ -222,8 +224,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useEventosStore } from '@/stores/eventos'
-import { useSafeImage } from '@/composables/useSafeImage'
+import { useEventosStore } from '@/modules/eventos/stores/eventos'
 
 const route = useRoute()
 const eventosStore = useEventosStore()
@@ -233,22 +234,43 @@ const evento = ref(null)
 const loading = ref(true)
 const error = ref(null)
 
-// ✅ ATUALIZADO: useSafeImage() para a imagem do evento
-const { 
-  imageUrl: eventoImageUrl, 
-  loading: eventoImageLoading, 
-  error: eventoImageError,
-  setUrl: setEventoImageUrl 
-} = useSafeImage()
+// Estados para controle da imagem
+const eventoImageUrl = ref('')
+const eventoImageLoading = ref(false)
+const eventoImageError = ref(false)
 
-// ✅ ATUALIZADO: Watcher para atualizar a imagem quando o evento carregar
+// Função para definir a URL da imagem
+const setEventoImageUrl = (url) => {
+  eventoImageUrl.value = url
+  eventoImageLoading.value = true
+  eventoImageError.value = false
+}
+
+// Handlers para eventos de imagem
+const handleImageLoad = () => {
+  eventoImageLoading.value = false
+  eventoImageError.value = false
+}
+
+const handleImageError = () => {
+  eventoImageLoading.value = false
+  eventoImageError.value = true
+  // Fallback para imagem padrão
+  eventoImageUrl.value = '/images/logo-amajac.png'
+}
+
+// Watcher para atualizar a imagem quando o evento carregar
 watch(evento, (newEvento) => {
   if (newEvento && newEvento.imagem_url) {
     setEventoImageUrl(newEvento.imagem_url)
+  } else {
+    // Fallback se não houver imagem
+    eventoImageUrl.value = '/images/logo-amajac.png'
+    eventoImageLoading.value = false
   }
 }, { immediate: true })
 
-// ✅ CORREÇÃO: Funções de segurança
+// Funções de segurança
 const safeString = (str) => {
   if (typeof str !== 'string') return ''
   return str.replace(/[<>"']/g, '').trim()
@@ -312,7 +334,7 @@ const formatarDataCompleta = (dataString) => {
   }
 }
 
-// ✅ CORREÇÃO: Função de Inscrição ajustada para o alerta
+// Função de Inscrição
 const inscreverEvento = () => {
   alert('🚫 Funcionalidade de Inscrição em Desenvolvimento. Aguarde!')
 }
@@ -353,33 +375,29 @@ const loadEvento = async () => {
     
     console.log('🔄 Carregando evento ID:', id)
     
-    // Assumindo que a função correta no store é `carregarEventoPorId` ou similar
-    let fetchedEvento = null;
+    // Tenta diferentes métodos do store para carregar o evento
+    let fetchedEvento = null
     
-    if (eventosStore.carregarEventoPorId) {
-      // Se a função retornar o objeto diretamente
-      fetchedEvento = await eventosStore.carregarEventoPorId(id);
-    } 
+    // Primeiro tenta carregar todos os eventos e depois busca pelo ID
+    if (eventosStore.carregarEventos) {
+      await eventosStore.carregarEventos()
+      fetchedEvento = eventosStore.todos?.find(e => e.id == id)
+    }
     
-    // Em alguns stores Pinia, a função apenas popula uma ref interna (eventoSelecionado, eventoAtual, etc.)
+    // Se não encontrou, tenta método específico por ID
+    if (!fetchedEvento && eventosStore.carregarEventoPorId) {
+      fetchedEvento = await eventosStore.carregarEventoPorId(id)
+    }
+    
+    // Última tentativa: busca direta no estado
     if (!fetchedEvento) {
-        if (eventosStore.fetchEventoById) {
-            await eventosStore.fetchEventoById(id);
-        } else if (eventosStore.carregarEvento) {
-            await eventosStore.carregarEvento(id);
-        } else {
-            // Se nenhuma função de carregamento foi encontrada
-            throw new Error('Store não possui função para carregar evento por ID');
-        }
-        
-        // Tentativa de obter o evento carregado do estado
-        fetchedEvento = eventosStore.eventoSelecionado || eventosStore.eventoAtual || fetchedEvento;
+      fetchedEvento = eventosStore.eventoSelecionado || eventosStore.eventoAtual
     }
 
     if (!fetchedEvento) {
       error.value = 'Evento não encontrado. O ID pode estar incorreto ou o evento inativo.'
     } else {
-      evento.value = fetchedEvento;
+      evento.value = fetchedEvento
       console.log('✅ Evento carregado:', evento.value)
     }
 
@@ -399,5 +417,51 @@ onMounted(() => {
 <style scoped>
 .container {
   max-width: 1200px;
+}
+
+/* Animações */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Transições suaves */
+.transition-colors {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Melhorias de acessibilidade */
+button:focus {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
 </style>

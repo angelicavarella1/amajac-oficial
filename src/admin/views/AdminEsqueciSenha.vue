@@ -1,4 +1,4 @@
-﻿<!-- src/admin/views/AdminEsqueciSenha.vue - VERSÃO CORRIGIDA -->
+<!-- src/admin/views/AdminEsqueciSenha.vue - VERSÃO CORRIGIDA -->
 <template>
   <div class="forgot-password-page">
     <div class="container">

@@ -1,6 +1,7 @@
-﻿import { ref } from 'vue'
-import { supabase } from '@/supabase'
-import { useUIStore } from '@/stores/ui'
+// src/admin/composables/useImageUpload.js - VERSÃO CORRIGIDA
+import { ref } from 'vue'
+import { supabase } from '@/supabase/client.js' // Importação direta do client.js correta
+import { useUIStore } from '@/shared/stores/ui' // ← CORRIGIDO: removida a barra invertida
 
 export function useImageUpload() {
   const uploading = ref(false)
@@ -8,17 +9,17 @@ export function useImageUpload() {
   const error = ref(null)
   const uiStore = useUIStore()
 
-  // 🎯 Buckets confirmados que existem
+  // Buckets confirmados que existem
   const BUCKETS = {
     GALERIA: 'galeria',
-    NOTICIAS: 'noticias', 
+    NOTICIAS: 'noticias',
     EVENTOS: 'eventos',
     COLABORADORES: 'colaboradores',
     LOGOS: 'logos',
     IMAGENS: 'imagens'
   }
 
-  // ✅ Validação simples e eficaz
+  // Validação simples e eficaz
   const validarImagem = (file) => {
     if (!file) {
       throw new Error('Nenhum arquivo selecionado.')
@@ -37,7 +38,7 @@ export function useImageUpload() {
     return true
   }
 
-  // 🖼️ Compressão otimizada para evitar timeout
+  // Compressão otimizada para evitar timeout
   const comprimirImagem = (file) => {
     return new Promise((resolve) => {
       // Não comprimir arquivos pequenos
@@ -56,7 +57,7 @@ export function useImageUpload() {
           // Redimensionar mantendo aspect ratio
           const MAX_WIDTH = 1200
           const MAX_HEIGHT = 1200
-          
+
           let { width, height } = img
 
           if (width > height) {
@@ -75,7 +76,7 @@ export function useImageUpload() {
           canvas.height = height
 
           ctx.drawImage(img, 0, 0, width, height)
-          
+
           // Converter para JPEG (menor que PNG)
           canvas.toBlob(
             (blob) => {
@@ -83,49 +84,49 @@ export function useImageUpload() {
                 type: 'image/jpeg',
                 lastModified: Date.now()
               })
-              
-              console.log(`📐 Compressão: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(compressedFile.size / 1024 / 1024).toFixed(2)}MB`)
+
+              console.log(` Compressão: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(compressedFile.size / 1024 / 1024).toFixed(2)}MB`)
               resolve(compressedFile)
             },
             'image/jpeg',
             0.8 // Qualidade 80%
           )
         }
-        
+
         img.onerror = () => {
-          console.warn('⚠️ Erro na compressão, usando original')
+          console.warn(' Erro na compressão, usando original')
           resolve(file)
         }
-        
+
         img.src = e.target.result
       }
-      
+
       reader.onerror = () => {
-        console.warn('⚠️ Erro no FileReader, usando original')
+        console.warn(' Erro no FileReader, usando original')
         resolve(file)
       }
-      
+
       reader.readAsDataURL(file)
     })
   }
 
-  // 🚀 UPLOAD PRINCIPAL - Corrigido e testado
+  // UPLOAD PRINCIPAL - Corrigido e testado
   const uploadImagem = async (file, bucketName = 'galeria') => {
     uploading.value = true
     progress.value = 0
     error.value = null
 
     try {
-      console.log('🚀 INICIANDO UPLOAD...')
-      
+      console.log(' 📤 INICIANDO UPLOAD...')
+
       // 1. Validação
       validarImagem(file)
-      console.log('✅ Arquivo validado')
+      console.log(' ✅ Arquivo validado')
 
       // 2. Comprimir se necessário
       let arquivoParaUpload = file
       if (file.size > 1 * 1024 * 1024) {
-        console.log('📐 Comprimindo imagem...')
+        console.log(' 🔄 Comprimindo imagem...')
         arquivoParaUpload = await comprimirImagem(file)
       }
 
@@ -135,7 +136,7 @@ export function useImageUpload() {
       const extensao = arquivoParaUpload.type === 'image/png' ? 'png' : 'jpg'
       const nomeArquivo = `${timestamp}-${randomId}.${extensao}`
 
-      console.log('📁 Informações do upload:', {
+      console.log(' 📋 Informações do upload:', {
         bucket: bucketName,
         arquivo: nomeArquivo,
         tipo: arquivoParaUpload.type,
@@ -144,7 +145,7 @@ export function useImageUpload() {
 
       // 4. Fazer upload DIRETO sem complicações
       progress.value = 30
-      
+
       const { data, error: uploadError } = await supabase.storage
         .from(bucketName)
         .upload(nomeArquivo, arquivoParaUpload, {
@@ -153,26 +154,32 @@ export function useImageUpload() {
         })
 
       if (uploadError) {
-        console.error('❌ Erro no upload Supabase:', uploadError)
+        console.error(' ❌ Erro no upload Supabase:', uploadError)
         throw new Error(`Falha no upload: ${uploadError.message}`)
       }
 
-      console.log('✅ Upload storage concluído:', data)
+      console.log(' ✅ Upload storage concluído:', data)
 
       // 5. Gerar URL pública
       progress.value = 90
-      
-      const { data: urlData } = supabase.storage
+
+      // CORREÇÃO: Destructuring e tratamento de erro corretos para getPublicUrl
+      const { data: urlData, error: urlError } = supabase.storage 
         .from(bucketName)
         .getPublicUrl(nomeArquivo)
 
+      if (urlError) {
+        console.error(' ❌ Erro ao gerar URL pública:', urlError);
+        throw new Error(`Falha ao gerar URL: ${urlError.message}`);
+      }
+      
       if (!urlData?.publicUrl) {
         throw new Error('Não foi possível gerar URL pública')
       }
 
       progress.value = 100
 
-      console.log('🌐 URL pública gerada:', urlData.publicUrl)
+      console.log(' 🌐 URL pública gerada:', urlData.publicUrl)
 
       return {
         success: true,
@@ -183,12 +190,12 @@ export function useImageUpload() {
       }
 
     } catch (err) {
-      console.error('💥 ERRO NO UPLOAD:', err)
+      console.error(' ❌ ERRO NO UPLOAD:', err)
       error.value = err.message
-      
+
       // Mensagens amigáveis
       let mensagemUsuario = 'Erro ao fazer upload da imagem'
-      
+
       if (err.message.includes('timeout') || err.message.includes('Timeout')) {
         mensagemUsuario = 'Upload demorou muito. Tente uma imagem menor ou melhor conexão.'
       } else if (err.message.includes('network') || err.message.includes('Network')) {
@@ -198,16 +205,16 @@ export function useImageUpload() {
       } else if (err.message.includes('bucket')) {
         mensagemUsuario = 'Problema no storage. Verifique as configurações.'
       }
-      
+
       uiStore.showToast(mensagemUsuario, 'error')
       throw err
-      
+
     } finally {
       uploading.value = false
     }
   }
 
-  // 🗑️ Excluir imagem
+  // Excluir imagem
   const excluirImagem = async (bucketName, filePath) => {
     try {
       if (!bucketName || !filePath) {
@@ -220,17 +227,17 @@ export function useImageUpload() {
 
       if (deleteError) throw deleteError
 
-      console.log('🗑️ Imagem excluída:', filePath)
+      console.log(' ✅ Imagem excluída:', filePath)
       return true
 
     } catch (err) {
-      console.error('❌ Erro ao excluir:', err)
+      console.error(' ❌ Erro ao excluir:', err)
       error.value = err.message
       throw err
     }
   }
 
-  // 🔥 FUNÇÕES ESPECÍFICAS SIMPLIFICADAS
+  // FUNÇÕES ESPECÍFICAS SIMPLIFICADAS
   const uploadImagemGaleria = async (file) => uploadImagem(file, BUCKETS.GALERIA)
   const uploadImagemNoticia = async (file) => uploadImagem(file, BUCKETS.NOTICIAS)
   const uploadImagemEvento = async (file) => uploadImagem(file, BUCKETS.EVENTOS)
@@ -238,19 +245,19 @@ export function useImageUpload() {
   const uploadImagemLogo = async (file) => uploadImagem(file, BUCKETS.LOGOS)
   const uploadImagemGenerica = async (file) => uploadImagem(file, BUCKETS.IMAGENS)
 
-  // 🧩 EXPORT
+  // EXPORT
   return {
     // Estados
     uploading,
     progress,
     error,
-    
+
     // Constantes
     BUCKETS,
-    
+
     // Validação
     validarImagem,
-    
+
     // Upload
     uploadImagem,
     uploadImagemGaleria,
@@ -259,7 +266,7 @@ export function useImageUpload() {
     uploadImagemColaborador,
     uploadImagemLogo,
     uploadImagemGenerica,
-    
+
     // Exclusão
     excluirImagem
   }

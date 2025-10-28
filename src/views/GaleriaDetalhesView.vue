@@ -1,10 +1,10 @@
-﻿=== C:\Users\angel\Documents\Projetos\amajac-oficial\src\views\GaleriaDetalhesView.vue ===
+=== C:\Users\angel\Documents\Projetos\amajac-oficial\src\views\GaleriaDetalhesView.vue ===
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 transition-colors duration-200">
     <div class="container mx-auto px-4">
       <div v-if="loading || (imagemLoading && !imagem)" class="flex justify-center items-center py-12">
         <div class="text-center">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 dark:border-green-500 mx-auto mb-4"></div>
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 dark:border-green-500 mx-auto mb-4"/>
           <p class="text-gray-600 dark:text-gray-400 transition-colors duration-200">Carregando imagem...</p>
         </div>
       </div>
@@ -38,7 +38,7 @@
           <div class="relative bg-gray-900">
             <div v-if="imagemLoading" class="flex items-center justify-center min-h-[400px]">
               <div class="text-center">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"/>
                 <p class="text-white text-sm">Carregando imagem...</p>
               </div>
             </div>
@@ -201,7 +201,7 @@
 <script setup>
 import { ref, computed, onMounted, watch, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useGaleriaStore } from '@/stores/galeria';
+import { useGaleriaStore } from '@/modules/galeria/stores/galeria';
 import { storeToRefs } from 'pinia';
 
 const route = useRoute();

@@ -1,89 +1,103 @@
-﻿// src/router/index.js
+// src/router/index.js
 import { createRouter, createWebHistory } from "vue-router"
-import { useUIStore } from '@/stores/ui'
-import { useAuthStore } from '@/stores/auth'
+// --- Imports Corrigidos ---
+import { useUIStore } from '@/shared/stores/ui' // <-- Corrigido
+import { useAuthStore } from '@/modules/auth/stores/auth' // <-- Corrigido
 
 const routes = [
   {
     path: "/",
     name: "Home",
-    component: () => import("@/views/HomeView.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/views/HomeView.vue"), // <-- Movido para src/views/
     meta: { title: "Início - AMAJAC" }
   },
   {
     path: "/noticias",
     name: "Noticias",
-    component: () => import("@/views/NoticiasView.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/views/NoticiasView.vue"), // <-- Movido para src/views/
     meta: { title: "Notícias - AMAJAC" }
   },
   {
     path: "/noticias/:id",
     name: "NoticiaDetalhes",
-    component: () => import("@/views/NoticiaDetalhesView.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/views/NoticiaDetalhesView.vue"), // <-- Movido para src/views/
     meta: { title: "Detalhes da Notícia - AMAJAC" },
     props: true
   },
   {
     path: "/eventos",
     name: "Eventos",
-    component: () => import("@/views/EventosView.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/views/EventosView.vue"), // <-- Movido para src/views/
     meta: { title: "Eventos - AMAJAC" }
   },
   {
     path: "/eventos/:id",
     name: "EventoDetalhes",
-    component: () => import("@/views/EventoDetalhesView.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/views/EventoDetalhesView.vue"), // <-- Movido para src/views/
     meta: { title: "Detalhes do Evento - AMAJAC" },
     props: true
   },
   {
     path: "/galeria",
     name: "Galeria",
-    component: () => import("@/views/GaleriaView.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/views/GaleriaView.vue"), // <-- Movido para src/views/
     meta: { title: "Galeria de Fotos - AMAJAC" }
   },
   {
     path: "/galeria/:id",
     name: "GaleriaDetalhes",
-    component: () => import("@/views/GaleriaDetalhesView.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/views/GaleriaDetalhesView.vue"), // <-- Movido para src/views/
     meta: { title: "Detalhes da Galeria - AMAJAC" },
     props: true
   },
   {
     path: "/parceiros",
     name: "Parceiros",
-    component: () => import("@/views/ParceirosView.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/views/ParceirosView.vue"), // <-- Movido para src/views/
     meta: { title: "Parceiros Comerciais - AMAJAC" }
   },
   {
     path: "/parceiros/:id",
     name: "ParceiroDetalhes",
-    component: () => import("@/views/ParceiroDetalhesView.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/views/ParceiroDetalhesView.vue"), // <-- Movido para src/views/
     meta: { title: "Detalhes do Parceiro - AMAJAC" },
     props: true
   },
   {
     path: "/contato",
     name: "Contato",
-    component: () => import("@/views/ContatoView.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/views/ContatoView.vue"), // <-- Movido para src/views/
     meta: { title: "Contato - AMAJAC" }
   },
   {
     path: "/torne-se-socio",
     name: "TorneSeSocio",
-    component: () => import("@/views/TorneSeAssociadoView.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/views/TorneSeAssociadoView.vue"), // <-- Movido para src/views/
     meta: { title: "Torne-se Sócio - AMAJAC" }
   },
   {
     path: "/classificados",
     name: "Classificados",
-    component: () => import("@/views/ClassificadosView.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/views/ClassificadosView.vue"), // <-- Movido para src/views/
     meta: { title: "Classificados - AMAJAC" }
   },
   {
     path: "/classificados/:id",
     name: "ClassificadoDetalhe",
-    component: () => import("@/views/ClassificadoDetalhe.vue"),
+    // --- CORREÇÃO CRÍTICA: CAMINHO ATUALIZADO ---
+    component: () => import("@/modules/classificados/components/ClassificadoDetalhe.vue"), // <-- CORRIGIDO: estava em views, agora em modules/classificados/components
     meta: { title: "Detalhes do Classificado - AMAJAC" },
     props: true
   },
@@ -94,7 +108,8 @@ const routes = [
   {
     path: "/admin/login",
     name: "AdminLogin",
-    component: () => import("@/admin/views/AdminLogin.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/admin/views/AdminLogin.vue"), // <-- Movido para src/admin/views/
     meta: { 
       title: "Login - Painel Admin",
       public: true
@@ -105,7 +120,8 @@ const routes = [
   {
     path: "/admin/forgot-password",
     name: "AdminForgotPassword",
-    component: () => import("@/admin/components/AdminEsqueciSenha.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/admin/views/AdminEsqueciSenha.vue"), // <-- Movido para src/admin/views/
     meta: { 
       title: "Recuperar Senha - Painel Admin",
       public: true 
@@ -115,7 +131,8 @@ const routes = [
   {
     path: "/admin/reset-password", 
     name: "AdminResetPassword",
-    component: () => import("@/admin/components/AdminResetSenha.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/admin/views/AdminResetSenha.vue"), // <-- Movido para src/admin/views/
     meta: { 
       title: "Nova Senha - Painel Admin",
       public: true 
@@ -125,33 +142,36 @@ const routes = [
   {
     path: "/admin/esqueci-senha",
     name: "AdminEsqueciSenha",
-    component: () => import("@/admin/views/AdminEsqueciSenha.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/admin/views/AdminEsqueciSenha.vue"), // <-- Movido para src/admin/views/
     meta: { 
       title: "Recuperar Senha - Painel Admin",
       public: true 
     }
   },
   
-  // ✅ CORREÇÃO CRÍTICA: Rota principal do admin redireciona para dashboard
+  // 🎯 CORREÇÃO CRÍTICA: ROTA PRINCIPAL DO ADMIN DEVE SER "/admin"
   {
     path: "/admin",
-    redirect: "/admin/dashboard"
-  },
-
-  // ROTA PROTEGIDA: Layout Principal do Admin
-  {
-    path: "/admin/dashboard",
-    component: () => import("@/admin/components/AdminLayout.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/admin/views/AdminLayout.vue"), // <-- Movido para src/admin/views/
     meta: { 
       requiresAuth: true,
-      title: "Dashboard - Painel Admin"
+      title: "Painel Admin - AMAJAC"
     },
     children: [
-      // ✅ CORREÇÃO: Dashboard Principal - caminho vazio dentro do layout
+      // ✅ Redirecionamento da raiz do admin para dashboard
       {
         path: "",
+        redirect: "/admin/dashboard"
+      },
+      
+      // ✅ Dashboard - AGORA como rota filha
+      {
+        path: "dashboard",
         name: "AdminDashboard",
-        component: () => import("@/admin/views/AdminDashboard.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminDashboard.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Dashboard" }
       },
       
@@ -159,19 +179,22 @@ const routes = [
       {
         path: "noticias",
         name: "AdminNoticias",
-        component: () => import("@/admin/views/AdminNoticias.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminNoticias.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Gerenciar Notícias" }
       },
       {
-        path: "noticias/nova",
+        path: "noticias/nova", // ✅ AGORA será: /admin/noticias/nova
         name: "AdminNoticiaNova",
-        component: () => import("@/admin/views/AdminNoticiaForm.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminNoticiaForm.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Nova Notícia" }
       },
       {
-        path: "noticias/editar/:id",
+        path: "noticias/editar/:id", // ✅ AGORA será: /admin/noticias/editar/1
         name: "AdminNoticiaEditar",
-        component: () => import("@/admin/views/AdminNoticiaForm.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminNoticiaForm.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Editar Notícia" },
         props: true
       },
@@ -180,19 +203,22 @@ const routes = [
       {
         path: "eventos",
         name: "AdminEventos",
-        component: () => import("@/admin/views/AdminEventos.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminEventos.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Gerenciar Eventos" }
       },
       {
-        path: "eventos/novo",
+        path: "eventos/novo", // ✅ AGORA será: /admin/eventos/novo
         name: "AdminEventoNovo",
-        component: () => import("@/admin/views/AdminEventoForm.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminEventoForm.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Novo Evento" }
       },
       {
-        path: "eventos/editar/:id",
+        path: "eventos/editar/:id", // ✅ AGORA será: /admin/eventos/editar/1
         name: "AdminEventoEditar",
-        component: () => import("@/admin/views/AdminEventoForm.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminEventoForm.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Editar Evento" },
         props: true
       },
@@ -201,19 +227,22 @@ const routes = [
       {
         path: "galeria",
         name: "AdminGaleria",
-        component: () => import("@/admin/views/AdminGaleria.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminGaleria.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Gerenciar Galeria" }
       },
       {
-        path: "galeria/nova",
+        path: "galeria/nova", // ✅ AGORA será: /admin/galeria/nova
         name: "AdminGaleriaNova",
-        component: () => import("@/admin/views/AdminGaleriaForm.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminGaleriaForm.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Nova Imagem" }
       },
       {
-        path: "galeria/editar/:id",
+        path: "galeria/editar/:id", // ✅ AGORA será: /admin/galeria/editar/1
         name: "AdminGaleriaEditar",
-        component: () => import("@/admin/views/AdminGaleriaForm.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminGaleriaForm.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Editar Imagem" },
         props: true
       },
@@ -222,19 +251,22 @@ const routes = [
       {
         path: "parceiros",
         name: "AdminParceiros",
-        component: () => import("@/admin/views/AdminParceiros.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminParceiros.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Gerenciar Parceiros Comerciais" }
       },
       {
-        path: "parceiros/novo",
+        path: "parceiros/novo", // ✅ AGORA será: /admin/parceiros/novo
         name: "AdminParceiroNovo",
-        component: () => import("@/admin/views/AdminParceiroForm.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminParceiroForm.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Novo Parceiro Comercial" }
       },
       {
-        path: "parceiros/editar/:id",
+        path: "parceiros/editar/:id", // ✅ AGORA será: /admin/parceiros/editar/1
         name: "AdminParceiroEditar",
-        component: () => import("@/admin/views/AdminParceiroForm.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminParceiroForm.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Editar Parceiro Comercial" },
         props: true
       },
@@ -243,19 +275,22 @@ const routes = [
       {
         path: "classificados",
         name: "AdminClassificados",
-        component: () => import("@/admin/views/AdminClassificados.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminClassificados.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Gerenciar Classificados" }
       },
       {
-        path: "classificados/novo",
+        path: "classificados/novo", // ✅ AGORA será: /admin/classificados/novo
         name: "AdminClassificadoNovo",
-        component: () => import("@/admin/views/AdminClassificadoForm.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminClassificadoForm.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Novo Classificado" }
       },
       {
-        path: "classificados/editar/:id",
+        path: "classificados/editar/:id", // ✅ AGORA será: /admin/classificados/editar/1
         name: "AdminClassificadoEditar",
-        component: () => import("@/admin/views/AdminClassificadoForm.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminClassificadoForm.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Editar Classificado" },
         props: true
       },
@@ -264,7 +299,8 @@ const routes = [
       {
         path: "mensagens",
         name: "AdminMensagens",
-        component: () => import("@/admin/views/AdminMensagens.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminMensagens.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Mensagens de Contato" }
       },
       
@@ -272,7 +308,8 @@ const routes = [
       {
         path: "solicitacoes-socio",
         name: "AdminSolicitacoesSocio",
-        component: () => import("@/admin/views/AdminSolicitacoesSocio.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminSolicitacoesSocio.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Solicitações de Sócio" }
       },
       
@@ -280,13 +317,15 @@ const routes = [
       {
         path: "configuracoes",
         name: "AdminConfiguracoes",
-        component: () => import("@/admin/views/AdminConfiguracoes.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminConfiguracoes.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Configurações Gerais" }
       },
       {
         path: "configuracoes-completo",
         name: "AdminConfiguracoesCompleto",
-        component: () => import("@/admin/views/AdminConfiguracoesCompleto.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminConfiguracoesCompleto.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Configurações Avançadas" }
       },
       
@@ -294,7 +333,8 @@ const routes = [
       {
         path: "relatorios",
         name: "AdminRelatorios",
-        component: () => import("@/admin/views/AdminRelatorios.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AdminRelatorios.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Relatórios e Estatísticas" }
       },
       
@@ -302,7 +342,8 @@ const routes = [
       {
         path: "relatorios/auditoria",
         name: "RelatorioAuditoria",
-        component: () => import("@/admin/views/RelatorioAuditoria.vue"),
+        // --- CORREÇÃO CRÍTICA: CAMINHO ATUALIZADO ---
+        component: () => import("@/admin/modules/auth/RelatorioAuditoria.vue"), // <-- CORRIGIDO: estava em views, agora em admin/modules/auth
         meta: { title: "Auditoria do Sistema" }
       },
 
@@ -312,7 +353,8 @@ const routes = [
       {
         path: "monitor",
         name: "AdminMonitor",
-        component: () => import("@/admin/views/MonitorView.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/MonitorView.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Monitor Supabase" }
       },
       
@@ -320,7 +362,8 @@ const routes = [
       {
         path: "backup", 
         name: "AdminBackup",
-        component: () => import("@/admin/views/BackupView.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/BackupView.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Backup & Limpeza" }
       },
       
@@ -328,7 +371,8 @@ const routes = [
       {
         path: "auditoria",
         name: "AdminAuditoria", 
-        component: () => import("@/admin/views/AuditoriaView.vue"),
+        // --- CAMINHO CORRIGIDO ---
+        component: () => import("@/admin/views/AuditoriaView.vue"), // <-- Movido para src/admin/views/
         meta: { title: "Auditoria do Sistema" }
       }
     ]
@@ -348,7 +392,8 @@ const routes = [
   {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
-    component: () => import("@/views/NotFoundView.vue"),
+    // --- CAMINHO CORRIGIDO ---
+    component: () => import("@/views/NotFoundView.vue"), // <-- Movido para src/views/
     meta: { title: "Página Não Encontrada - AMAJAC" }
   }
 ]
@@ -356,22 +401,11 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(_, __, savedPosition) {
     return new Promise((resolve) => {
       setTimeout(() => {
         if (savedPosition) {
           resolve(savedPosition)
-        } else if (to.hash) {
-          const element = document.querySelector(to.hash)
-          if (element) {
-            resolve({
-              el: to.hash,
-              behavior: 'smooth',
-              top: 80
-            })
-          } else {
-            resolve({ top: 0, behavior: 'smooth' })
-          }
         } else {
           resolve({ top: 0, behavior: 'smooth' })
         }
@@ -418,7 +452,7 @@ router.beforeEach(async (to, from, next) => {
 })
 
 // Hook após navegação
-router.afterEach((to) => {
+router.afterEach(() => {
   const uiStore = useUIStore()
   
   // Fechar menu mobile se estiver aberto

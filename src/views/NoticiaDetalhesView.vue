@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 pt-24 pb-12">
     <div class="container mx-auto px-4 max-w-4xl">
       
@@ -15,7 +15,17 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>
           </li>
-          <li class="text-green-600 dark:text-green-400 font-medium">
+          <li>
+            <router-link to="/noticias" class="hover:text-green-600 dark:hover:text-green-400 transition-colors">
+              Notícias
+            </router-link>
+          </li>
+          <li class="flex items-center">
+            <svg class="w-4 h-4 mx-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </li>
+          <li class="text-green-600 dark:text-green-400 font-medium truncate max-w-xs">
             {{ safeString(noticia?.titulo || 'Carregando...') }}
           </li>
         </ol>
@@ -39,12 +49,20 @@
           </svg>
           <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Notícia não encontrada</h3>
           <p class="text-gray-500 dark:text-gray-400 mb-4">{{ safeString(error) }}</p>
-          <router-link
-            to="/"
-            class="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
-          >
-            Voltar para Home
-          </router-link>
+          <div class="flex gap-3 justify-center">
+            <router-link
+              to="/noticias"
+              class="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Ver Notícias
+            </router-link>
+            <router-link
+              to="/"
+              class="inline-block bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              Voltar para Home
+            </router-link>
+          </div>
         </div>
       </div>
 
@@ -59,6 +77,7 @@
             :alt="safeString(noticia.titulo)"
             class="w-full h-full object-cover"
             @error="handleImageError"
+            loading="lazy"
           />
           <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
             <svg class="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,6 +117,14 @@
                 </svg>
                 Por {{ safeString(noticia.autor) }}
               </span>
+
+              <span v-if="noticia.visualizacoes" class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+                {{ noticia.visualizacoes }} visualizações
+              </span>
             </div>
 
             <!-- Resumo -->
@@ -121,7 +148,7 @@
             <div class="prose prose-lg dark:prose-invert max-w-none">
               <p class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
                 {{ safeString(noticia.informacoes_adicionais) }}
-              </p>
+              </p> <!-- ✅ CORREÇÃO: Tag </p> adicionada -->
             </div>
           </div>
 
@@ -139,13 +166,13 @@
               </button>
 
               <router-link
-                to="/"
+                to="/noticias"
                 class="flex-1 bg-gray-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-700 transition-colors text-center flex items-center justify-center"
               >
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                 </svg>
-                Voltar para Home
+                Ver Todas as Notícias
               </router-link>
             </div>
           </div>
@@ -158,7 +185,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useNoticiasStore } from '@/stores/noticias'
+import { useNoticiasStore } from '@/modules/noticias/stores/noticias'
 
 const route = useRoute()
 const noticiasStore = useNoticiasStore()
@@ -171,15 +198,18 @@ const error = ref(null)
 // Funções de segurança
 const safeString = (str) => {
   if (typeof str !== 'string') return ''
+  // Remove caracteres potencialmente perigosos
   return str.replace(/[<>"']/g, '').trim()
 }
 
 const safeUrl = (url) => {
   if (typeof url !== 'string') return ''
   try {
+    // Verifica se é uma URL válida
     new URL(url)
     return url
   } catch {
+    // Permite URLs relativas
     return url.startsWith('/') || url.startsWith('./') ? url : ''
   }
 }
@@ -244,6 +274,14 @@ const compartilharNoticia = async () => {
       alert('URL da notícia copiada para a área de transferência!')
     } catch (err) {
       console.log('Erro ao copiar URL:', err)
+      // Fallback mais básico
+      const textArea = document.createElement('textarea')
+      textArea.value = window.location.href
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textArea)
+      alert('URL da notícia copiada para a área de transferência!')
     }
   }
 }
@@ -258,6 +296,7 @@ const loadNoticia = async () => {
 
   loading.value = true
   error.value = null
+  noticia.value = null
 
   try {
     console.log('🆔 Buscando notícia com ID:', id)
@@ -308,5 +347,19 @@ watch(() => route.params.id, () => {
 
 .prose-invert p {
   color: #d1d5db;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>

@@ -1,4 +1,4 @@
-﻿<template>
+<template>
     <!-- Vue Component: TorneSeSocioView -->
     <!-- Todo o conteúdo da seção e do modal de credenciamento -->
     <div class="min-h-screen flex items-center justify-center p-4">
@@ -11,7 +11,7 @@
                 <button @click="toggleTheme" class="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
                     <span class="text-sm font-medium hidden md:inline" id="toggleText">{{ isDark ? 'Desativar Dark Mode' : 'Ativar Dark Mode' }}</span>
                     <div class="toggle-switch">
-                        <div class="toggle-dot" :class="{'transform translate-x-6': isDark}"></div>
+                        <div class="toggle-dot" :class="{'transform translate-x-6': isDark}"/>
                     </div>
                 </button>
             </div>
@@ -20,7 +20,7 @@
             <div class="text-center mb-10">
                 <!-- Icone para Profissionais de Serviço (Verde) -->
                 <svg class="mx-auto h-12 w-12 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 4V2m-4 2V2m-4 2V2m12 14v-2m-2-3H6m14-4H4m0 0l-2-2m2 2l2-2m-4 4l-2 2m2-2l2 2m-4 4h16a2 2 0 002-2v-8a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 4V2m-4 2V2m-4 2V2m12 14v-2m-2-3H6m14-4H4m0 0l-2-2m2 2l2-2m-4 4l-2 2m2-2l2 2m-4 4h16a2 2 0 002-2v-8a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                 </svg>
                 <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mt-4">Torne-se Associado Credenciado</h1>
                 <p class="text-lg text-gray-600 dark:text-gray-400 mt-2 font-semibold">Apenas profissionais aprovados e verificados podem anunciar nos classificados.</p>
@@ -36,19 +36,19 @@
             <!-- Lista de Benefícios Focados em Anúncios para Serviços Domésticos -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700 dark:text-gray-300 mb-10">
                 <div class="flex items-start space-x-3">
-                    <svg class="h-6 w-6 text-green-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <svg class="h-6 w-6 text-green-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     <p><strong>Visibilidade Máxima:</strong> Seu serviço em destaque nos classificados para clientes locais.</p>
                 </div>
                 <div class="flex items-start space-x-3">
-                    <svg class="h-6 w-6 text-green-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <svg class="h-6 w-6 text-green-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     <p><strong>Confiança e Credibilidade:</strong> Use o selo de profissional associado da associação.</p>
                 </div>
                 <div class="flex items-start space-x-3">
-                    <svg class="h-6 w-6 text-green-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <svg class="h-6 w-6 text-green-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     <p><strong>Clientes em Contato:</strong> Receba pedidos de orçamento diretamente no seu e-mail ou telefone.</p>
                 </div>
                 <div class="flex items-start space-x-3">
-                    <svg class="h-6 w-6 text-green-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <svg class="h-6 w-6 text-green-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     <p>Controle Total: Edite seus serviços e disponibilidade a qualquer momento.</p>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                 <div class="flex justify-between items-center pb-4 border-b border-gray-200 dark:border-gray-700">
                     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Registro e Credenciamento Profissional</h3>
                     <button @click="closeModal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>
                 
@@ -86,7 +86,7 @@
                             class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 text-gray-900 
                                     bg-gray-50 focus:border-green-500 focus:ring-green-500 
                                     dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
-                            placeholder="Ex: João da Silva">
+                            placeholder="Ex: João da Silva"/>
                     </div>
                     
                     <!-- Campo CPF -->
@@ -96,7 +96,7 @@
                             class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 text-gray-900 
                                     bg-gray-50 focus:border-green-500 focus:ring-green-500
                                     dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
-                            placeholder="000.000.000-00" maxlength="14">
+                            placeholder="000.000.000-00" maxlength="14"/>
                     </div>
 
                     <!-- Campo Endereço Residencial -->
@@ -106,7 +106,7 @@
                             class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 text-gray-900 
                                     bg-gray-50 focus:border-green-500 focus:ring-green-500
                                     dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
-                            placeholder="Rua, número, complemento e CEP">
+                            placeholder="Rua, número, complemento e CEP"/>
                     </div>
 
                     <!-- Campo Endereço Comercial -->
@@ -116,7 +116,7 @@
                             class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 text-gray-900 
                                     bg-gray-50 focus:border-green-500 focus:ring-green-500
                                     dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
-                            placeholder="Rua, número, complemento e CEP do local de trabalho">
+                            placeholder="Rua, número, complemento e CEP do local de trabalho"/>
                     </div>
                     
                     <!-- Campo Serviço Principal -->
@@ -148,7 +148,7 @@
                             class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 text-gray-900 
                                     bg-gray-50 focus:border-green-500 focus:ring-green-500
                                     dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
-                            placeholder="(21) 99999-9999" maxlength="15">
+                            placeholder="(21) 99999-9999" maxlength="15"/>
                     </div>
 
                     <!-- Campo WhatsApp -->
@@ -158,7 +158,7 @@
                             class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 text-gray-900 
                                     bg-gray-50 focus:border-green-500 focus:ring-green-500
                                     dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
-                            placeholder="(21) 99999-9999" maxlength="15">
+                            placeholder="(21) 99999-9999" maxlength="15"/>
                     </div>
 
                     <!-- Campo Email -->
@@ -168,7 +168,7 @@
                             class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 text-gray-900 
                                     bg-gray-50 focus:border-green-500 focus:ring-green-500
                                     dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
-                            placeholder="seu.email.profissional@exemplo.com.br">
+                            placeholder="seu.email.profissional@exemplo.com.br"/>
                     </div>
 
                     <!-- Campo Motivação -->
@@ -178,7 +178,7 @@
                             class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 text-gray-900 
                                     bg-gray-50 focus:border-green-500 focus:ring-green-500
                                     dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
-                            placeholder="Conte um pouco sobre sua motivação e experiência..."></textarea>
+                            placeholder="Conte um pouco sobre sua motivação e experiência..."/>
                     </div>
                     
                     <!-- Termos e Condições -->
@@ -189,7 +189,7 @@
                             type="checkbox"
                             required
                             class="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
-                        >
+                        />
                         <label for="aceitou_termos" class="text-sm text-gray-600 dark:text-gray-300">
                             Concordo com os 
                             <a href="/termos-associacao" target="_blank" class="text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 font-medium underline">

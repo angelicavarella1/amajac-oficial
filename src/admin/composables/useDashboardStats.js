@@ -1,6 +1,6 @@
-// src/admin/composables/useDashboardStats.js - VERSÃO CORRIGIDA
+// src/admin/composables/useDashboardStats.js - VERSÃO CORRIGIDA E AUDITADA
 import { ref } from 'vue'
-import { supabase } from '@/supabase'
+import { supabase } from '@/supabase/client.js' // Importação direta do client.js
 
 export const useDashboardStats = () => {
   const loading = ref(false)
@@ -33,11 +33,11 @@ export const useDashboardStats = () => {
           .select('*', { count: 'exact', head: true })
           .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()),
 
-        // ✅ SÓCIOS ATIVOS - CORREÇÃO FINAL
+        // SÓCIOS ATIVOS - FILTRA POR status='ativo'
         supabase
           .from('socios')
           .select('*', { count: 'exact', head: true })
-          .eq('status', 'ativo')  // ← FILTRA POR status='ativo'
+          .eq('status', 'ativo')
       ]
 
       // Executa todas as queries em paralelo
@@ -49,7 +49,7 @@ export const useDashboardStats = () => {
         eventos: results[1].count || 0,
         mensagens: results[2].count || 0,
         associados: results[3].count || 0,
-        
+
         // Trends simuladas
         noticiasTrend: 'up',
         noticiasTrendValue: '+5%',
@@ -67,7 +67,7 @@ export const useDashboardStats = () => {
     } catch (err) {
       console.error('❌ Erro ao carregar estatísticas:', err)
       error.value = err.message
-      
+
       // Retorna valores padrão em caso de erro
       return {
         noticias: 0,

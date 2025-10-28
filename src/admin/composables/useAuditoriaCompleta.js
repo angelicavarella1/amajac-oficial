@@ -1,6 +1,6 @@
 // src/admin/composables/useAuditoriaCompleta.js - VERSÃO OTIMIZADA
 import { ref } from 'vue'
-import { supabase } from '@/supabase'
+import { supabase } from '@/supabase/client.js' // ✅ Corrigido: Importação direta do client.js
 
 export const useAuditoriaCompleta = () => {
   const loading = ref(false)
@@ -10,13 +10,13 @@ export const useAuditoriaCompleta = () => {
     loading.value = true
     error.value = null
 
-    try {
+    try { // ✅ O bloco 'try' tem um 'catch' e 'finally'
       console.log('🚀 Buscando logs OTIMIZADO...')
-      
+
       // QUERY ÚNICA E RÁPIDA
       let query = supabase
         .from('admin_logs')
-        .select('id, admin_id, created_at, action, table_name, row_id', 
+        .select('id, admin_id, created_at, action, table_name, row_id',
                 { count: 'exact' })
         .order('created_at', { ascending: false })
         .limit(200) // Limite menor para performance
@@ -25,7 +25,7 @@ export const useAuditoriaCompleta = () => {
       if (filtros.tabela && filtros.tabela !== 'all') {
         query = query.eq('table_name', filtros.tabela)
       }
-      
+
       if (filtros.acao && filtros.acao !== 'all') {
         query = query.eq('action', filtros.acao)
       }
@@ -43,13 +43,13 @@ export const useAuditoriaCompleta = () => {
       if (supabaseError) throw supabaseError
 
       console.log(`✅ ${data?.length || 0} logs carregados rapidamente`)
-      
+
       return {
         logs: data || [],
         total: count || 0
       }
 
-    } catch (err) {
+    } catch (err) { // ✅ 'catch' associado ao 'try' acima
       console.error('❌ Erro rápido:', err)
       error.value = err.message
       throw err
@@ -59,9 +59,9 @@ export const useAuditoriaCompleta = () => {
   }
 
   const obterEstatisticasAuditoria = async (filtros = {}) => {
-    try {
+    try { // ✅ O bloco 'try' tem um 'catch'
       console.log('📈 Estatísticas RÁPIDAS...')
-      
+
       // QUERY ÚNICA para estatísticas
       let query = supabase
         .from('admin_logs')
@@ -93,10 +93,10 @@ export const useAuditoriaCompleta = () => {
       data?.forEach(log => {
         // Ações
         statsAcoes[log.action] = (statsAcoes[log.action] || 0) + 1
-        
+
         // Tabelas
         statsTabelas[log.table_name] = (statsTabelas[log.table_name] || 0) + 1
-        
+
         // Hoje
         if (new Date(log.created_at).toDateString() === hojeDate) {
           hoje++
@@ -110,7 +110,7 @@ export const useAuditoriaCompleta = () => {
         hoje
       }
 
-    } catch (err) {
+    } catch (err) { // ✅ 'catch' associado ao 'try' acima
       console.error('❌ Erro estatísticas rápidas:', err)
       return {
         totalAcoes: 0,
