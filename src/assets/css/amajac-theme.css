@@ -1,0 +1,25 @@
+/* src/assets/css/amajac-theme.css CORRIGIDO */
+
+/* 1. Use as diretivas oficiais do Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 2. Seu CSS Global e Variáveis */
+:root {
+  --amajac-green: #2E7D32;
+  --amajac-green-dark: #1B5E20;
+  --amajac-green-light: #4CAF50;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Classes AMAJAC (opcional, mas seguras) */
+.text-amajac-green { color: var(--amajac-green); }
+.bg-amajac-green { background-color: var(--amajac-green); }
+.hover\:bg-amajac-green-dark:hover { background-color: var(--amajac-green-dark); }
+
+/* 3. Remover o bloco vazio */
+/* Removido o bloco .dark vazio para resolver a severity 4 */
