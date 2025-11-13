@@ -106,7 +106,7 @@ const mare = ref({
 const lua = ref({
   phase: 0.5,
   phaseLabel: 'Cheia',
-  illumination: '100'
+  illumination: 100
 })
 
 const tempoAtualizado = ref(0)
@@ -116,7 +116,36 @@ const loading = ref(false)
 const LATITUDE = -22.956608
 const LONGITUDE = -42.951448
 
-// funções utilitárias
+// Função para calcular fase e iluminação da Lua (sem API, sem dependência)
+const getMoonData = (date = new Date()) => {
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+
+  let a = Math.floor((14 - month) / 12)
+  let y = year + 4800 - a
+  let m = month + 12 * a - 3
+
+  let jdn = day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045
+  let jd = jdn + (date.getHours() - 12) / 24 + date.getMinutes() / 1440 + date.getSeconds() / 86400
+
+  let daysSinceNew = jd - 2451550.1
+  let newMoons = daysSinceNew / 29.530588853
+  let phase = newMoons - Math.floor(newMoons)
+
+  let illumination = Math.round((1 - Math.cos(phase * 2 * Math.PI)) * 50)
+
+  let phaseLabel = 'Cheia'
+  if (phase < 0.06 || phase > 0.94) phaseLabel = 'Lua Nova'
+  else if (phase < 0.25) phaseLabel = 'Crescente Côncavo'
+  else if (phase < 0.5) phaseLabel = 'Quarto Crescente'
+  else if (phase < 0.75) phaseLabel = 'Crescente Convexo'
+  else phaseLabel = 'Minguante'
+
+  return { phase, illumination, phaseLabel }
+}
+
+// Função utilitária para emoji da Lua
 const getMoonEmoji = (phase) => {
   if (phase < 0.1 || phase > 0.9) return '🌑'
   if (phase < 0.25) return '🌒'
@@ -132,71 +161,61 @@ const calcularDirecao = (graus) => {
   return direcoes[Math.round(graus / 22.5) % 16] || ''
 }
 
-// Carregar dados (Refatorado para duas chamadas de API)
+// Carregar dados (Refatorado para duas chamadas de API + Lua local)
 const carregarDados = async () => {
   if (loading.value) return
   loading.value = true
   
   try {
     // --- 1. CHAMADA DA API DE PREVISÃO DE TEMPO (TERRESTRE) ---
-    // Removemos 'wave_height' e 'wave_period' daqui
     const climaUrl = `https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,weather_code,apparent_temperature&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=America%2FSao_Paulo&forecast_days=1`
     
     const climaResponse = await fetch(climaUrl)
     const climaData = await climaResponse.json()
     
-    // Verifica se a resposta da API de clima contém erros
     if (climaData.error) throw new Error(climaData.reason || 'Erro na API de Clima.')
 
     const current = climaData.current
-
-    // Clima atual
     tempHoje.value = Math.round(current.temperature_2m)
     umidade.value = Math.round(current.relative_humidity_2m)
     vento.value = Math.round(current.wind_speed_10m)
     direcaoVento.value = calcularDirecao(current.wind_direction_10m)
-
-    // Temperaturas min/max
     tempMin.value = Math.round(climaData.daily.temperature_2m_min[0])
     tempMax.value = Math.round(climaData.daily.temperature_2m_max[0])
     
     // --- 2. CHAMADA DA API DE PREVISÃO MARINHA (ONDAS) ---
     const marineUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${LATITUDE}&longitude=${LONGITUDE}&current=wave_height,wave_period&timezone=America%2FSao_Paulo`
-
     const marineResponse = await fetch(marineUrl)
     const marineData = await marineResponse.json()
     
-    // Verifica se a resposta da API marinha contém erros
     if (marineData.error) throw new Error(marineData.reason || 'Erro na API Marinha.')
-
     const marineCurrent = marineData.current
-    
-    // Ondas
     ondas.value = {
       wave_height: marineCurrent.wave_height?.toFixed(1) || '--',
       wave_period: marineCurrent.wave_period?.toFixed(0) || '--'
     }
 
-    // --- 3. SIMULAÇÃO DE DADOS (MARÉS e LUA - MANTIDO) ---
-    
-    // Simular dados de marés
+    // --- 3. CÁLCULO LOCAL DA LUA (SEM API EXTERNA) ---
+    const moonData = getMoonData()
+    lua.value = {
+      phase: moonData.phase,
+      phaseLabel: moonData.phaseLabel,
+      illumination: moonData.illumination
+    }
+
+    // --- 4. SIMULAÇÃO DE MARÉS (mantida como antes) ---
     const agora = new Date()
-    // Lógica de simulação de alta mantida, apenas para fins de exibição
-    const minutos = (agora.getMinutes() + 30) % 60;
-    let horas = agora.getHours() + 2;
-    if (minutos < 30) horas = (horas - 1) % 24;
+    const minutos = (agora.getMinutes() + 30) % 60
+    let horas = agora.getHours() + 2
+    if (minutos < 30) horas = (horas - 1) % 24
     mare.value.alta = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`
     
-    // Simulação da Lua
-    // (A fase da lua não está na API, mantemos a simulação)
-    // A fase deve ser atualizada de outra fonte se for necessária precisão.
-
     tempoAtualizado.value = 0
     
   } catch (error) {
     console.error('Erro ao carregar dados:', error)
     
-    // Dados de fallback (melhorados e mantidos)
+    // Dados de fallback
     tempHoje.value = 26
     tempMin.value = 20
     tempMax.value = 29
@@ -205,6 +224,7 @@ const carregarDados = async () => {
     direcaoVento.value = 'SE'
     ondas.value = { wave_height: '1.2', wave_period: '8' }
     mare.value = { alta: '06:30' }
+    lua.value = { phase: 0.5, phaseLabel: 'Cheia', illumination: 100 }
     
   } finally {
     loading.value = false
@@ -212,22 +232,17 @@ const carregarDados = async () => {
 }
 
 const refreshData = async () => {
-  // Resetamos o tempoAtualizado ao iniciar o refresh
-  tempoAtualizado.value = 0; 
+  tempoAtualizado.value = 0
   await carregarDados()
 }
 
 onMounted(async () => {
   await carregarDados()
 
-  // Atualizar a cada 15 minutos (900000 ms)
   setInterval(async () => {
-    // Incrementa o contador do tempo de atualização para a exibição no botão
     tempoAtualizado.value += 15
-    
-    // Recarrega os dados se o contador for um múltiplo de 15, ou a cada 15 minutos exatos (só para garantir)
     if (tempoAtualizado.value % 15 === 0) {
-        await carregarDados()
+      await carregarDados()
     }
   }, 900000)
 })
@@ -430,10 +445,9 @@ onMounted(async () => {
 /* Mostrar fallback sempre como backup */
 .fallback-icone {
   font-size: 0.9rem;
-  display: none; /* Vamos mostrar apenas se MDI não carregar */
+  display: none;
 }
 
-/* Se MDI não carregou, mostrar fallback */
 .mdi[class*="mdi-"]:not(.mdi-loaded) {
   display: none;
 }
@@ -442,7 +456,6 @@ onMounted(async () => {
   display: inline-block;
 }
 
-/* Forçar exibição dos ícones MDI */
 .mdi-weather-sunny:before,
 .mdi-weather-windy:before,
 .mdi-water-percent:before,
@@ -554,6 +567,4 @@ onMounted(async () => {
     gap: 0.25rem;
   }
 }
-
-/* Garantir que os ícones MDI sejam visíveis */
 </style>
