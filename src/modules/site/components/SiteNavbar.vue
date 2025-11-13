@@ -60,7 +60,7 @@
         <div class="flex flex-wrap items-center gap-2">
           <!-- LINKS EXTERNOS SEM ESPAÇOS -->
           <a 
-            href="https://68f1811fa0c8f800095fbfe6--sosjac.netlify.app/login" 
+            href="https://sosjacapp.amajac.org.br/login" 
             target="_blank"
             class="quick-btn sos-btn"
           >
