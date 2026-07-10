@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -175,7 +175,7 @@ export default function SiteNavbar() {
                 SOSJAC
               </a>
               <a
-                href="https://associacoes.softaliza.com.br/login/amajac"
+                href="https://gestao.amajac.org.br/"
                 target="_blank"
                 className="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-xl text-white bg-gradient-to-r from-green-700 to-green-800 hover:from-green-600 hover:to-green-700 shadow-md shadow-green-700/20 hover:shadow-lg hover:shadow-green-700/30 hover:-translate-y-0.5 transition-all duration-200"
               >
