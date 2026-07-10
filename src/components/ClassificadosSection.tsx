@@ -1,464 +1,326 @@
-'use client';
+﻿"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { supabase } from '@/core/utils/supabaseClient';
+import { useState, useEffect, useCallback, useRef } from "react";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/core/utils/supabaseClient";
 
 const categoriasOptions = [
-  { value: null, label: 'Todos', icon: 'mdi mdi-view-grid' },
-  { value: 'jardinagem', label: 'Jardinagem', icon: 'mdi mdi-leaf' },
-  { value: 'limpeza', label: 'Limpeza', icon: 'mdi mdi-broom' },
-  { value: 'reparos', label: 'Reparos', icon: 'mdi mdi-tools' },
-  { value: 'pintura', label: 'Pintura', icon: 'mdi mdi-format-paint' },
-  { value: 'encanamento', label: 'Encanamento', icon: 'mdi mdi-pipe' },
-  { value: 'eletrica', label: 'Elétrica', icon: 'mdi mdi-flash' },
-  { value: 'construcao', label: 'Construção', icon: 'mdi mdi-hard-hat' },
-  { value: 'informatica', label: 'Informática', icon: 'mdi mdi-laptop' },
-  { value: 'transporte', label: 'Transporte', icon: 'mdi mdi-truck' },
-  { value: 'outros', label: 'Outros', icon: 'mdi mdi-hammer-wrench' }
+  { value: null, label: "Todos", icon: "mdi mdi-view-grid" },
+  { value: "jardinagem", label: "Jardinagem", icon: "mdi mdi-leaf" },
+  { value: "limpeza", label: "Limpeza", icon: "mdi mdi-broom" },
+  { value: "reparos", label: "Reparos", icon: "mdi mdi-tools" },
+  { value: "pintura", label: "Pintura", icon: "mdi mdi-format-paint" },
+  { value: "encanamento", label: "Encanamento", icon: "mdi mdi-pipe" },
+  { value: "eletrica", label: "Elétrica", icon: "mdi mdi-flash" },
+  { value: "construcao", label: "Construção", icon: "mdi mdi-hard-hat" },
+  { value: "informatica", label: "Informática", icon: "mdi mdi-laptop" },
+  { value: "transporte", label: "Transporte", icon: "mdi mdi-truck" },
+  { value: "outros", label: "Outros", icon: "mdi mdi-hammer-wrench" },
 ];
 
-const getServiceIcon = (categoria: string) => {
-  const c = categoriasOptions.find(o => o.value === categoria);
-  return c?.icon || 'mdi mdi-toolbox';
+const getIcon = (cat: string) => categoriasOptions.find((c) => c.value === cat)?.icon || "mdi mdi-toolbox";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.06, duration: 0.4, ease: [0.4, 0, 0.2, 1] as const } }),
 };
 
-function AvaliarClassificado({ classificadoId, onAvaliacaoEnviada }: { classificadoId: string, onAvaliacaoEnviada: () => void }) {
-  const [mostrarModal, setMostrarModal] = useState(false);
-  const [form, setForm] = useState({ nome: '', email: '', nota: 0, comentario: '' });
-  const [enviando, setEnviando] = useState(false);
+// ── Avaliar Modal ──
+function AvaliarModal({ classificadoId, onDone, onClose }: { classificadoId: string; onDone: () => void; onClose: () => void }) {
+  const [form, setForm] = useState({ nome: "", email: "", nota: 0, comentario: "" });
+  const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const abrirModal = () => {
-    setMostrarModal(true);
-    setForm({ nome: '', email: '', nota: 0, comentario: '' });
-    setError(null);
-  };
-
-  const fecharModal = () => setMostrarModal(false);
-
-  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-  const enviarAvaliacao = async (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.nome?.trim()) { setError('Nome é obrigatório.'); return; }
-    if (!validateEmail(form.email)) { setError('E-mail válido é obrigatório.'); return; }
-    if (!form.nota) { setError('Por favor, selecione uma nota.'); return; }
-
-    setEnviando(true);
-    setError(null);
-
+    if (!form.nome.trim()) { setError("Nome é obrigatório."); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) { setError("E-mail válido é obrigatório."); return; }
+    if (!form.nota) { setError("Selecione uma nota."); return; }
+    setSending(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      const dadosAvaliacao = {
+      await supabase.from("avaliacoes_classificados").insert([{
         classificado_id: classificadoId,
         nota: form.nota,
-        comentario: form.comentario?.trim() || null,
+        comentario: form.comentario.trim() || null,
         nome_avaliador: form.nome.trim(),
         email_avaliador: form.email.trim().toLowerCase(),
         created_at: new Date().toISOString(),
-        usuario_id: user?.id || null
-      };
-
-      const { error: supabaseError } = await supabase.from('avaliacoes_classificados').insert([dadosAvaliacao]).select();
-      
-      if (supabaseError) {
-        if (supabaseError.code === '23502' && supabaseError.message.includes('usuario_id')) {
-          const { error: errSemUser } = await supabase.from('avaliacoes_classificados').insert([{ ...dadosAvaliacao, usuario_id: null }]);
-          if (errSemUser) throw errSemUser;
-        } else {
-          throw supabaseError;
-        }
-      }
-
-      onAvaliacaoEnviada();
-      fecharModal();
-    } catch (err) {
-      console.error('Erro ao enviar avaliação:', err);
-      setError('Erro ao enviar avaliação. Tente novamente.');
+      }]);
+      onDone();
+      onClose();
+    } catch {
+      setError("Erro ao enviar avaliação.");
     } finally {
-      setEnviando(false);
+      setSending(false);
     }
   };
 
   return (
-    <div className="avaliar-classificado">
-      <button onClick={abrirModal} className="px-4 py-2 bg-[#2E7D32] text-white rounded-lg hover:bg-[#1B5E20] transition-colors text-sm flex items-center gap-2">
-        <i className="mdi mdi-star"></i> Avaliar
-      </button>
-
-      {mostrarModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Avaliar Serviço</h3>
-              <button onClick={fecharModal} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                <i className="mdi mdi-close text-xl"></i>
-              </button>
-            </div>
-
-            <form onSubmit={enviarAvaliacao} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Seu nome *</label>
-                <input value={form.nome} onChange={(e) => setForm({...form, nome: e.target.value})} type="text" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2E7D32] focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Ex: Maria Silva" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Seu e-mail *</label>
-                <input value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} type="email" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2E7D32] focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="seu@email.com" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sua avaliação *</label>
-                <div className="flex gap-1">
-                  {[1, 2, 3, 4, 5].map(estrela => (
-                    <button key={estrela} type="button" onClick={() => setForm({...form, nota: estrela})} className={`text-2xl transition-colors ${estrela <= form.nota ? 'text-yellow-500' : 'text-gray-300'}`}>
-                      <i className="mdi mdi-star"></i>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <label htmlFor="comentario" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Comentário (opcional)</label>
-                <textarea id="comentario" value={form.comentario} onChange={(e) => setForm({...form, comentario: e.target.value})} rows={3} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2E7D32] focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Conte sua experiência..."></textarea>
-              </div>
-
-              {error && <div className="p-3 bg-red-50 text-red-700 rounded-lg text-sm dark:bg-red-900/20 dark:text-red-200">{error}</div>}
-
-              <div className="flex gap-3 pt-2">
-                <button type="submit" disabled={enviando} className="px-4 py-2 bg-[#2E7D32] text-white rounded-lg font-medium hover:bg-[#1B5E20] transition-colors disabled:opacity-70 flex items-center gap-2 flex-1 justify-center">
-                  <i className={`mdi ${enviando ? 'mdi-loading mdi-spin' : 'mdi-send'}`}></i>
-                  {enviando ? 'Enviando...' : 'Enviar Avaliação'}
-                </button>
-                <button type="button" onClick={fecharModal} className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">Cancelar</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function ClassificadoDetalhes({ mostrar, classificadoId, onFechar }: { mostrar: boolean, classificadoId: string | null, onFechar: () => void }) {
-  const [classificado, setClassificado] = useState<any>(null);
-  const [carregando, setCarregando] = useState(false);
-
-  const getClassificadoDetalhes = async (id: string) => {
-    try {
-      const { data: cData, error: cErr } = await supabase.from('classificados').select('*').eq('id', id).eq('ativo', true).eq('aprovado', true).single();
-      if (cErr) throw cErr;
-
-      const { data: aData, error: aErr } = await supabase.from('avaliacoes_classificados').select('id, nota, comentario, nome_avaliador, email_avaliador, created_at').eq('classificado_id', id).order('created_at', { ascending: false });
-      if (aErr && aErr.code !== 'PGRST116') throw aErr;
-
-      const avaliacoes = (aData || []).map((a: any) => ({ ...a, data: new Date(a.created_at).toLocaleDateString('pt-BR') }));
-      const notas = avaliacoes.map((a: any) => a.nota);
-      const media = notas.length > 0 ? (notas.reduce((acc: number, cur: number) => acc + cur, 0) / notas.length) : 0;
-
-      return {
-        ...cData,
-        mediaAvaliacoes: notas.length > 0 ? parseFloat(media.toFixed(1)) : null,
-        totalAvaliacoes: notas.length,
-        avaliacoes
-      };
-    } catch (err) {
-      console.error('Erro ao buscar detalhes:', err);
-      return null;
-    }
-  };
-
-  const carregar = async () => {
-    if (!classificadoId) return;
-    setCarregando(true);
-    const data = await getClassificadoDetalhes(classificadoId);
-    setClassificado(data);
-    setCarregando(false);
-  };
-
-  useEffect(() => {
-    if (mostrar && classificadoId) carregar();
-    else setClassificado(null);
-  }, [mostrar, classificadoId]);
-
-  const abrirWhatsApp = () => {
-    if (classificado?.telefone) {
-      const tel = classificado.telefone.replace(/\D/g, '');
-      const msg = `Olá! Gostaria de saber mais sobre o serviço: ${classificado.titulo}`;
-      window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-  };
-
-  if (!mostrar) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={onFechar}>
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col relative" onClick={e => e.stopPropagation()}>
-        <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{classificado?.titulo}</h2>
-          <button onClick={onFechar} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2"><i className="mdi mdi-close text-2xl"></i></button>
-        </div>
-
-        {classificado && (
-          <div className="overflow-y-auto max-h-[calc(90vh-160px)]">
-            <div className="p-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <div>
-                  {classificado.imagem_url ? (
-                    <div className="rounded-lg overflow-hidden"><img src={classificado.imagem_url} alt={classificado.titulo} className="w-full h-64 object-cover" /></div>
-                  ) : (
-                    <div className="h-64 bg-gradient-to-br from-[#2E7D32] to-green-600 rounded-lg flex items-center justify-center">
-                      <i className={`${getServiceIcon(classificado.categoria)} text-white text-6xl`}></i>
-                    </div>
-                  )}
-                </div>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full dark:bg-blue-900 dark:text-blue-200 capitalize">{classificado.categoria}</span>
-                    {classificado.mediaAvaliacoes && (
-                      <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
-                        <i className="mdi mdi-star text-yellow-500"></i>
-                        <span className="font-medium text-gray-900 dark:text-white">{classificado.mediaAvaliacoes}</span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">({classificado.totalAvaliacoes} avaliações)</span>
-                      </div>
-                    )}
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Descrição</h3>
-                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{classificado.descricao}</p>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Informações de Contato</h3>
-                    <div className="space-y-2">
-                      <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">Anunciante:</span><span className="font-medium text-gray-900 dark:text-white">{classificado.nome_anunciante}</span></div>
-                      <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">Bairro:</span><span className="font-medium text-gray-900 dark:text-white">{classificado.bairro}</span></div>
-                      <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">Telefone:</span><span className="font-medium text-gray-900 dark:text-white">{classificado.telefone}</span></div>
-                      {classificado.email && <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">E-mail:</span><span className="font-medium text-gray-900 dark:text-white">{classificado.email}</span></div>}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                {classificado.avaliacoes && classificado.avaliacoes.length > 0 ? (
-                  <>
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Avaliações ({classificado.totalAvaliacoes})</h3>
-                    <div className="space-y-4">
-                      {classificado.avaliacoes.map((av: any) => (
-                        <div key={av.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="flex text-yellow-500">
-                              {[1, 2, 3, 4, 5].map(n => <i key={n} className={`mdi mdi-star ${n <= av.nota ? 'text-yellow-500' : 'text-gray-300'}`}></i>)}
-                            </div>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">{av.data}</span>
-                          </div>
-                          {av.comentario ? <p className="text-gray-700 dark:text-gray-300">{av.comentario}</p> : <p className="text-gray-500 dark:text-gray-400 italic">Sem comentário</p>}
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <div className="text-center py-8">
-                    <i className="mdi mdi-star-outline text-4xl text-gray-400 mb-2"></i>
-                    <p className="text-gray-500 dark:text-gray-400">Este classificado ainda não possui avaliações.</p>
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-                <AvaliarClassificado classificadoId={classificado.id} onAvaliacaoEnviada={carregar} />
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div className="border-t border-gray-200 dark:border-gray-700 p-6">
-          <div className="flex gap-3">
-            {classificado?.telefone && (
-              <button onClick={abrirWhatsApp} className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-3">
-                <i className="mdi mdi-whatsapp text-xl"></i> Entrar em Contato via WhatsApp
-              </button>
-            )}
-            <button onClick={onFechar} className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">Fechar</button>
-          </div>
-        </div>
-
-        {carregando && (
-          <div className="absolute inset-0 bg-white dark:bg-gray-800 bg-opacity-80 flex items-center justify-center z-10">
-            <div className="text-center"><i className="mdi mdi-loading mdi-spin text-[#2E7D32] text-4xl mb-2"></i><p className="text-gray-600 dark:text-gray-300">Carregando detalhes...</p></div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function ClassificadoCard({ c, onVerDetalhes, onFiltrarCategoria }: { c: any, onVerDetalhes: (id: string) => void, onFiltrarCategoria: (cat: string) => void }) {
-  const classificado = { ...c, anunciante: c.nome_anunciante, data: new Date(c.created_at).toLocaleDateString('pt-BR') };
-
-  const abrirWhatsApp = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!classificado.telefone) return;
-    const tel = classificado.telefone.replace(/\D/g, '');
-    const msg = `Olá! Gostaria de saber mais sobre o serviço: ${classificado.titulo}`;
-    window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`, '_blank');
-  };
-
-  return (
-    <article onClick={() => onVerDetalhes(classificado.id)} className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 group cursor-pointer flex flex-col">
-      {classificado.imagem_url ? (
-        <div className="h-48 overflow-hidden"><img src={classificado.imagem_url} alt={classificado.titulo} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" /></div>
-      ) : (
-        <div className="h-48 bg-gradient-to-br from-[#2E7D32] to-green-600 flex items-center justify-center">
-          <i className={`${getServiceIcon(classificado.categoria)} text-white text-5xl`}></i>
-        </div>
-      )}
-      <div className="p-5 flex flex-col h-full flex-grow">
-        <div className="flex justify-between items-start mb-3">
-          <button onClick={(e) => { e.stopPropagation(); onFiltrarCategoria(classificado.categoria); }} className="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full dark:bg-blue-900 dark:text-blue-200 capitalize hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors">
-            {classificado.categoria}
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white">Avaliar Serviço</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-white p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
-          {classificado.mediaAvaliacoes && (
-            <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
-              <i className="mdi mdi-star text-yellow-500 text-sm"></i>
-              <span className="text-sm font-medium text-gray-900 dark:text-white">{classificado.mediaAvaliacoes}</span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">({classificado.totalAvaliacoes})</span>
-            </div>
-          )}
         </div>
-        <h3 className="text-xl font-bold mb-2 line-clamp-2 text-gray-900 dark:text-white group-hover:text-[#2E7D32] transition-colors">{classificado.titulo}</h3>
-        <p className="text-sm mb-4 flex-grow line-clamp-3 text-gray-600 dark:text-gray-300">{classificado.descricao}</p>
-        <div className="text-sm space-y-2 pt-3 border-t border-gray-200 dark:border-gray-700 mt-auto">
-          <div className="flex items-center justify-between"><span className="font-medium text-gray-900 dark:text-white">{classificado.anunciante}</span><span className="text-gray-600 dark:text-gray-400">{classificado.bairro}</span></div>
-          {classificado.telefone && (
-            <button onClick={abrirWhatsApp} className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
-              <i className="mdi mdi-whatsapp text-lg"></i> Entrar em Contato
-            </button>
-          )}
-          <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-            <div className="flex items-center gap-2"><i className="mdi mdi-calendar"></i><span>Publicado em {classificado.data}</span></div>
-            <span className="text-[#2E7D32] hover:text-[#1B5E20] transition-colors flex items-center gap-1"><span>Ver detalhes</span><i className="mdi mdi-chevron-right"></i></span>
+        <form onSubmit={submit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Seu nome *</label>
+            <input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none text-sm" placeholder="Maria Silva" />
           </div>
-        </div>
-      </div>
-    </article>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">E-mail *</label>
+            <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none text-sm" placeholder="seu@email.com" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nota *</label>
+            <div className="flex gap-1">{[1, 2, 3, 4, 5].map((s) => (
+              <button key={s} type="button" onClick={() => setForm({ ...form, nota: s })} className={`text-2xl transition-colors ${s <= form.nota ? "text-yellow-500" : "text-gray-300 dark:text-gray-600"}`}>★</button>
+            ))}</div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Comentário (opcional)</label>
+            <textarea value={form.comentario} onChange={(e) => setForm({ ...form, comentario: e.target.value })} rows={3} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none text-sm resize-none" />
+          </div>
+          {error && <div className="p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-300 rounded-lg text-sm">{error}</div>}
+          <button type="submit" disabled={sending} className="w-full py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-semibold hover:from-green-500 hover:to-green-600 disabled:opacity-60 transition-all shadow-md shadow-green-600/20">
+            {sending ? "Enviando..." : "Enviar Avaliação"}
+          </button>
+        </form>
+      </motion.div>
+    </motion.div>
   );
 }
 
+// ── Detalhes Modal ──
+function DetalhesModal({ id, onClose }: { id: string | null; onClose: () => void }) {
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [showAvaliar, setShowAvaliar] = useState(false);
+
+  const load = useCallback(async () => {
+    if (!id) return;
+    setLoading(true);
+    const { data: c } = await supabase.from("classificados").select("*").eq("id", id).single();
+    const { data: a } = await supabase.from("avaliacoes_classificados").select("*").eq("classificado_id", id).order("created_at", { ascending: false });
+    const avs = (a || []).map((x: any) => ({ ...x, data: new Date(x.created_at).toLocaleDateString("pt-BR") }));
+    const med = avs.length ? (avs.reduce((acc: number, x: any) => acc + x.nota, 0) / avs.length).toFixed(1) : null;
+    setData({ ...c, mediaAvaliacoes: med ? parseFloat(med) : null, totalAvaliacoes: avs.length, avaliacoes: avs });
+    setLoading(false);
+  }, [id]);
+
+  useEffect(() => { if (id) load(); }, [id, load]);
+
+  if (!id) return null;
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }} className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
+        {loading ? (
+          <div className="p-12 text-center"><div className="skeleton h-64 rounded-xl mb-4" /><p className="text-gray-500">Carregando...</p></div>
+        ) : data ? (
+          <>
+            <div className="flex justify-between items-center p-5 border-b border-gray-100 dark:border-gray-700">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">{data.titulo}</h2>
+              <button onClick={onClose} className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <div className="overflow-y-auto p-5 space-y-5">
+              {data.imagem_url ? (
+                <img src={data.imagem_url} alt={data.titulo} className="w-full h-64 object-cover rounded-xl" />
+              ) : (
+                <div className="w-full h-48 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+                  <i className={`${getIcon(data.categoria)} text-white text-5xl`}></i>
+                </div>
+              )}
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="badge badge-green">{data.categoria}</span>
+                {data.mediaAvaliacoes && <span className="text-sm text-yellow-600 font-medium">★ {data.mediaAvaliacoes} ({data.totalAvaliacoes} avaliações)</span>}
+              </div>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{data.descricao}</p>
+              <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 grid grid-cols-2 gap-3 text-sm">
+                <div><span className="text-gray-500">Anunciante:</span> <span className="font-medium text-gray-900 dark:text-white">{data.nome_anunciante}</span></div>
+                <div><span className="text-gray-500">Bairro:</span> <span className="font-medium text-gray-900 dark:text-white">{data.bairro}</span></div>
+                <div><span className="text-gray-500">Telefone:</span> <span className="font-medium text-gray-900 dark:text-white">{data.telefone}</span></div>
+                {data.email && <div><span className="text-gray-500">E-mail:</span> <span className="font-medium text-gray-900 dark:text-white">{data.email}</span></div>}
+              </div>
+              {data.avaliacoes?.length > 0 && (
+                <div>
+                  <h3 className="font-bold text-gray-900 dark:text-white mb-3">Avaliações</h3>
+                  <div className="space-y-3">{data.avaliacoes.map((a: any) => (
+                    <div key={a.id} className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-yellow-500">{Array(a.nota).fill("★").join("")}</span>
+                        <span className="text-xs text-gray-500">{a.data}</span>
+                      </div>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">{a.comentario || "Sem comentário."}</p>
+                    </div>
+                  ))}</div>
+                </div>
+              )}
+              <button onClick={() => setShowAvaliar(true)} className="w-full py-2.5 border-2 border-green-600 text-green-700 dark:text-green-400 dark:border-green-500 rounded-xl font-semibold hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors text-sm">★ Avaliar este serviço</button>
+            </div>
+            {data.telefone && (
+              <div className="border-t border-gray-100 dark:border-gray-700 p-5">
+                <a href={`https://wa.me/55${data.telefone.replace(/\D/g, "")}?text=Olá! Gostaria de saber mais sobre: ${encodeURIComponent(data.titulo)}`} target="_blank" className="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors shadow-md shadow-green-600/20">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
+                  WhatsApp
+                </a>
+              </div>
+            )}
+            <AnimatePresence>{showAvaliar && <AvaliarModal classificadoId={id} onDone={load} onClose={() => setShowAvaliar(false)} />}</AnimatePresence>
+          </>
+        ) : null}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ── Card ──
+function Card({ c, onOpen }: { c: any; onOpen: (id: string) => void }) {
+  const whatsapp = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!c.telefone) return;
+    window.open(`https://wa.me/55${c.telefone.replace(/\D/g, "")}?text=Olá! Gostaria de saber mais sobre: ${encodeURIComponent(c.titulo)}`, "_blank");
+  };
+
+  return (
+    <motion.article
+      variants={fadeInUp}
+      onClick={() => onOpen(c.id)}
+      className="card-modern cursor-pointer flex flex-col group"
+    >
+      <div className="relative overflow-hidden">
+        {c.imagem_url ? (
+          <img src={c.imagem_url} alt={c.titulo} className="w-full h-44 object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+        ) : (
+          <div className="w-full h-44 bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+            <i className={`${getIcon(c.categoria)} text-white text-4xl`}></i>
+          </div>
+        )}
+        {c.mediaAvaliacoes && (
+          <span className="absolute top-3 right-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-yellow-600 text-xs font-bold px-2 py-1 rounded-full shadow-sm">★ {c.mediaAvaliacoes}</span>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+          <span className="text-white text-sm font-semibold">Ver detalhes →</span>
+        </div>
+      </div>
+      <div className="p-4 flex flex-col flex-grow">
+        <span className="badge badge-green mb-2 text-[10px]">{c.categoria}</span>
+        <h3 className="font-bold text-gray-900 dark:text-white mb-1 line-clamp-2 text-sm group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors">{c.titulo}</h3>
+        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 flex-grow">{c.descricao}</p>
+        <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between text-xs">
+          <span className="font-medium text-gray-900 dark:text-white truncate mr-2">{c.nome_anunciante}</span>
+          {c.telefone && (
+            <button onClick={whatsapp} className="flex-shrink-0 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold transition-colors">WhatsApp</button>
+          )}
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
+// ── Main Section ──
 export default function ClassificadosSection() {
   const [classificados, setClassificados] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState(true);
+  const [filtro, setFiltro] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const PAGE_SIZE = 12;
 
-  const [categoriaFiltro, setCategoriaFiltro] = useState<string | null>(null);
-  const [mostrarModalDetalhes, setMostrarModalDetalhes] = useState(false);
-  const [classificadoSelecionadoId, setClassificadoSelecionadoId] = useState<string | null>(null);
-
-  const fetchClassificados = async (catFiltro: string | null, reset = false) => {
-    const currentPage = reset ? 0 : page;
-    if (reset) {
-      setClassificados([]);
-      setHasMore(true);
-    } else {
-      if (!hasMore) return;
-    }
-
+  const fetch = useCallback(async (cat: string | null, reset: boolean) => {
+    const p = reset ? 0 : page;
+    if (!reset && !hasMore) return;
+    if (reset) { setClassificados([]); setHasMore(true); }
     setLoading(true);
-    setError(null);
-
     try {
-      let query = supabase.from('classificados').select('*', { count: 'exact' })
-        .eq('ativo', true).eq('aprovado', true).order('created_at', { ascending: false })
-        .range(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE - 1);
-
-      if (catFiltro) query = query.eq('categoria', catFiltro);
-
-      const { data, error: err } = await query;
-      if (err) throw err;
-
-      const novos = data || [];
-      if (reset) setClassificados(novos);
-      else setClassificados(prev => [...prev, ...novos]);
-
-      setHasMore(novos.length === PAGE_SIZE);
-      setPage(currentPage + 1);
-    } catch (err) {
-      console.error('Erro:', err);
-      setError('Não foi possível carregar os classificados no momento.');
+      let q = supabase.from("classificados").select("*", { count: "exact" }).eq("ativo", true).eq("aprovado", true).order("created_at", { ascending: false }).range(p * PAGE_SIZE, (p + 1) * PAGE_SIZE - 1);
+      if (cat) q = q.eq("categoria", cat);
+      const { data, error: e } = await q;
+      if (e) throw e;
+      const items = data || [];
+      setClassificados((prev) => (reset ? items : [...prev, ...items]));
+      setHasMore(items.length === PAGE_SIZE);
+      setPage(p + 1);
+    } catch {
+      setError("Erro ao carregar classificados.");
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, hasMore]);
 
-  useEffect(() => {
-    fetchClassificados(null, true);
-  }, []);
+  useEffect(() => { fetch(null, true); }, []);
 
-  const mudarCategoria = (cat: string | null) => {
-    setCategoriaFiltro(cat);
+  const mudarFiltro = (cat: string | null) => {
+    setFiltro(cat);
     setPage(0);
     setHasMore(true);
-    fetchClassificados(cat, true);
+    fetch(cat, true);
   };
 
   return (
-    <section id="classificados-section" className="py-12 bg-gray-50 dark:bg-gray-900">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Classificados de Serviços</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-6">Encontre os melhores prestadores de serviço da região. Entre em contato diretamente via WhatsApp.</p>
-          <div className="bg-[#2E7D32]/10 border border-[#2E7D32]/30 rounded-xl py-4 px-6 max-w-2xl mx-auto">
-            <p className="text-[#2E7D32] font-medium">📢 <strong>Você também presta serviço no bairro?</strong><br />Associe-se à AMAJAC e anuncie gratuitamente!</p>
-            <Link href="/associacao" className="mt-2 inline-block text-sm bg-[#2E7D32] text-white px-4 py-2 rounded-lg hover:bg-[#1B5E20] transition-colors">Quero me associar</Link>
-          </div>
-        </div>
+    <section id="classificados-section" className="py-16 md:py-20 bg-gray-50/50 dark:bg-gray-900/30 scroll-mt-32">
+      <div className="max-w-7xl mx-auto px-4">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeInUp} custom={0}>
+          <h2 className="section-title text-gray-900 dark:text-white">Classificados</h2>
+          <p className="section-subtitle">Encontre os melhores prestadores de serviço da região</p>
+        </motion.div>
 
-        <div className="flex flex-wrap gap-4 justify-center mb-8">
-          {categoriasOptions.map(cat => (
-            <button key={cat.value || 'todos'} onClick={() => mudarCategoria(cat.value)} className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${categoriaFiltro === cat.value ? 'bg-[#2E7D32] text-white shadow-md' : 'bg-white text-gray-700 dark:bg-gray-800 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600'}`}>
-              <i className={`${cat.icon} mr-2`}></i>{cat.label}
+        {/* CTA banner */}
+        <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-10 p-5 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-2xl text-center">
+          <p className="text-green-800 dark:text-green-200 font-medium text-sm">💼 <strong>Você presta serviço no bairro?</strong> Associe-se à AMAJAC e anuncie gratuitamente!</p>
+          <Link href="/associacao" className="mt-3 inline-block px-5 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">Quero me associar</Link>
+        </motion.div>
+
+        {/* Filtros */}
+        <div className="flex flex-wrap gap-2 justify-center mb-10">
+          {categoriasOptions.map((cat) => (
+            <button key={cat.value || "todos"} onClick={() => mudarFiltro(cat.value)}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                filtro === cat.value
+                  ? "bg-green-600 text-white shadow-md shadow-green-600/20"
+                  : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-700"
+              }`}
+            >
+              <i className={`${cat.icon} mr-1.5`}></i>{cat.label}
             </button>
           ))}
         </div>
 
+        {/* Grid */}
         {loading && classificados.length === 0 ? (
-          <div className="text-center py-12">
-            <i className="mdi mdi-loading mdi-spin text-[#2E7D32] text-4xl mb-4"></i>
-            <p className="text-gray-600 dark:text-gray-300">Carregando classificados...</p>
-          </div>
-        ) : error ? (
-          <div className="text-center py-12">
-            <i className="mdi mdi-alert-circle-outline text-red-500 text-4xl mb-4"></i>
-            <p className="text-red-600 dark:text-red-400">{error}</p>
-            <button onClick={() => fetchClassificados(categoriaFiltro, true)} className="mt-4 px-6 py-2 bg-[#2E7D32] text-white rounded-lg hover:bg-green-700 transition-colors">Tentar Novamente</button>
-          </div>
-        ) : classificados.length === 0 ? (
-          <div className="text-center py-12">
-            <i className="mdi mdi-bullhorn-outline text-gray-400 text-4xl mb-4"></i>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Nenhum classificado encontrado</h3>
-            <p className="text-gray-600 dark:text-gray-300">{categoriaFiltro ? 'Nenhum serviço encontrado na categoria.' : 'Ainda não há classificados cadastrados.'}</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {classificados.map(c => (
-              <ClassificadoCard key={c.id} c={c} onVerDetalhes={(id) => { setClassificadoSelecionadoId(id); setMostrarModalDetalhes(true); }} onFiltrarCategoria={mudarCategoria} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="card-modern"><div className="skeleton h-44 rounded-none rounded-t-xl" /><div className="p-4 space-y-2"><div className="skeleton h-3 w-1/4" /><div className="skeleton h-4 w-3/4" /><div className="skeleton h-3 w-full" /></div></div>
             ))}
           </div>
+        ) : error ? (
+          <div className="text-center py-16 text-red-500">{error}</div>
+        ) : classificados.length === 0 ? (
+          <div className="text-center py-16"><div className="text-5xl mb-4">🔍</div><p className="text-gray-500 dark:text-gray-400 text-lg">Nenhum classificado encontrado.</p></div>
+        ) : (
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-40px" }} variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05 } } }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {classificados.map((c) => <Card key={c.id} c={c} onOpen={setSelectedId} />)}
+          </motion.div>
         )}
 
-        {hasMore && !loading && (
-          <div className="text-center mt-12">
-            <button onClick={() => fetchClassificados(categoriaFiltro, false)} className="px-8 py-3 bg-[#2E7D32] text-white rounded-lg hover:bg-[#1B5E20] transition-colors font-medium">Carregar Mais Classificados</button>
-          </div>
-        )}
-        {loading && classificados.length > 0 && (
-          <div className="text-center mt-8">
-            <i className="mdi mdi-loading mdi-spin text-[#2E7D32] text-2xl"></i>
+        {hasMore && classificados.length > 0 && (
+          <div className="text-center mt-10">
+            <button onClick={() => fetch(filtro, false)} disabled={loading}
+              className="px-8 py-3 border-2 border-green-600 text-green-700 dark:text-green-400 dark:border-green-500 rounded-xl font-semibold hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors disabled:opacity-50 text-sm"
+            >
+              {loading ? "Carregando..." : "Carregar mais"}
+            </button>
           </div>
         )}
 
-        <ClassificadoDetalhes mostrar={mostrarModalDetalhes} classificadoId={classificadoSelecionadoId} onFechar={() => { setMostrarModalDetalhes(false); setClassificadoSelecionadoId(null); }} />
+        <AnimatePresence>{selectedId && <DetalhesModal id={selectedId} onClose={() => setSelectedId(null)} />}</AnimatePresence>
       </div>
     </section>
   );

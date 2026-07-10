@@ -1,233 +1,94 @@
-'use client';
+﻿"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-// Constantes de localização para API (Maricá/Região)
-const LATITUDE = -22.956608;
-const LONGITUDE = -42.951448;
+const LAT = -22.956608;
+const LNG = -42.951448;
 
 const getMoonData = (date = new Date()) => {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-
-  const a = Math.floor((14 - month) / 12);
-  const y = year + 4800 - a;
-  const m = month + 12 * a - 3;
-
-  const jdn = day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
-  const jd = jdn + (date.getHours() - 12) / 24 + date.getMinutes() / 1440 + date.getSeconds() / 86400;
-
-  const daysSinceNew = jd - 2451550.1;
-  const newMoons = daysSinceNew / 29.530588853;
-  const phase = newMoons - Math.floor(newMoons);
-
-  const illumination = Math.round((1 - Math.cos(phase * 2 * Math.PI)) * 50);
-
-  let phaseLabel = 'Cheia';
-  if (phase < 0.06 || phase > 0.94) phaseLabel = 'Lua Nova';
-  else if (phase < 0.25) phaseLabel = 'Crescente Côncavo';
-  else if (phase < 0.5) phaseLabel = 'Quarto Crescente';
-  else if (phase < 0.75) phaseLabel = 'Crescente Convexo';
-  else phaseLabel = 'Minguante';
-
-  return { phase, illumination, phaseLabel };
+  const a = Math.floor((14 - (date.getMonth() + 1)) / 12);
+  const y = date.getFullYear() + 4800 - a;
+  const m = date.getMonth() + 1 + 12 * a - 3;
+  const jdn = date.getDate() + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+  const jd = jdn + (date.getHours() - 12) / 24 + date.getMinutes() / 1440;
+  const phase = ((jd - 2451550.1) / 29.530588853) % 1;
+  const ill = Math.round((1 - Math.cos(phase * 2 * Math.PI)) * 50);
+  let label = "Cheia";
+  if (phase < 0.06 || phase > 0.94) label = "Lua Nova";
+  else if (phase < 0.25) label = "Crescente";
+  else if (phase < 0.5) label = "Quarto Crescente";
+  else if (phase < 0.75) label = "Minguante";
+  return { phase, illumination: ill, phaseLabel: label };
 };
 
-const getMoonEmoji = (phase: number) => {
-  if (phase < 0.1 || phase > 0.9) return '🌑';
-  if (phase < 0.25) return '🌒';
-  if (phase < 0.4) return '🌓';
-  if (phase < 0.6) return '🌔';
-  if (phase < 0.75) return '🌕';
-  if (phase < 0.9) return '🌖';
-  return '🌗';
-};
-
-const calcularDirecao = (graus: number) => {
-  const direcoes = ['N', 'NNE', 'NE', 'ENE', 'L', 'ESE', 'SE', 'SSE', 'S', 'SSO', 'SO', 'OSO', 'O', 'ONO', 'NO', 'NNO'];
-  return direcoes[Math.round(graus / 22.5) % 16] || '';
+const windDir = (deg: number) => {
+  const dirs = ["N", "NNE", "NE", "ENE", "L", "ESE", "SE", "SSE", "S", "SSO", "SO", "OSO", "O", "ONO", "NO", "NNO"];
+  return dirs[Math.round(deg / 22.5) % 16] || "";
 };
 
 export default function PrevisaoTempo() {
-  const [tempHoje, setTempHoje] = useState<number | string>('--');
-  const [tempMin, setTempMin] = useState<number | string>('--');
-  const [tempMax, setTempMax] = useState<number | string>('--');
-  const [umidade, setUmidade] = useState<number | string>('--');
-  const [vento, setVento] = useState<number | string>('--');
-  const [direcaoVento, setDirecaoVento] = useState('--');
-  const [ondas, setOndas] = useState({ wave_height: '--', wave_period: '--' });
-  const [mare, setMare] = useState({ alta: '--:--' });
-  const [lua, setLua] = useState({ phase: 0.5, phaseLabel: 'Cheia', illumination: 100 });
-  const [tempoAtualizado, setTempoAtualizado] = useState(0);
+  const [data, setData] = useState({ temp: "--" as number | string, min: "--" as number | string, max: "--" as number | string, umidade: "--" as number | string, vento: "--" as number | string, dirVento: "--", ondas: { h: "--", p: "--" }, mare: "--:--", lua: { phase: 0.5, phaseLabel: "Cheia", illumination: 100 } });
   const [loading, setLoading] = useState(false);
 
-  const carregarDados = async () => {
-    if (loading) return;
+  const carregar = async () => {
     setLoading(true);
-
     try {
-      const climaUrl = `https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,weather_code,apparent_temperature&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=America%2FSao_Paulo&forecast_days=1`;
-      const climaResponse = await fetch(climaUrl);
-      const climaData = await climaResponse.json();
-
-      if (climaData.error) throw new Error(climaData.reason || 'Erro na API de Clima.');
-
-      const current = climaData.current;
-      setTempHoje(Math.round(current.temperature_2m));
-      setUmidade(Math.round(current.relative_humidity_2m));
-      setVento(Math.round(current.wind_speed_10m));
-      setDirecaoVento(calcularDirecao(current.wind_direction_10m));
-      setTempMin(Math.round(climaData.daily.temperature_2m_min[0]));
-      setTempMax(Math.round(climaData.daily.temperature_2m_max[0]));
-
-      const marineUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${LATITUDE}&longitude=${LONGITUDE}&current=wave_height,wave_period&timezone=America%2FSao_Paulo`;
-      const marineResponse = await fetch(marineUrl);
-      const marineData = await marineResponse.json();
-
-      if (marineData.error) throw new Error(marineData.reason || 'Erro na API Marinha.');
-      const marineCurrent = marineData.current;
-      setOndas({
-        wave_height: marineCurrent.wave_height?.toFixed(1) || '--',
-        wave_period: marineCurrent.wave_period?.toFixed(0) || '--',
+      const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LNG}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m&daily=temperature_2m_max,temperature_2m_min&timezone=America%2FSao_Paulo`);
+      const c = await r.json();
+      const cur = c.current;
+      const marine = await fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${LAT}&longitude=${LNG}&current=wave_height,wave_period&timezone=America%2FSao_Paulo`);
+      const m = await marine.json();
+      const moon = getMoonData();
+      const now = new Date();
+      const mins = (now.getMinutes() + 30) % 60;
+      let hrs = (now.getHours() + 2) % 24;
+      if (mins < 30) hrs = (hrs - 1 + 24) % 24;
+      setData({
+        temp: Math.round(cur.temperature_2m),
+        min: Math.round(c.daily.temperature_2m_min[0]),
+        max: Math.round(c.daily.temperature_2m_max[0]),
+        umidade: Math.round(cur.relative_humidity_2m),
+        vento: Math.round(cur.wind_speed_10m),
+        dirVento: windDir(cur.wind_direction_10m),
+        ondas: { h: m.current?.wave_height?.toFixed(1) || "--", p: m.current?.wave_period?.toFixed(0) || "--" },
+        mare: `${String(hrs).padStart(2, "0")}:${String(mins).padStart(2, "0")}`,
+        lua: { phase: moon.phase, phaseLabel: moon.phaseLabel, illumination: moon.illumination },
       });
-
-      const moonData = getMoonData();
-      setLua({
-        phase: moonData.phase,
-        phaseLabel: moonData.phaseLabel,
-        illumination: moonData.illumination,
-      });
-
-      const agora = new Date();
-      const minutos = (agora.getMinutes() + 30) % 60;
-      let horas = agora.getHours() + 2;
-      if (minutos < 30) horas = (horas - 1) % 24;
-      setMare({ alta: `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}` });
-
-      setTempoAtualizado(0);
-    } catch (error) {
-      console.error('Erro ao carregar dados:', error);
-      setTempHoje(26);
-      setTempMin(20);
-      setTempMax(29);
-      setUmidade(78);
-      setVento(15);
-      setDirecaoVento('SE');
-      setOndas({ wave_height: '1.2', wave_period: '8' });
-      setMare({ alta: '06:30' });
-      setLua({ phase: 0.5, phaseLabel: 'Cheia', illumination: 100 });
+    } catch {
+      setData({ temp: 26, min: 20, max: 29, umidade: 78, vento: 15, dirVento: "SE", ondas: { h: "1.2", p: "8" }, mare: "06:30", lua: { phase: 0.5, phaseLabel: "Cheia", illumination: 100 } });
     } finally {
       setLoading(false);
     }
   };
 
-  const refreshData = async () => {
-    setTempoAtualizado(0);
-    await carregarDados();
-  };
+  useEffect(() => { carregar(); const id = setInterval(carregar, 900000); return () => clearInterval(id); }, []);
 
-  useEffect(() => {
-    carregarDados();
-    const intervalId = setInterval(async () => {
-      setTempoAtualizado((prev) => {
-        const next = prev + 15;
-        if (next % 15 === 0) {
-          carregarDados();
-        }
-        return next;
-      });
-    }, 900000); // 15 minutos
-
-    return () => clearInterval(intervalId);
-  }, []);
+  const items = [
+    { icon: "☀️", value: `${data.temp}°`, label: `${data.min}° / ${data.max}°`, color: "amber" },
+    { icon: "💨", value: `${data.vento} km/h`, label: data.dirVento, color: "sky" },
+    { icon: "💧", value: `${data.umidade}%`, label: "Umidade", color: "green" },
+    { icon: "🌊", value: `${data.ondas.h}m`, label: `${data.ondas.p}s`, color: "blue" },
+    { icon: "🌊", value: data.mare, label: "Próx. alta", color: "purple" },
+    { icon: "🌙", value: `${data.lua.illumination}%`, label: data.lua.phaseLabel, color: "gray" },
+  ];
 
   return (
-    <>
-      <div className="navbar-previsao-wrapper w-screen -ml-[50vw] left-[50%] relative bg-white border-b border-gray-200 shadow-[0_1px_2px_rgba(0,0,0,0.05)] dark:bg-gray-800 dark:border-gray-700">
-        <div className="navbar-previsao flex items-center justify-around max-w-[1200px] mx-auto p-2 gap-1 flex-wrap md:flex-nowrap">
-          
-          <div className="nav-item clima-item flex items-center gap-2 p-1.5 rounded-md transition-all hover:bg-slate-50 dark:hover:bg-gray-700 min-w-[110px] flex-1">
-            <div className="nav-icon bg-amber-400/20 text-amber-600 flex items-center justify-center w-8 h-8 rounded shrink-0">
-              <i className="mdi mdi-weather-sunny text-base"></i>
-              <span className="fallback-icone hidden text-sm">☀️</span>
-            </div>
-            <div className="nav-info flex flex-col flex-1 min-w-0">
-              <div className="nav-temp text-lg font-bold text-gray-800 dark:text-gray-50 leading-none">{tempHoje}°</div>
-              <div className="nav-details text-[0.7rem] text-gray-500 mt-0.5 truncate max-w-full">
-                <span className="nav-minmax font-semibold text-gray-500">{tempMin}° / {tempMax}°</span>
-              </div>
-            </div>
+    <div className="flex items-center justify-center flex-wrap gap-2 md:gap-1">
+      {items.map((item, i) => (
+        <div key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-shadow">
+          <span className="text-lg">{item.icon}</span>
+          <div className="flex flex-col">
+            <span className="text-sm font-bold text-gray-900 dark:text-white leading-tight">{item.value}</span>
+            <span className="text-[10px] text-gray-500 dark:text-gray-400 leading-tight">{item.label}</span>
           </div>
-
-          <div className="nav-item vento-item flex items-center gap-2 p-1.5 rounded-md transition-all hover:bg-slate-50 dark:hover:bg-gray-700 min-w-[110px] flex-1">
-            <div className="nav-icon bg-blue-500/20 text-blue-600 flex items-center justify-center w-8 h-8 rounded shrink-0">
-              <i className="mdi mdi-weather-windy text-base"></i>
-              <span className="fallback-icone hidden text-sm">💨</span>
-            </div>
-            <div className="nav-info flex flex-col flex-1 min-w-0">
-              <div className="nav-value text-sm font-bold text-gray-800 dark:text-gray-50 leading-none">{vento} km/h</div>
-              <div className="nav-details text-[0.7rem] text-gray-500 mt-0.5 truncate max-w-full">{direcaoVento}</div>
-            </div>
-          </div>
-
-          <div className="nav-item umidade-item flex items-center gap-2 p-1.5 rounded-md transition-all hover:bg-slate-50 dark:hover:bg-gray-700 min-w-[110px] flex-1">
-            <div className="nav-icon bg-green-500/20 text-green-600 flex items-center justify-center w-8 h-8 rounded shrink-0">
-              <i className="mdi mdi-water-percent text-base"></i>
-              <span className="fallback-icone hidden text-sm">💧</span>
-            </div>
-            <div className="nav-info flex flex-col flex-1 min-w-0">
-              <div className="nav-value text-sm font-bold text-gray-800 dark:text-gray-50 leading-none">{umidade}%</div>
-              <div className="nav-details text-[0.7rem] text-gray-500 mt-0.5 truncate max-w-full">Umidade</div>
-            </div>
-          </div>
-
-          <div className="nav-item ondas-item flex items-center gap-2 p-1.5 rounded-md transition-all hover:bg-slate-50 dark:hover:bg-gray-700 min-w-[110px] flex-1">
-            <div className="nav-icon bg-sky-500/20 text-sky-600 flex items-center justify-center w-8 h-8 rounded shrink-0">
-              <i className="mdi mdi-wave text-base"></i>
-              <span className="fallback-icone hidden text-sm">🌊</span>
-            </div>
-            <div className="nav-info flex flex-col flex-1 min-w-0">
-              <div className="nav-value text-sm font-bold text-gray-800 dark:text-gray-50 leading-none">{ondas.wave_height}m</div>
-              <div className="nav-details text-[0.7rem] text-gray-500 mt-0.5 truncate max-w-full">{ondas.wave_period}s</div>
-            </div>
-          </div>
-
-          <div className="nav-item mares-item flex items-center gap-2 p-1.5 rounded-md transition-all hover:bg-slate-50 dark:hover:bg-gray-700 min-w-[110px] flex-1">
-            <div className="nav-icon bg-purple-500/20 text-purple-600 flex items-center justify-center w-8 h-8 rounded shrink-0">
-              <span className="mare-emoji text-sm">🌅</span>
-            </div>
-            <div className="nav-info flex flex-col flex-1 min-w-0">
-              <div className="nav-value text-sm font-bold text-gray-800 dark:text-gray-50 leading-none">{mare.alta}</div>
-              <div className="nav-details text-[0.7rem] text-gray-500 mt-0.5 truncate max-w-full">Próxima alta</div>
-            </div>
-          </div>
-
-          <div className="nav-item lua-item flex items-center gap-2 p-1.5 rounded-md transition-all hover:bg-slate-50 dark:hover:bg-gray-700 min-w-[110px] flex-1">
-            <div className="nav-icon bg-gray-400/20 text-gray-500 flex items-center justify-center w-8 h-8 rounded shrink-0">
-              <span className="lua-emoji text-sm">{getMoonEmoji(lua.phase)}</span>
-            </div>
-            <div className="nav-info flex flex-col flex-1 min-w-0">
-              <div className="nav-value text-sm font-bold text-gray-800 dark:text-gray-50 leading-none">{lua.illumination}%</div>
-              <div className="nav-details text-[0.7rem] text-gray-500 mt-0.5 truncate max-w-full">{lua.phaseLabel}</div>
-            </div>
-          </div>
-
-          <div className="nav-item refresh-item flex items-center gap-2 p-0 rounded-md min-w-[110px] flex-1 md:flex-none">
-            <button 
-              onClick={refreshData} 
-              disabled={loading} 
-              title="Atualizar dados"
-              className="nav-refresh-btn flex items-center gap-1.5 bg-[#2E7D32] text-white border-none rounded py-1.5 px-2.5 cursor-pointer text-xs font-semibold transition-all h-8 w-full justify-center hover:bg-[#1B5E20] hover:scale-[1.02] disabled:bg-gray-500 disabled:cursor-not-allowed disabled:opacity-80"
-            >
-              <i className={`mdi mdi-refresh ${loading ? 'animate-spin' : ''}`}></i>
-              <span className="fallback-icone hidden">🔍</span>
-              <span className="update-time text-[0.7rem] opacity-90">{loading ? 'Carregando...' : tempoAtualizado > 0 ? tempoAtualizado + 'min' : 'Agora'}</span>
-            </button>
-          </div>
-          
         </div>
-      </div>
-    </>
+      ))}
+      <button onClick={carregar} disabled={loading}
+        className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-xl text-xs font-semibold transition-colors flex items-center gap-1"
+        title="Atualizar">
+        <svg className={`w-3 h-3 ${loading ? "animate-spin" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+        Atualizar
+      </button>
+    </div>
   );
 }

@@ -1,247 +1,176 @@
-'use client';
+﻿"use client";
 
-import { useState, useEffect, useMemo } from 'react';
-import { supabase } from '@/core/utils/supabaseClient';
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/core/utils/supabaseClient";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.06, duration: 0.4, ease: [0.4, 0, 0.2, 1] as const } }),
+};
 
 export default function GaleriaSection() {
-  const [galeria, setGaleria] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [images, setImages] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [categoriaAtiva, setCategoriaAtiva] = useState<string>('');
-  const [imagemSelecionada, setImagemSelecionada] = useState<any>(null);
-
-  const fetchGaleria = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const { data, error: err } = await supabase
-        .from('galeria')
-        .select(`id, titulo, imagem_url, imagem_alt, descricao, created_at, categoria`)
-        .order('created_at', { ascending: false });
-
-      if (err) throw new Error(`Erro ao buscar galeria: ${err.message}`);
-
-      const formatados = (data || []).map((row: any) => ({
-        id: row.id,
-        titulo: row.titulo?.trim() || 'Sem título',
-        categoria: row.categoria?.trim() || 'Geral',
-        url: row.imagem_url || 'https://placehold.co/400x300/2E7D32/FFFFFF?text=Sem+Imagem',
-        alt: row.imagem_alt?.trim() || `Imagem: ${row.titulo || 'sem título'}`,
-        descricao: row.descricao?.trim() || null,
-        data: row.created_at,
-      }));
-
-      setGaleria(formatados);
-    } catch (e: any) {
-      console.error('[useGaleria] Erro:', e);
-      setError('Não foi possível carregar a galeria no momento.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [categoriaAtiva, setCategoriaAtiva] = useState("");
+  const [selected, setSelected] = useState<any>(null);
 
   useEffect(() => {
-    fetchGaleria();
+    (async () => {
+      try {
+        const { data, error: e } = await supabase.from("galeria").select("*").order("created_at", { ascending: false });
+        if (e) throw e;
+        setImages((data || []).map((r: any) => ({
+          ...r,
+          url: r.imagem_url || "https://placehold.co/400x300/2E7D32/FFFFFF?text=Sem+Imagem",
+          alt: r.imagem_alt || r.titulo || "Imagem",
+        })));
+      } catch { setError("Erro ao carregar galeria."); }
+      finally { setLoading(false); }
+    })();
   }, []);
 
-  const categorias = useMemo(() => {
-    const setCat = new Set<string>();
-    galeria.forEach(img => {
-      if (img.categoria) setCat.add(img.categoria);
-    });
-    return Array.from(setCat).sort();
-  }, [galeria]);
+  const categorias = useMemo(() => [...new Set(images.map((i) => i.categoria || "Geral"))].sort(), [images]);
+  const filtradas = useMemo(() => categoriaAtiva ? images.filter((i) => (i.categoria || "Geral") === categoriaAtiva) : images, [images, categoriaAtiva]);
+  const idx = selected ? filtradas.findIndex((i) => i.id === selected.id) : -1;
 
-  const imagensFiltradas = useMemo(() => {
-    if (!categoriaAtiva) return galeria;
-    return galeria.filter(img => img.categoria === categoriaAtiva);
-  }, [galeria, categoriaAtiva]);
+  const fmtCat = (c: string) => (c || "Geral").replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+  const fmtDate = (d: string) => d ? new Date(d).toLocaleDateString("pt-BR") : "";
 
-  const categoriasParaExibir = useMemo(() => {
-    if (categoriaAtiva) return [categoriaAtiva];
-    return categorias;
-  }, [categoriaAtiva, categorias]);
-
-  const imagensPorCategoria = useMemo(() => {
-    const agrupadas: any = {};
-    if (categoriaAtiva) {
-      agrupadas[categoriaAtiva] = imagensFiltradas;
-    } else {
-      categorias.forEach(cat => {
-        agrupadas[cat] = galeria.filter(img => img.categoria === cat);
-      });
-    }
-    return agrupadas;
-  }, [categoriaAtiva, imagensFiltradas, categorias, galeria]);
-
-  const formatarCategoria = (cat: string) => {
-    if (!cat) return 'Sem Categoria';
-    return cat.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
-  };
-
-  const formatarData = (dataStr: string) => {
-    if (!dataStr) return 'Data não informada';
-    return new Date(dataStr).toLocaleDateString('pt-BR');
-  };
-
-  const abrirLightbox = (imagem: any) => setImagemSelecionada(imagem);
-  const fecharLightbox = () => setImagemSelecionada(null);
-
-  const indiceImagemAtual = imagemSelecionada ? imagensFiltradas.findIndex(img => img.id === imagemSelecionada.id) : -1;
-  const podeNavegarAnterior = indiceImagemAtual > 0;
-  const podeNavegarProximo = indiceImagemAtual < imagensFiltradas.length - 1;
-
-  const imagemAnterior = () => {
-    if (podeNavegarAnterior) setImagemSelecionada(imagensFiltradas[indiceImagemAtual - 1]);
-  };
-
-  const proximaImagem = () => {
-    if (podeNavegarProximo) setImagemSelecionada(imagensFiltradas[indiceImagemAtual + 1]);
-  };
+  const nav = useCallback((dir: 1 | -1) => {
+    const next = idx + dir;
+    if (next >= 0 && next < filtradas.length) setSelected(filtradas[next]);
+  }, [idx, filtradas]);
 
   useEffect(() => {
-    const handleKeydown = (e: KeyboardEvent) => {
-      if (!imagemSelecionada) return;
-      if (e.key === 'Escape') fecharLightbox();
-      if (e.key === 'ArrowLeft') imagemAnterior();
-      if (e.key === 'ArrowRight') proximaImagem();
+    const onKey = (e: KeyboardEvent) => {
+      if (!selected) return;
+      if (e.key === "Escape") setSelected(null);
+      if (e.key === "ArrowLeft") nav(-1);
+      if (e.key === "ArrowRight") nav(1);
     };
-    document.addEventListener('keydown', handleKeydown);
-    return () => document.removeEventListener('keydown', handleKeydown);
-  }, [imagemSelecionada, imagensFiltradas, indiceImagemAtual]);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [selected, nav]);
 
   return (
-    <section id="galeria-section" className="galeria-section min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Galeria de Fotos</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Explore nossa coleção de imagens organizadas por categorias
-          </p>
-        </div>
+    <section id="galeria-section" className="py-16 md:py-20 scroll-mt-32">
+      <div className="max-w-7xl mx-auto px-4">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeInUp} custom={0}>
+          <h2 className="section-title text-gray-900 dark:text-white">Galeria de Fotos</h2>
+          <p className="section-subtitle">Momentos e registros da nossa comunidade</p>
+        </motion.div>
 
+        {/* Filtros */}
         {categorias.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            <button
-              onClick={() => setCategoriaAtiva('')}
-              className={`px-4 py-2 rounded-full transition-all duration-200 font-medium ${categoriaAtiva === '' ? 'bg-[#2E7D32] text-white shadow-lg' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600'}`}
-            >
-              Todas
-            </button>
+          <div className="flex flex-wrap gap-2 justify-center mb-10">
+            <button onClick={() => setCategoriaAtiva("")} className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${categoriaAtiva === "" ? "bg-green-600 text-white shadow-md" : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-green-300"}`}>Todas</button>
             {categorias.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setCategoriaAtiva(cat)}
-                className={`px-4 py-2 rounded-full transition-all duration-200 font-medium ${categoriaAtiva === cat ? 'bg-[#2E7D32] text-white shadow-lg' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600'}`}
-              >
-                {formatarCategoria(cat)}
-              </button>
+              <button key={cat} onClick={() => setCategoriaAtiva(cat)} className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${categoriaAtiva === cat ? "bg-green-600 text-white shadow-md" : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-green-300"}`}>{fmtCat(cat)}</button>
             ))}
           </div>
         )}
 
         {loading ? (
-          <div className="text-center py-12">
-            <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-[#2E7D32] border-t-transparent mx-auto"></div>
-            <p className="text-gray-600 dark:text-gray-400 mt-4">Carregando galeria...</p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => <div key={i} className="card-modern"><div className="skeleton h-48 rounded-none rounded-t-xl" /><div className="p-3"><div className="skeleton h-3 w-3/4" /></div></div>)}
           </div>
         ) : error ? (
-          <div className="text-center py-12">
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 max-w-md mx-auto">
-              <h3 className="text-lg font-medium text-red-800 dark:text-red-200 mb-2">Erro ao carregar galeria</h3>
-              <p className="text-red-700 dark:text-red-300">{error}</p>
-              <button onClick={fetchGaleria} className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">Tentar Novamente</button>
-            </div>
-          </div>
-        ) : imagensFiltradas.length > 0 ? (
-          <div className="space-y-12">
-            {categoriasParaExibir.map((categoria) => (
-              <section key={categoria} className="categoria-section">
-                <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{formatarCategoria(categoria)}</h2>
-                  <div className="w-16 h-1 bg-[#2E7D32] rounded-full"></div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {imagensPorCategoria[categoria].map((imagem: any) => (
-                    <div
-                      key={imagem.id}
-                      onClick={() => abrirLightbox(imagem)}
-                      className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col"
-                    >
-                      <div className="h-64 sm:h-56 md:h-64 overflow-hidden flex items-center justify-center bg-gray-100 dark:bg-gray-700">
-                        <img src={imagem.url} alt={imagem.alt} className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-                      </div>
-                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center pointer-events-none">
-                        <div className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 text-white text-center">
-                          <p className="text-sm font-medium">Ver detalhes</p>
-                        </div>
-                      </div>
-                      <div className="p-3 flex flex-col border-t border-gray-100 dark:border-gray-700">
-                        <h3 className="font-semibold text-gray-900 dark:text-white mb-1 truncate text-sm">{imagem.titulo}</h3>
-                        {imagem.descricao && <p className="text-gray-600 dark:text-gray-300 text-xs truncate mb-2">{imagem.descricao}</p>}
-                        <div className="flex justify-between items-center mt-auto">
-                          <span className="text-xs text-gray-500 dark:text-gray-400">{formatarData(imagem.data)}</span>
-                          <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full capitalize">{formatarCategoria(imagem.categoria)}</span>
-                        </div>
+          <div className="text-center py-16 text-red-500">{error}</div>
+        ) : filtradas.length === 0 ? (
+          <div className="text-center py-16"><div className="text-5xl mb-4">🖼️</div><p className="text-gray-500 dark:text-gray-400 text-lg">Nenhuma imagem encontrada.</p></div>
+        ) : (
+          <>
+            {categoriaAtiva ? (
+              <motion.div layout className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {filtradas.map((img, i) => (
+                  <motion.div key={img.id} layout custom={i} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-40px" }} variants={fadeInUp}
+                    onClick={() => setSelected(img)}
+                    className="card-modern cursor-pointer group"
+                  >
+                    <div className="relative overflow-hidden aspect-square bg-gray-100 dark:bg-gray-700">
+                      <img src={img.url} alt={img.alt} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </section>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-16">
-            <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">Nenhuma imagem encontrada</h3>
-            <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto">
-              {categoriaAtiva ? `Nenhuma imagem na categoria "${formatarCategoria(categoriaAtiva)}"` : 'Nenhuma imagem cadastrada na galeria'}
-            </p>
-          </div>
+                    <div className="p-3">
+                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white truncate">{img.titulo || "Sem título"}</h3>
+                      <p className="text-xs text-gray-500 mt-0.5">{fmtDate(img.created_at)}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            ) : (
+              <div className="space-y-14">
+                {categorias.map((cat) => {
+                  const items = images.filter((i) => (i.categoria || "Geral") === cat);
+                  if (items.length === 0) return null;
+                  return (
+                    <div key={cat}>
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-5 flex items-center gap-3">
+                        {fmtCat(cat)}
+                        <span className="text-sm font-normal text-gray-400">({items.length})</span>
+                      </h3>
+                      <motion.div layout className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {items.map((img, i) => (
+                          <motion.div key={img.id} layout custom={i} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-40px" }} variants={fadeInUp}
+                            onClick={() => setSelected(img)}
+                            className="card-modern cursor-pointer group"
+                          >
+                            <div className="relative overflow-hidden aspect-square bg-gray-100 dark:bg-gray-700">
+                              <img src={img.url} alt={img.alt} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
+                              </div>
+                            </div>
+                            <div className="p-3"><h3 className="text-sm font-semibold text-gray-900 dark:text-white truncate">{img.titulo || "Sem título"}</h3><p className="text-xs text-gray-500 mt-0.5">{fmtDate(img.created_at)}</p></div>
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </>
         )}
       </div>
 
-      {imagemSelecionada && (
-        <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4" onClick={fecharLightbox}>
-          <div className="relative max-w-6xl max-h-full w-full animate-[fadeIn_0.3s_ease-out]" onClick={(e) => e.stopPropagation()}>
-            <button onClick={fecharLightbox} className="absolute top-4 right-4 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-70 transition-colors z-20">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+      {/* Lightbox */}
+      <AnimatePresence>
+        {selected && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4" onClick={() => setSelected(null)}>
+            <button onClick={() => setSelected(null)} className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
-            {podeNavegarAnterior && (
-              <button onClick={imagemAnterior} className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-70 transition-colors z-20 hidden md:block">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
+            {idx > 0 && (
+              <button onClick={() => nav(-1)} className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors hidden sm:block">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
               </button>
             )}
-            {podeNavegarProximo && (
-              <button onClick={proximaImagem} className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-70 transition-colors z-20 hidden md:block">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+            {idx < filtradas.length - 1 && (
+              <button onClick={() => nav(1)} className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors hidden sm:block">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
               </button>
             )}
-            <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden max-h-[90vh] flex flex-col">
-              <div className="flex-1 flex items-center justify-center p-6 min-h-0 bg-gray-100 dark:bg-gray-900 h-[60vh]">
-                <img src={imagemSelecionada.url} alt={imagemSelecionada.alt} className="max-w-full max-h-full object-contain" />
+            <motion.div key={selected.id} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="max-w-5xl max-h-[85vh] w-full" onClick={(e) => e.stopPropagation()}>
+              <img src={selected.url} alt={selected.alt} className="w-full h-full object-contain max-h-[75vh]" />
+              <div className="mt-4 text-center text-white">
+                <h3 className="text-lg font-bold">{selected.titulo}</h3>
+                <p className="text-sm text-gray-400">{fmtCat(selected.categoria || "Geral")} · {fmtDate(selected.created_at)}</p>
+                <p className="text-xs text-gray-500 mt-1">{idx + 1} de {filtradas.length}</p>
               </div>
-              <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-                <div className="flex justify-between items-center mb-2">
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">{imagemSelecionada.titulo}</h3>
-                    <span className="inline-block px-2 py-1 bg-[#2E7D32] text-white text-xs rounded-full">{formatarCategoria(imagemSelecionada.categoria)}</span>
-                  </div>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">{formatarData(imagemSelecionada.data)}</span>
-                </div>
-                {imagemSelecionada.descricao && <p className="text-gray-700 dark:text-gray-300 text-sm line-clamp-2">{imagemSelecionada.descricao}</p>}
-                <div className="flex justify-center items-center mt-3 pt-2 border-t border-gray-100 dark:border-gray-700">
-                  <span className="text-xs text-gray-500 dark:text-gray-400">{indiceImagemAtual + 1} de {imagensFiltradas.length}</span>
-                </div>
-                {/* Mobile controls */}
-                <div className="flex justify-between mt-4 md:hidden">
-                  <button onClick={imagemAnterior} disabled={!podeNavegarAnterior} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded disabled:opacity-50">Anterior</button>
-                  <button onClick={proximaImagem} disabled={!podeNavegarProximo} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded disabled:opacity-50">Próxima</button>
-                </div>
+              {/* Mobile nav */}
+              <div className="flex justify-center gap-4 mt-4 sm:hidden">
+                <button onClick={() => nav(-1)} disabled={idx <= 0} className="px-5 py-2 bg-white/10 text-white rounded-lg disabled:opacity-30">Anterior</button>
+                <button onClick={() => nav(1)} disabled={idx >= filtradas.length - 1} className="px-5 py-2 bg-white/10 text-white rounded-lg disabled:opacity-30">Próxima</button>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

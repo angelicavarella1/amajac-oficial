@@ -1,117 +1,45 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export default function Relogio() {
-  const [hora, setHora] = useState('--:--:--');
-  const [diaSemana, setDiaSemana] = useState('---');
-  const [dataExtenso, setDataExtenso] = useState('-- de --------');
+  const [hora, setHora] = useState("--:--:--");
+  const [dia, setDia] = useState("---");
+  const [data, setData] = useState("-- de --------");
 
   useEffect(() => {
-    let timeoutId: number | null = null;
-    let ultimaAtualizacao = 0;
-    const INTERVALO_ATUALIZACAO = 1000;
-    const THRESHOLD_PERFORMANCE = 16;
-    let isMounted = true;
+    const dias = ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"];
+    const meses = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+    let mounted = true;
 
-    const diasSemanaStr = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
-    const mesesStr = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
-
-    const atualizar = () => {
-      if (!isMounted) return;
-
-      const agora = Date.now();
-      
-      if (agora - ultimaAtualizacao < THRESHOLD_PERFORMANCE) {
-        agendarProximaAtualizacao();
-        return;
-      }
-      
-      ultimaAtualizacao = agora;
-      const data = new Date(agora);
-      
-      try {
-        const horas = data.getHours().toString().padStart(2, '0');
-        const minutos = data.getMinutes().toString().padStart(2, '0');
-        const segundos = data.getSeconds().toString().padStart(2, '0');
-        setHora(`${horas}:${minutos}:${segundos}`);
-        
-        const diaNum = data.getDay();
-        let diaNome = diasSemanaStr[diaNum];
-        diaNome = diaNome.charAt(0).toUpperCase() + diaNome.slice(1);
-        setDiaSemana(diaNome);
-        
-        const dia = data.getDate();
-        const mes = mesesStr[data.getMonth()];
-        setDataExtenso(`${dia} de ${mes}`);
-      } catch (error) {
-        console.warn('Erro ao atualizar relógio:', error);
-      }
-      
-      agendarProximaAtualizacao();
+    const tick = () => {
+      if (!mounted) return;
+      const d = new Date();
+      setHora(`${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}:${String(d.getSeconds()).padStart(2, "0")}`);
+      setDia(dias[d.getDay()].replace(/^\w/, (c) => c.toUpperCase()));
+      setData(`${d.getDate()} de ${meses[d.getMonth()]}`);
     };
 
-    const agendarProximaAtualizacao = () => {
-      const agora = Date.now();
-      const proximoTick = INTERVALO_ATUALIZACAO - (agora % INTERVALO_ATUALIZACAO);
-      timeoutId = window.setTimeout(() => {
-        requestAnimationFrame(atualizar);
-      }, Math.max(proximoTick, 0));
-    };
+    tick();
+    const id = setInterval(tick, 1000);
 
-    const iniciarRelogio = () => {
-      requestAnimationFrame(atualizar);
-    };
+    const vis = () => { if (document.hidden) { clearInterval(id); } else { tick(); } };
+    document.addEventListener("visibilitychange", vis);
 
-    const pararRelogio = () => {
-      if (timeoutId) {
-        window.clearTimeout(timeoutId);
-        timeoutId = null;
-      }
-    };
-
-    iniciarRelogio();
-
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        pararRelogio();
-      } else {
-        iniciarRelogio();
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    return () => {
-      isMounted = false;
-      pararRelogio();
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
+    return () => { mounted = false; clearInterval(id); document.removeEventListener("visibilitychange", vis); };
   }, []);
 
   return (
-    <>
-      <div className="relogio-data flex items-center gap-3 font-semibold text-[#2E7D32] dark:text-[#4CAF50] bg-[#2E7D32]/10 dark:bg-[#2E7D32]/15 px-4 py-2 rounded-lg min-w-[280px] h-[56px] will-change-transform font-['Montserrat',sans-serif]">
-        <div className="hora text-lg font-bold font-mono tracking-wide">{hora}</div>
-        <div className="separador w-[1px] h-[30px] bg-[#2E7D32]/30"></div>
-        <div className="data-completa flex flex-col gap-0.5">
-          <span className="dia-semana text-sm font-semibold lowercase first-letter:uppercase">{diaSemana}</span>
-          <span className="data-extenso text-sm font-medium opacity-90">{dataExtenso}</span>
-        </div>
+    <div className="flex items-center gap-3 text-sm font-medium">
+      <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300">
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span className="font-mono font-bold tracking-wide">{hora}</span>
       </div>
-      <style dangerouslySetInnerHTML={{ __html: `
-        @media (max-width: 768px) {
-          .relogio-data { min-width: 240px; padding: 0.5rem 0.8rem; gap: 0.5rem; }
-          .relogio-data .hora { font-size: 1rem; }
-          .relogio-data .dia-semana, .relogio-data .data-extenso { font-size: 0.8rem; }
-        }
-        @media (max-width: 640px) {
-          .relogio-data { min-width: 220px; padding: 0.4rem 0.7rem; gap: 0.4rem; }
-          .relogio-data .hora { font-size: 0.9rem; }
-          .relogio-data .dia-semana, .relogio-data .data-extenso { font-size: 0.75rem; }
-          .relogio-data .separador { height: 25px; }
-        }
-      ` }} />
-    </>
+      <div className="hidden sm:block text-gray-600 dark:text-gray-400">
+        <span className="font-semibold">{dia}</span>
+        <span className="mx-1.5 text-gray-300 dark:text-gray-600">·</span>
+        <span>{data}</span>
+      </div>
+    </div>
   );
 }
